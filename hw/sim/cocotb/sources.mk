@@ -14,6 +14,10 @@ VERILOG_INCLUDE_DIRS = \
 VERILOG_SOURCES = \
 	$(FYP_DIR)/hw/sim/modelsim/glbl.v \
 	$(FYP_DIR)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
+	$(FYP_DIR)/imports/verilog-axi/rtl/priority_encoder.v \
+	$(FYP_DIR)/imports/verilog-axi/rtl/arbiter.v \
+	$(FYP_DIR)/imports/verilog-axi/rtl/axil_interconnect.v \
+	$(FYP_DIR)/imports/verilog-axi/rtl/axil_interconnect_wrap_1x4.v \
 	$(FYP_DIR)/hw/build/build_project.srcs/sources_1/ip/axi_memory_interconnect/sim/axi_memory_interconnect.v \
 	$(FYP_DIR)/hw/build/build_project.srcs/sources_1/ip/axi_L_register_control_crossbar/sim/axi_L_register_control_crossbar.v \
 	$(FYP_DIR)/hw/build/build_project.srcs/sources_1/ip/transformation_buffer_sdp_bram/sim/transformation_buffer_sdp_bram.v \
@@ -93,13 +97,14 @@ VERILOG_SOURCES += \
 
 # IP
 VERILOG_SOURCES += \
+	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/feature_aggregator.sv \
 	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/aggregation_core.sv \
+	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/aggregation_manager.sv \
+	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/buffer_manager.sv \
+	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/buffer_manager_arbiter.sv \
+	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/aggregation_mesh.sv \
 	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/aggregation_core_allocator.sv \
 	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/aggregation_engine.sv \
-	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/aggregation_manager.sv \
-	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/aggregation_mesh.sv \
-	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/buffer_manager.sv \
-	$(FYP_DIR)/hw/build/ip/aggregation_engine/rtl/feature_aggregator.sv \
 	$(FYP_DIR)/hw/build/ip/transformation_engine/rtl/feature_transformation_core.sv \
 	$(FYP_DIR)/hw/build/ip/transformation_engine/rtl/feature_transformation_engine.sv \
 	$(FYP_DIR)/hw/build/ip/prefetcher/rtl/prefetcher.sv \
