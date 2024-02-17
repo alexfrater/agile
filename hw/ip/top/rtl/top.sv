@@ -792,17 +792,6 @@ axil_interconnect_wrap_1x4 #(
     .M01_ADDR_WIDTH (30),
     .M02_ADDR_WIDTH (30),
     .M03_ADDR_WIDTH (30)
-    // .M00_CONNECT_READ  = 1'b1,
-    // .M00_CONNECT_WRITE = 1'b1,
-
-    // parameter M01_CONNECT_READ = 1'b1,
-    // parameter M01_CONNECT_WRITE = 1'b1,
-
-    // parameter M02_CONNECT_READ = 1'b1,
-    // parameter M02_CONNECT_WRITE = 1'b1,
-
-    // parameter M03_CONNECT_READ = 1'b1,
-    // parameter M03_CONNECT_WRITE = 1'b1,
 ) axil_interconnect_i (
     .clk                            (regbank_clk),
     .rst                            (!regbank_resetn),
