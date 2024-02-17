@@ -28,7 +28,7 @@ class Monitor:
         self._coro = None
 
     async def _run(self) -> None:
-        pass
+        raise NotImplementedError
 
     def _sample(self, data, queue) -> Dict[str, Any]:
         """

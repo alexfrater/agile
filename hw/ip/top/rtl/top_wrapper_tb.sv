@@ -9,6 +9,9 @@ module top_wrapper_tb
 
     input  logic                          regbank_clk,
     input  logic                          regbank_resetn,
+
+    input  logic                          axi_memory_clk,
+    input  logic                          axi_memory_reset,
     
     // AXI-L interface to Host
     input  logic [0 : 0]                  host_axil_awvalid,
@@ -110,6 +113,9 @@ top top_i
     .host_axil_rready                          (host_axil_rready),
     .host_axil_rdata                           (host_axil_rdata),
     .host_axil_rresp                           (host_axil_rresp),
+    
+    .axi_memory_clk                            (axi_memory_clk),
+    .axi_memory_reset                          (axi_memory_reset),
 
     .c0_ddr4_s_axi_awid                        (c0_ddr4_s_axi_awid),
     .c0_ddr4_s_axi_awaddr                      (c0_ddr4_s_axi_awaddr),
@@ -155,8 +161,8 @@ axi_ram #(
     .ADDR_WIDTH(34),
     .ID_WIDTH(8)
 ) ram_model (
-    .clk                    (sys_clk),
-    .rst                    (sys_rst),
+    .clk                    (axi_memory_clk),
+    .rst                    (axi_memory_reset),
 
     .s_axi_awid             (c0_ddr4_s_axi_awid),
     .s_axi_awaddr           (c0_ddr4_s_axi_awaddr),

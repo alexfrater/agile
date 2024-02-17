@@ -9,6 +9,9 @@ module top
 
     input  logic                          regbank_clk,
     input  logic                          regbank_resetn,
+
+    input  logic                          axi_memory_clk,
+    input  logic                          axi_memory_reset,
     
     // AXI-L interface to Host
     input  logic [0 : 0]                  host_axil_awvalid,
@@ -778,51 +781,6 @@ feature_transformation_engine transformation_engine_i (
 // M02: NSB
 // M03: Prefetcher
 
-// axi_L_register_control_crossbar axi_L_register_control_crossbar_i (
-//   .aclk                                 (regbank_clk),                    // input wire aclk
-//   .aresetn                              (regbank_resetn),              // input wire aresetn
-
-//   .s_axi_awaddr                         (host_axil_awaddr),    // input wire [31 : 0] s_axi_awaddr
-//   .s_axi_awprot                         (host_axil_awprot),    // input wire [2 : 0] s_axi_awprot
-//   .s_axi_awvalid                        (host_axil_awvalid),  // input wire [0 : 0] s_axi_awvalid
-//   .s_axi_awready                        (host_axil_awready),  // output wire [0 : 0] s_axi_awready
-//   .s_axi_wdata                          (host_axil_wdata),      // input wire [31 : 0] s_axi_wdata
-//   .s_axi_wstrb                          (host_axil_wstrb),      // input wire [3 : 0] s_axi_wstrb
-//   .s_axi_wvalid                         (host_axil_wvalid),    // input wire [0 : 0] s_axi_wvalid
-//   .s_axi_wready                         (host_axil_wready),    // output wire [0 : 0] s_axi_wready
-//   .s_axi_bresp                          (host_axil_bresp),      // output wire [1 : 0] s_axi_bresp
-//   .s_axi_bvalid                         (host_axil_bvalid),    // output wire [0 : 0] s_axi_bvalid
-//   .s_axi_bready                         (host_axil_bready),    // input wire [0 : 0] s_axi_bready
-//   .s_axi_araddr                         (host_axil_araddr),    // input wire [31 : 0] s_axi_araddr
-//   .s_axi_arprot                         (host_axil_arprot),    // input wire [2 : 0] s_axi_arprot
-//   .s_axi_arvalid                        (host_axil_arvalid),  // input wire [0 : 0] s_axi_arvalid
-//   .s_axi_arready                        (host_axil_arready),  // output wire [0 : 0] s_axi_arready
-//   .s_axi_rdata                          (host_axil_rdata),      // output wire [31 : 0] s_axi_rdata
-//   .s_axi_rresp                          (host_axil_rresp),      // output wire [1 : 0] s_axi_rresp
-//   .s_axi_rvalid                         (host_axil_rvalid),    // output wire [0 : 0] s_axi_rvalid
-//   .s_axi_rready                         (host_axil_rready),    // input wire [0 : 0] s_axi_rready
-
-//   .m_axi_awaddr                         (axil_interconnect_m_axi_awaddr),    // output wire [127 : 0] m_axi_awaddr
-//   .m_axi_awprot                         (axil_interconnect_m_axi_awprot),    // output wire [11 : 0] m_axi_awprot
-//   .m_axi_awvalid                        (axil_interconnect_m_axi_awvalid),  // output wire [3 : 0] m_axi_awvalid
-//   .m_axi_awready                        (axil_interconnect_m_axi_awready),  // input wire [3 : 0] m_axi_awready
-//   .m_axi_wdata                          (axil_interconnect_m_axi_wdata),      // output wire [127 : 0] m_axi_wdata
-//   .m_axi_wstrb                          (axil_interconnect_m_axi_wstrb),      // output wire [15 : 0] m_axi_wstrb
-//   .m_axi_wvalid                         (axil_interconnect_m_axi_wvalid),    // output wire [3 : 0] m_axi_wvalid
-//   .m_axi_wready                         (axil_interconnect_m_axi_wready),    // input wire [3 : 0] m_axi_wready
-//   .m_axi_bresp                          (axil_interconnect_m_axi_bresp),      // input wire [7 : 0] m_axi_bresp
-//   .m_axi_bvalid                         (axil_interconnect_m_axi_bvalid),    // input wire [3 : 0] m_axi_bvalid
-//   .m_axi_bready                         (axil_interconnect_m_axi_bready),    // output wire [3 : 0] m_axi_bready
-//   .m_axi_araddr                         (axil_interconnect_m_axi_araddr),    // output wire [127 : 0] m_axi_araddr
-//   .m_axi_arprot                         (axil_interconnect_m_axi_arprot),    // output wire [11 : 0] m_axi_arprot
-//   .m_axi_arvalid                        (axil_interconnect_m_axi_arvalid),  // output wire [3 : 0] m_axi_arvalid
-//   .m_axi_arready                        (axil_interconnect_m_axi_arready),  // input wire [3 : 0] m_axi_arready
-//   .m_axi_rdata                          (axil_interconnect_m_axi_rdata),      // input wire [127 : 0] m_axi_rdata
-//   .m_axi_rresp                          (axil_interconnect_m_axi_rresp),      // input wire [7 : 0] m_axi_rresp
-//   .m_axi_rvalid                         (axil_interconnect_m_axi_rvalid),    // input wire [3 : 0] m_axi_rvalid
-//   .m_axi_rready                         (axil_interconnect_m_axi_rready)    // output wire [3 : 0] m_axi_rready
-// );
-
 // axil interconnect uses either M<x>_BASE_ADDR or M<x>_ADDR_WIDTH
 // to calculate ranges for each master
 // setting ADDR_WIDTH to 30 for each master leads to 4 regular ranges
@@ -1308,8 +1266,8 @@ axi_memory_interconnect axi_memory_interconnect_i (
     .S07_AXI_WVALID               ('0), // input wire S00_AXI_WVALID
 
     // M00: DDR4 controller or RAM model (depending on DRAM_CONTROLLER and RAM_MODEL macros)
-    .M00_AXI_ACLK                 (sys_clk),                  // input wire M00_AXI_ACLK
-    .M00_AXI_ARESET_OUT_N         (M00_AXI_ARESET_OUT_N),  // output wire M00_AXI_ARESET_OUT_N
+    .M00_AXI_ACLK                 (axi_memory_clk),                  // input wire M00_AXI_ACLK
+    .M00_AXI_ARESET_OUT_N         (),  // output wire M00_AXI_ARESET_OUT_N
 
     .M00_AXI_AWID                 (c0_ddr4_s_axi_awid),                  // output wire [3 : 0] M00_AXI_AWID
     .M00_AXI_AWADDR               (c0_ddr4_s_axi_awaddr),              // output wire [33 : 0] M00_AXI_AWADDR

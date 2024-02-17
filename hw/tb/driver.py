@@ -61,9 +61,8 @@ class Driver():
         await self.write(self.nsb_regs["nsb_nodeslot_neighbour_count"] + 4*id, programming["neighbour_count"])
         await self.write(self.nsb_regs["nsb_nodeslot_precision"] + 4*id, NodePrecision[programming["precision"]].value)
         # await self.write(self.nsb_regs["nsb_nodeslot_aggregation_function"] + 4*id, AggregationFunction[programming["aggregation_function"]].value)
-        await self.write(self.nsb_regs["nsb_nodeslot_adjacency_list_address_lsb"] + 4*id, programming["adjacency_list_address_lsb"])
-        await self.write(self.nsb_regs["nsb_nodeslot_scale_factors_address_lsb"] + 4*id, programming["scale_factors_address_lsb"])
-        await self.write(self.nsb_regs["nsb_nodeslot_out_messages_address_lsb"] + 4*id, programming["out_messages_address_lsb"])
+        # await self.write(self.nsb_regs["nsb_nodeslot_adjacency_list_address_lsb"] + 4*id, programming["adjacency_list_address_lsb"])
+        # await self.write(self.nsb_regs["nsb_nodeslot_scale_factors_address_lsb"] + 4*id, programming["scale_factors_address_lsb"])
 
         await self.axil_driver.axil_write(self.nsb_regs["nsb_nodeslot_config_make_valid"] + 4*id, 1)
 

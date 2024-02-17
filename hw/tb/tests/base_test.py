@@ -12,34 +12,17 @@ from tb.driver import Driver
 from tb.utils.common import NodePrecision
 
 from tb.variant import Variant
-# from tb.monitors.age_monitor import AGE_Monitor
-# from tb.monitors.nsb_monitor import NSB_Monitor
-from tb.monitors.prefetcher_monitor import Prefetcher_Monitor
-from tb.monitors.fte_monitor import FTE_Monitor
+from tb.monitors.top_monitor import TopMonitor
 
 from tb.monitors.bm_monitor import BM_Monitor
 
 class BaseTest:
     def __init__(self, dut, base_path=None):
         self.dut = dut
-
-        self.driver = Driver(dut)
-
         self.variant = Variant()
 
-        # self.age_monitor = AGE_Monitor(dut.top_i.aggregation_engine_i, self.variant)
-        # self.nsb_monitor = NSB_Monitor(dut.top_i.node_scoreboard_i, self.variant)
-        # self.prefetcher_monitor = Prefetcher_Monitor(dut.top_i.prefetcher_i, self.variant)
-        # self.fte_monitor = FTE_Monitor(dut.top_i.transformation_engine_i, self.variant)
-
-        # Buffer Manager Monitors
-        # self.float_bm_monitors = [None] * self.variant.aggregation_buffer_slots
-        # self.fixed_bm_monitors = [None] * self.variant.aggregation_buffer_slots
-        # for id in range(self.variant.aggregation_buffer_slots):
-        #         self.dut._log.info("%s", dir(dut.top_i.aggregation_engine_i.precision_block[0].aggregation_mesh_i))
-        #         self.dut._log.info(f"Creating monitor for BM {id}")
-        #         self.float_bm_monitors[id] = BM_Monitor(dut.top_i.aggregation_engine_i.precision_block[0].aggregation_mesh_i.bm_block[id].buffer_manager_i,
-        #                                                         self.variant, NodePrecision.FLOAT_32.value, id)
+        self.driver = Driver(dut)
+        self.top_monitor = TopMonitor(dut, self.variant)
 
         self.scoreboard = sb.Scoreboard(nodeslot_count=256)
         self.nodeslot_programming = {}
@@ -132,16 +115,20 @@ class BaseTest:
     async def start_clocks(self):
         cocotb.start_soon(Clock(self.dut.sys_clk, 5, units="ns").start())
         cocotb.start_soon(Clock(self.dut.regbank_clk, 5, units="ns").start())
+        cocotb.start_soon(Clock(self.dut.axi_memory_clk, 2.5, units="ns").start())
 
     async def drive_reset(self):
         self.dut._log.info("Driving reset")
         self.dut.sys_rst = 1
         self.dut.regbank_resetn = 0
+        self.dut.axi_memory_reset = 1
+
         for _ in range(50):
             await RisingEdge(self.dut.regbank_clk)
         self.dut._log.info("Reset done")
         self.dut.sys_rst = 0
         self.dut.regbank_resetn = 1
+        self.dut.axi_memory_reset = 0
 
         self.dut._log.info("Starting wait after reset")
         for _ in range(10):

@@ -86,6 +86,12 @@ logic [9:0] layer_config_in_features_count;
 logic layer_config_out_features_strobe;
 logic [9:0] layer_config_out_features_count;
 
+logic layer_config_scale_factors_address_lsb_strobe;
+logic [31:0] layer_config_scale_factors_address_lsb_value;
+logic layer_config_scale_factors_address_msb_strobe;
+logic [31:0] layer_config_scale_factors_address_msb_value;
+
+
 logic layer_config_adjacency_list_address_lsb_strobe;
 logic [31:0] layer_config_adjacency_list_address_lsb_lsb;
 logic layer_config_adjacency_list_address_msb_strobe;
@@ -145,6 +151,10 @@ logic [31:0] status_nodeslots_empty_mask_5_value;
 logic [31:0] status_nodeslots_empty_mask_6_value;
 logic [31:0] status_nodeslots_empty_mask_7_value;
 
+// temporary
+logic [31:0] status_nodeslots_empty_mask_lsb_value;
+logic [31:0] status_nodeslots_empty_mask_msb_value;
+
 // Other
 // ------------------------------------------------------------
 
@@ -184,16 +194,6 @@ top_pkg::NODE_PRECISION_e active_weights_fetch_precision;
 
 logic [top_pkg::PRECISION_COUNT-1:0] aggregation_buffer_waiting_transformation;
 logic [$clog2(top_pkg::PRECISION_COUNT)-1:0] aggregation_buffer_precision_arb_bin;
-
-// temporary fix
-logic [31:0] status_nodeslots_empty_mask_0_value;
-logic [31:0] status_nodeslots_empty_mask_1_value;
-logic [31:0] status_nodeslots_empty_mask_2_value;
-logic [31:0] status_nodeslots_empty_mask_3_value;
-logic [31:0] status_nodeslots_empty_mask_4_value;
-logic [31:0] status_nodeslots_empty_mask_5_value;
-logic [31:0] status_nodeslots_empty_mask_6_value;
-logic [31:0] status_nodeslots_empty_mask_7_value;
 
 // ==================================================================================================================================================
 // Instances
@@ -514,8 +514,8 @@ always_comb begin : nsb_prefetcher_req_logic
     nsb_prefetcher_req.nodeslot      = prefetcher_arbiter_grant_bin;
     
     nsb_prefetcher_req.start_address = nsb_prefetcher_req.req_opcode == top_pkg::WEIGHTS ? {layer_config_weights_address_msb_msb [ctrl_fetch_layer_weights_precision_value], layer_config_weights_address_lsb_lsb [ctrl_fetch_layer_weights_precision_value]}
-                                    : nsb_prefetcher_req.req_opcode == top_pkg::ADJACENCY_LIST ? {nsb_nodeslot_adjacency_list_address_msb_msb[prefetcher_arbiter_grant_bin], nsb_nodeslot_adjacency_list_address_lsb_lsb[prefetcher_arbiter_grant_bin]}
-                                    : nsb_prefetcher_req.req_opcode == top_pkg::SCALE_FACTOR ? {nsb_nodeslot_scale_factors_address_msb_value[prefetcher_arbiter_grant_bin], nsb_nodeslot_scale_factors_address_lsb_value[prefetcher_arbiter_grant_bin]}
+                                    : nsb_prefetcher_req.req_opcode == top_pkg::ADJACENCY_LIST ? {layer_config_adjacency_list_address_msb_msb[prefetcher_arbiter_grant_bin], layer_config_adjacency_list_address_lsb_lsb + nsb_nodeslot_node_id_id[prefetcher_arbiter_grant_bin] * 64}
+                                    : nsb_prefetcher_req.req_opcode == top_pkg::SCALE_FACTOR ? {layer_config_scale_factors_address_msb_value[prefetcher_arbiter_grant_bin], layer_config_scale_factors_address_lsb_value[prefetcher_arbiter_grant_bin] + nsb_nodeslot_node_id_id[prefetcher_arbiter_grant_bin] * 64}
                                     : '0;
     
 
