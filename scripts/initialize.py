@@ -18,7 +18,7 @@ import os
 
 import numpy as np
 
-logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s]:%(levelname)s:: %(message)s')
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s]:%(levelname)s:: %(message)s')
 
 '''
     Build graphs with requested embedding size and generate memory file.
@@ -32,7 +32,7 @@ graph_map = {
         'class': KarateClubGraph
     },
     'erdos': {
-        'class': RandomGraph
+        'class': lambda feature_count, graph_precision: RandomGraph(num_nodes=1, avg_degree=1, num_channels=feature_count, graph_precision=graph_precision)
     },
     'pubmed': { 'class': lambda feature_count, graph_precision: PlanetoidGraph(name="Pubmed", graph_precision=graph_precision)},
     'cora': { 'class': lambda feature_count, graph_precision: PlanetoidGraph(name="Cora", graph_precision=graph_precision)},
@@ -61,7 +61,11 @@ def main(args):
     graphs = []
     for arg, graph_info in graph_map.items():
         if getattr(args, arg):
-            graph = graph_info['class'](feature_count=args.in_features, graph_precision=args.precision)
+            # To do: temporary
+            if arg == "erdos":
+                graph = RandomGraph(num_nodes=args.num_nodes, avg_degree=args.avg_degree, num_channels=args.in_features, graph_precision=args.precision)
+            else:
+                graph = graph_info['class'](feature_count=args.in_features, graph_precision=args.precision)
             
             # Apply options
             options = graph_info.get('options', {})
@@ -78,9 +82,13 @@ def main(args):
     for arg, _ in model_map.items():
         if getattr(args, arg):
             models.append(arg)
+
+    if (args.sweep):
+        run_sweep(args, models)
+        return
     
     for (graph, model) in itertools.product(graphs, models):
-        run_pass(graph, model, args.random, args.reduce, cpu=args.cpu, payloads=args.payloads)
+        run_pass(graph, model, args.random, args.reduce, cpu=args.cpu, payloads=args.payloads, base_path=args.base_path)
 
 def run_graph_commands(graph, commands):
     for command in commands:
@@ -92,13 +100,17 @@ def apply_graph_options(graph, options):
     for key, value in options.items():
         setattr(graph, key, value)
 
-def run_pass(graph, model, random_embeddings=False, reduce=False, cpu=False, payloads=False):
-    logging.info(f"Running graph: {str(graph)} with model: {model}")
-
+def run_pass(graph, model, 
+                random_embeddings=False, 
+                reduce=False, 
+                cpu=False, 
+                payloads=False, 
+                base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config"
+            ):
     model = model_map[model]['class'](args.in_features, args.out_features)
-    
-    init_manager = InitManager(graph, model, base_path=args.base_path)
-    bman = BenchmarkingManager(graph=graph, model=model)
+
+    init_manager = InitManager(graph, model, base_path=base_path)
+    bman = BenchmarkingManager(graph=graph, model=model, cpu=args.cpu, gpu=args.gpu)
 
     if (reduce):
         init_manager.reduce_graph()
@@ -107,19 +119,55 @@ def run_pass(graph, model, random_embeddings=False, reduce=False, cpu=False, pay
     else:
         init_manager.trained_graph.train_embeddings()
 
-    if (cpu):
-        t = bman.cpu_step()
-        logging.info(f"Elapsed time: {t}")
-
+    if (args.cpu or args.gpu or args.sweep):
+        metrics = bman.benchmark()
 
     if (payloads):
         # Initialize Memory
         init_manager.memory_mapper.map()
 
         # Dump
-        init_manager.dump_memory()
+        # init_manager.dump_memory()
         init_manager.dump_layer_config()
         init_manager.dump_nodeslot_programming()
+
+    return metrics
+
+def run_sweep(args, models):
+    # avg_degree_range = range(1, 11)
+    avg_degree_range = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    node_count_range = range(50000, 1000050, 50000)
+    # node_count_range = [10000]
+
+    metrics = []
+    for degree in avg_degree_range:
+        for node_count in node_count_range:
+            logging.info(f"Running graph with degree {degree} and node_count {node_count}")
+            graph = RandomGraph(num_nodes=node_count, avg_degree=degree, num_channels=args.in_features, graph_precision=args.precision)
+            
+            results = run_pass(
+                graph, 
+                models[0], 
+                args.random, 
+                args.reduce, 
+                cpu=args.cpu, 
+                payloads=args.payloads, 
+                base_path = os.environ.get("WORKAREA") + f"/hw/sim/layer_config_degree_{degree}_nodes_{node_count}"
+            )
+
+            metrics.append({
+                "node_count": graph.dataset.y.shape[0],
+                "average_neighbour_count": graph.dataset.edge_index.shape[1] / graph.dataset.y.shape[0],
+                **{k: v for d in results.values() for k, v in d.items()},
+            })
+
+    import pandas as pd
+    from tabulate import tabulate
+
+    df = pd.DataFrame(metrics)
+    print(tabulate(df, headers="keys", tablefmt="psql"))
+    df.to_csv("sweep.csv")
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
@@ -143,8 +191,13 @@ def parse_arguments():
     default_base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config"
     parser.add_argument('--base_path', default=default_base_path, help='Base path (default: $WORKAREA/hw/sim/layer_config)')
     
-    parser.add_argument('--in_features', type=int, default=4, help='Input feature count')
-    parser.add_argument('--out_features', type=int, default=4, help='Output feature count')
+    parser.add_argument('--in_features', type=int, default=64, help='Input feature count')
+    parser.add_argument('--out_features', type=int, default=64, help='Output feature count')
+
+    # For random (erdos) graphs
+    parser.add_argument('--sweep', action='store_true', help='Run benchmarking for random graphs over a range of average node counts and average degrees')
+    parser.add_argument('--avg_degree', type=float, default=1, help='Average number of neighbours per node')
+    parser.add_argument('--num_nodes', type=int, default=10000, help='Approximate number of nodes in the graph')
     
     parser.add_argument('--random', action='store_true', help='Initialize graph with random embedding.')
     
@@ -156,6 +209,7 @@ def parse_arguments():
     # Tools
     parser.add_argument('--payloads', action='store_true', help='Generate simulation initialization payloads')
     parser.add_argument('--cpu', action='store_true', help='Run benchmarking steps on CPU')
+    parser.add_argument('--gpu', action='store_true', help='Run benchmarking steps on GPU')
 
     return parser.parse_args()
 
