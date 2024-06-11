@@ -193,6 +193,10 @@ logic [31:0] status_nodeslots_empty_mask_7_value;
 // Instances
 // ==================================================================================================================================================
 
+
+logic [31:0] layer_config_scale_factors_address_lsb_value;
+logic [31:0] layer_config_scale_factors_address_msb_value;
+
 // Regbank
 // ------------------------------------------------------------
 node_scoreboard_regbank_wrapper node_scoreboard_regbank_i (

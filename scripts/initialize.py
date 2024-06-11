@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+
 import argparse
+
+import sys
+sys.path.append('/home/aw1223/agile')
 from sdk.initialization_manager import InitManager
 
 from sdk.graphs.matrix_graph import MatrixGraph
