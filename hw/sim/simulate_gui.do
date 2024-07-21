@@ -10,7 +10,7 @@ view wave3
 do age.do
 view wave4
 do fte.do
-run -all
+run 30945.00ns
 view wave
 wave zoom full
 view wave1
@@ -21,3 +21,4 @@ view wave3
 wave zoom full
 view wave4
 wave zoom full
+radix dec

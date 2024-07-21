@@ -21,6 +21,8 @@ quietly virtual function -install {/top_wrapper_tb/top_i/aggregation_engine_i/pr
 quietly virtual function -install {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i} -env /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/row_gen[1]/col_gen[0]/agc_i { &{/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[31], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[30], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[29], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[28], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[27], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[26], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[25], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[24], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[23], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[22], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[21], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[20], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[19], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[18], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[17], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[16], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[15], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[14], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[13], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[12], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[11], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[10], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[9], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[8], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[7], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[6], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[5], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[4], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[3], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[2], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[1], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[1]/agm_i/message_channel_resp.data[0] }} 1
 quietly virtual function -install {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i} -env /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/row_gen[1]/col_gen[0]/agc_i { &{/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[31], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[30], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[29], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[28], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[27], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[26], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[25], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[24], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[23], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[22], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[21], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[20], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[19], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[18], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[17], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[16], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[15], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[14], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[13], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[12], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[11], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[10], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[9], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[8], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[7], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[6], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[5], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[4], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[3], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[2], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[1], /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/agm_block[0]/agm_i/message_channel_resp.data[0] }} 1001
 quietly virtual function -install /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i -env /top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[0]/aggregation_mesh_i/row_gen[1]/col_gen[0]/agc_i { &{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][31], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][30], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][29], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][28], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][27], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][26], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][25], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][24], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][23], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][22], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][21], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][20], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][19], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][18], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][17], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][16], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][15], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][14], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][13], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][12], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][11], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][10], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][9], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][8], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][7], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][6], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][5], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][4], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][3], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][2], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][1], /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0][0] }} 1
+quietly virtual signal -install {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i} { /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_resp_data[511:480]} last
+quietly virtual function -install /top_wrapper_tb/top_i/prefetcher_i -env /top_wrapper_tb { &{/top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[31], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[30], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[29], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[28], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[27], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[26], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[25], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[24], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[23], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[22], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[21], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[20], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[19], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[18], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[17], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[16], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[15], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[14], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[13], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[12], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[11], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[10], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[9], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[8], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[7], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[6], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[5], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[4], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[3], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[2], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[1], /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data[0] }} 1001
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /top_wrapper_tb/top_i/prefetcher_i/core_clk
 add wave -noupdate /top_wrapper_tb/top_i/prefetcher_i/resetn
@@ -102,55 +104,56 @@ add wave -noupdate -group {Read Master} -expand -group RM-INTERFACE -childformat
 add wave -noupdate -group {Read Master} -expand -group RM-INTERFACE /top_wrapper_tb/top_i/prefetcher_i/read_master_resp_ready
 add wave -noupdate -group {Read Master} -expand -group RM-INTERFACE /top_wrapper_tb/top_i/prefetcher_i/read_master_resp_last
 add wave -noupdate -group {Read Master} -expand -group RM-INTERFACE /top_wrapper_tb/top_i/prefetcher_i/read_master_resp_axi_id
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_req_valid
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_fetch_req_ready
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_req_ready
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_start_address
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_byte_count
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_fetch_resp_valid
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_resp_valid
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_resp_ready
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_last
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_axi_id
-add wave -noupdate -expand -group {Weight Bank AXI} -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/active_weight_fetch_precision
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_araddr
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arburst
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arcache
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arid
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arlen
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arlock
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arprot
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arqos
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arsize
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arvalid
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arready
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awaddr
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awburst
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awcache
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awid
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awlen
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awlock
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awprot
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awqos
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awready
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awsize
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awvalid
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_bid
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_bready
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_bresp
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_bvalid
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rdata
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rid
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rlast
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rready
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rresp
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rvalid
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wdata
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wlast
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wready
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wstrb
-add wave -noupdate -expand -group {Weight Bank AXI} -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wvalid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_req_valid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_fetch_req_ready
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_req_ready
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_start_address
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_byte_count
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_fetch_resp_valid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_resp_valid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rm_fetch_resp_ready
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_last
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} -radix float32 /top_wrapper_tb/top_i/prefetcher_i/1001
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_data
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/weight_read_master_resp_axi_id
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group {WB INTERFACE} /top_wrapper_tb/top_i/prefetcher_i/active_weight_fetch_precision
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_araddr
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arburst
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arcache
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arlen
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arlock
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arprot
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arqos
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arsize
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arvalid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_arready
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awaddr
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awburst
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awcache
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awlen
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awlock
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awprot
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awqos
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awready
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awsize
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_awvalid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_bid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_bready
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_bresp
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_bvalid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rdata
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rlast
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rready
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rresp
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_rvalid
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wdata
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wlast
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wready
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wstrb
+add wave -noupdate -expand -group {Weight Bank AXI} -expand -group WB-AXI /top_wrapper_tb/top_i/prefetcher_i/weight_bank_axi_wvalid
 add wave -noupdate -group {MESSAGE CHANNEL} /top_wrapper_tb/top_i/prefetcher_i/message_channel_req_valid
 add wave -noupdate -group {MESSAGE CHANNEL} /top_wrapper_tb/top_i/prefetcher_i/message_channel_req_ready
 add wave -noupdate -group {MESSAGE CHANNEL} /top_wrapper_tb/top_i/prefetcher_i/message_channel_req
@@ -286,13 +289,13 @@ add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/nsb_prefetcher_feature_bank_resp
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_req_valid
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_req_ready
-add wave -noupdate -expand -group FEATURE-BANK -childformat {{{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[9]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[8]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[7]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[6]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[5]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[4]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[3]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[2]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[1]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[0]} -radix unsigned}} -expand -subitemconfig {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[9]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[8]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[7]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[6]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[5]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[4]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[3]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[2]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[1]} {-radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[0]} {-radix unsigned}} /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address
+add wave -noupdate -expand -group FEATURE-BANK -childformat {{{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[9]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[8]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[7]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[6]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[5]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[4]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[3]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[2]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[1]} -radix unsigned} {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[0]} -radix unsigned}} -subitemconfig {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[9]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[8]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[7]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[6]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[5]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[4]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[3]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[2]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[1]} {-height 16 -radix unsigned} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address[0]} {-height 16 -radix unsigned}} /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_start_address
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_byte_count
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_valid
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_ready
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_last
 add wave -noupdate -expand -group FEATURE-BANK -radix float32 /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/1
-add wave -noupdate -expand -group FEATURE-BANK -subitemconfig {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data[0]} -expand} /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data
+add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_data
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_fetch_resp_axi_id
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/message_channel_req_valid
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/message_channel_req_ready
@@ -302,7 +305,7 @@ add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/message_channel_resp
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/scale_factor_queue_pop
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/scale_factor_queue_out_valid
-add wave -noupdate -expand -group FEATURE-BANK -expand /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/scale_factor_queue_out_data
+add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/scale_factor_queue_out_data
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/scale_factor_queue_count
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/scale_factor_queue_empty
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/scale_factor_queue_full
@@ -351,190 +354,190 @@ add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/read_master_req_fetch_tag_q
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/fetch_tag_bank
 add wave -noupdate -expand -group FEATURE-BANK /top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/chosen_ft_group_idx
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/core_clk}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/resetn}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_req_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_req_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_req}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_resp}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocation_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocation_nodeslot}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocation_feature_count}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/deallocation_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/tag_free}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_req_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_req_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_start_address}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_byte_count}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_last}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_data}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_axi_id}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_req_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_req_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_start_address}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_byte_count}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_last}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_data}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_axi_id}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_req_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_req_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_req}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_resp}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_pop}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_out_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_out_data}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_count}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_empty}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_full}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/layer_config_adjacency_list_address_lsb_value}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/layer_config_in_messages_address_lsb_value}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/layer_config_scale_factors_address_lsb_value}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/layer_config_scale_factors_address_msb_value}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocated_nodeslot}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocated_feature_count}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/make_tag_free}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_fetch_state}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_fetch_state_n}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/push_adj_queue}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/pop_adj_queue}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_write_data}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_head_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_head}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_empty}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_full}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_count}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_slots_available}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_manager_free}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_manager_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_fetch_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_fetch_resp_partial}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/push_message_queue}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/pop_message_queue}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_head_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_head}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_empty}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_full}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_count}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/accepting_nsb_req}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/accepting_message_fetch_req}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/accepting_msg_fetch_resp}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_push}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_in_data}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_fetch_req_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_fetch_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_fetch_resp_partial}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_read_master_req_valid}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_read_master_start_address}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_read_master_byte_count}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_read_master_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/msg_fetch_req_precision_q}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/msg_queue_expected_responses}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/issue_nsb_partial_done_msg_fetch}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/issue_nsb_partial_done_msg_fetch_q}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/msg_queue_write_data}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/accepted_message_channel_req}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/msg_fetch_required_bytes}
-add wave -noupdate -expand -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/trigger_msg_partial_resp}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/core_clk}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/resetn}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_req_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_req_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_req}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_resp}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocation_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocation_nodeslot}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocation_feature_count}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/deallocation_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/tag_free}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_req_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_req_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_start_address}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_byte_count}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_last}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_data}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_axi_id}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_req_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_req_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_start_address}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_byte_count}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_last}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_data}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_axi_id}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_req_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_req_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_req}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_resp}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_pop}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_out_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_out_data}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_count}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_empty}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_full}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/layer_config_adjacency_list_address_lsb_value}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/layer_config_in_messages_address_lsb_value}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/layer_config_scale_factors_address_lsb_value}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/layer_config_scale_factors_address_msb_value}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocated_nodeslot}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocated_feature_count}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/make_tag_free}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_fetch_state}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_fetch_state_n}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/push_adj_queue}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/pop_adj_queue}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_write_data}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_head_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_head}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_empty}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_full}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_count}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_slots_available}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_manager_free}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_manager_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_fetch_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_fetch_resp_partial}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/push_message_queue}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/pop_message_queue}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_head_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_head}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_empty}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_full}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_count}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/accepting_nsb_req}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/accepting_message_fetch_req}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/accepting_msg_fetch_resp}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_push}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_in_data}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_fetch_req_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_fetch_resp_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_fetch_resp_partial}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_read_master_req_valid}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_read_master_start_address}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_read_master_byte_count}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_read_master_resp_ready}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/msg_fetch_req_precision_q}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/msg_queue_expected_responses}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/issue_nsb_partial_done_msg_fetch}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/issue_nsb_partial_done_msg_fetch_q}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/msg_queue_write_data}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/accepted_message_channel_req}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/msg_fetch_required_bytes}
-add wave -noupdate -expand -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/trigger_msg_partial_resp}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/core_clk}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/resetn}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_req_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_req_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_req}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_resp_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_resp_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/nsb_prefetcher_resp}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocation_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocation_nodeslot}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocation_feature_count}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/deallocation_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/tag_free}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_req_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_req_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_start_address}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_byte_count}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_last}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_data}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_adj_rm_resp_axi_id}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_req_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_req_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_start_address}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_byte_count}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_last}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_data}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/fetch_tag_msg_rm_resp_axi_id}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_req_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_req_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_req}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_resp_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_resp_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_channel_resp}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_pop}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_out_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_out_data}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_count}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_empty}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_full}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/layer_config_adjacency_list_address_lsb_value}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/layer_config_in_messages_address_lsb_value}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/layer_config_scale_factors_address_lsb_value}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/layer_config_scale_factors_address_msb_value}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocated_nodeslot}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/allocated_feature_count}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/make_tag_free}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_fetch_state}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_fetch_state_n}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/push_adj_queue}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/pop_adj_queue}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_write_data}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_head_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_head}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_empty}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_full}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_count}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_slots_available}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_manager_free}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_manager_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_fetch_resp_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_fetch_resp_partial}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/push_message_queue}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/pop_message_queue}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_head_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_head}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_empty}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_full}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_queue_count}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/accepting_nsb_req}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/accepting_message_fetch_req}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/accepting_msg_fetch_resp}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_push}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_queue_in_data}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_fetch_req_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_fetch_resp_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_fetch_resp_partial}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_read_master_req_valid}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_read_master_start_address}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_read_master_byte_count}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/scale_factor_read_master_resp_ready}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/msg_fetch_req_precision_q}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/msg_queue_expected_responses}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/issue_nsb_partial_done_msg_fetch}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/issue_nsb_partial_done_msg_fetch_q}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/msg_queue_write_data}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/accepted_message_channel_req}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/msg_fetch_required_bytes}
+add wave -noupdate -group FETCH-TAG1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/trigger_msg_partial_resp}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/core_clk}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/resetn}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_req_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_req_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_req}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_resp_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_resp_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/nsb_prefetcher_resp}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocation_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocation_nodeslot}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocation_feature_count}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/deallocation_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/tag_free}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_req_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_req_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_start_address}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_byte_count}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_last}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_data}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_adj_rm_resp_axi_id}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_req_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_req_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_start_address}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_byte_count}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_last}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_data}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/fetch_tag_msg_rm_resp_axi_id}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_req_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_req_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_req}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_resp_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_resp_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_channel_resp}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_pop}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_out_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_out_data}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_count}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_empty}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_full}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/layer_config_adjacency_list_address_lsb_value}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/layer_config_in_messages_address_lsb_value}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/layer_config_scale_factors_address_lsb_value}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/layer_config_scale_factors_address_msb_value}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocated_nodeslot}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/allocated_feature_count}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/make_tag_free}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_fetch_state}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_fetch_state_n}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/push_adj_queue}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/pop_adj_queue}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_write_data}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_head_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_head}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_empty}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_full}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_count}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_slots_available}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_manager_free}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_manager_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_fetch_resp_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_fetch_resp_partial}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/push_message_queue}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/pop_message_queue}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_head_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_head}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_empty}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_full}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_queue_count}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/accepting_nsb_req}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/accepting_message_fetch_req}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/accepting_msg_fetch_resp}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_push}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_queue_in_data}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_fetch_req_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_fetch_resp_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_fetch_resp_partial}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_read_master_req_valid}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_read_master_start_address}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_read_master_byte_count}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/scale_factor_read_master_resp_ready}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/msg_fetch_req_precision_q}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/msg_queue_expected_responses}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/issue_nsb_partial_done_msg_fetch}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/issue_nsb_partial_done_msg_fetch_q}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/msg_queue_write_data}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/accepted_message_channel_req}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/msg_fetch_required_bytes}
+add wave -noupdate -group FETCH-TAG2 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/trigger_msg_partial_resp}
 add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/core_clk}
 add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/resetn}
 add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/write_enable}
@@ -547,6 +550,17 @@ add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/
 add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/slot_free}
 add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/rd_ptr}
 add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/read_address}
+add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/clka}
+add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/ena}
+add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/wea}
+add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/addra}
+add wave -noupdate -expand -group AGG-Buffer1 -radix float32 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/dina}
+add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/clkb}
+add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/enb}
+add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/addrb}
+add wave -noupdate -expand -group AGG-Buffer1 -radix float32 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/doutb}
+add wave -noupdate -expand -group AGG-Buffer1 -radix float32 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/doutb_reg}
+add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/genblk1/fifo/ram}
 add wave -noupdate -expand -group AGG-Buffer1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[0]/slot_i/pop_q}
 add wave -noupdate -group AGGBuff1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[1]/slot_i/core_clk}
 add wave -noupdate -group AGGBuff1 {/top_wrapper_tb/top_i/genblk1[0]/aggregation_buffer_i/genblk1[1]/slot_i/resetn}
@@ -566,10 +580,10 @@ add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/resetn}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_req_valid}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_req_ready}
-add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_req}
+add wave -noupdate -expand -group FetchTag1 -childformat {{{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_req.start_address} -radix unsigned}} -expand -subitemconfig {{/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_req.start_address} {-height 16 -radix unsigned}} {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_req}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_resp_valid}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_resp_ready}
-add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_resp}
+add wave -noupdate -expand -group FetchTag1 -expand {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/nsb_prefetcher_resp}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/allocation_valid}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/allocation_nodeslot}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/allocation_feature_count}
@@ -577,7 +591,7 @@ add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/tag_free}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_adj_rm_req_valid}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_adj_rm_req_ready}
-add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_adj_rm_start_address}
+add wave -noupdate -expand -group FetchTag1 -radix unsigned {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_adj_rm_start_address}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_adj_rm_byte_count}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_adj_rm_resp_valid}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_adj_rm_resp_ready}
@@ -586,11 +600,12 @@ add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_adj_rm_resp_axi_id}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_req_valid}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_req_ready}
-add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_start_address}
+add wave -noupdate -expand -group FetchTag1 -radix unsigned {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_start_address}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_byte_count}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_resp_valid}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_resp_ready}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_resp_last}
+add wave -noupdate -expand -group FetchTag1 -radix float32 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/last}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_resp_data}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/fetch_tag_msg_rm_resp_axi_id}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/message_channel_req_valid}
@@ -606,7 +621,7 @@ add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/scale_factor_queue_empty}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/scale_factor_queue_full}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/layer_config_adjacency_list_address_lsb_value}
-add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/layer_config_in_messages_address_lsb_value}
+add wave -noupdate -expand -group FetchTag1 -radix unsigned {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/layer_config_in_messages_address_lsb_value}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/layer_config_scale_factors_address_lsb_value}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/layer_config_scale_factors_address_msb_value}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/allocated_nodeslot}
@@ -616,9 +631,9 @@ add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/message_fetch_state_n}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/push_adj_queue}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/pop_adj_queue}
-add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_write_data}
+add wave -noupdate -expand -group FetchTag1 -radix unsigned {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_write_data}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_head_valid}
-add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_head}
+add wave -noupdate -expand -group FetchTag1 -radix unsigned {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_head}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_empty}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_full}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_count}
@@ -655,9 +670,9 @@ add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/msg_fetch_required_bytes}
 add wave -noupdate -expand -group FetchTag1 {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/trigger_msg_partial_resp}
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {10286689 ps} 0}
+WaveRestoreCursors {{Cursor 1} {10978349 ps} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 305
+configure wave -namecolwidth 358
 configure wave -valuecolwidth 230
 configure wave -justifyvalue left
 configure wave -signalnamewidth 1
@@ -671,6 +686,6 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {10104300 ps} {11130684 ps}
-bookmark add wave bookmark4 {{18551117 ps} {18990769 ps}} 0
-bookmark add wave bookmark5 {{17959609 ps} {22111537 ps}} 0
+WaveRestoreZoom {10415302 ps} {11253006 ps}
+bookmark add wave bookmark2 {{18551117 ps} {18990769 ps}} 0
+bookmark add wave bookmark3 {{17959609 ps} {22111537 ps}} 0

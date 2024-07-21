@@ -158,6 +158,40 @@ add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_60 
 add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_61 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[61]}
 add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_62 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[62]}
 add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_63 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[63]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_32 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[32]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_33 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[33]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_34 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[34]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_35 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[35]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_36 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[36]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_37 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[37]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_38 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[38]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_39 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[39]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_40 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[40]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_41 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[41]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_42 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[42]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_43 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[43]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_44 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[44]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_45 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[45]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_46 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[46]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_47 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[47]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_48 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[48]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_49 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[49]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_50 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[50]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_51 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[51]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_52 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[52]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_53 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[53]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_54 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[54]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_55 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[55]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_56 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[56]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_57 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[57]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_58 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[58]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_59 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[59]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_60 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[60]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_61 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[61]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_62 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[62]}
+add wave -noupdate -expand -group NSB -expand -group 32-63 -label node_state_63 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[63]}
+add wave -noupdate -group WEIGHT_BANK -label weight_bank_state {/top_wrapper_tb/top_i/prefetcher_i/genblk1[0]/weight_bank_i/weight_bank_state}
+add wave -noupdate -group WEIGHT_BANK -label weight_channel_resp {/top_wrapper_tb/top_i/prefetcher_i/genblk1[0]/weight_bank_i/weight_channel_resp}
 add wave -noupdate -group WEIGHT_BANK -label weight_bank_state {/top_wrapper_tb/top_i/prefetcher_i/genblk1[0]/weight_bank_i/weight_bank_state}
 add wave -noupdate -group WEIGHT_BANK -label weight_channel_resp {/top_wrapper_tb/top_i/prefetcher_i/genblk1[0]/weight_bank_i/weight_channel_resp}
 add wave -noupdate -group WEIGHT_BANK -label weight_bank_state {/top_wrapper_tb/top_i/prefetcher_i/genblk1[0]/weight_bank_i/weight_bank_state}
@@ -170,6 +204,10 @@ add wave -noupdate -group FETCH_TAG_0 -label message_fetch_state {/top_wrapper_t
 add wave -noupdate -group FETCH_TAG_0 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_manager_i/fetch_state}
 add wave -noupdate -group FETCH_TAG_0 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_fetch_state}
 add wave -noupdate -group FETCH_TAG_0 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_manager_i/fetch_state}
+add wave -noupdate -group FETCH_TAG_0 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/message_fetch_state}
+add wave -noupdate -group FETCH_TAG_0 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[0]/fetch_tag_i/adj_queue_manager_i/fetch_state}
+add wave -noupdate -group FETCH_TAG_1 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/message_fetch_state}
+add wave -noupdate -group FETCH_TAG_1 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_manager_i/fetch_state}
 add wave -noupdate -group FETCH_TAG_1 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/message_fetch_state}
 add wave -noupdate -group FETCH_TAG_1 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/adj_queue_manager_i/fetch_state}
 add wave -noupdate -group FETCH_TAG_1 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[1]/fetch_tag_i/message_fetch_state}
@@ -182,12 +220,21 @@ add wave -noupdate -group FETCH_TAG_2 -label message_fetch_state {/top_wrapper_t
 add wave -noupdate -group FETCH_TAG_2 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_manager_i/fetch_state}
 add wave -noupdate -group FETCH_TAG_2 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_fetch_state}
 add wave -noupdate -group FETCH_TAG_2 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_manager_i/fetch_state}
+add wave -noupdate -group FETCH_TAG_2 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/message_fetch_state}
+add wave -noupdate -group FETCH_TAG_2 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[2]/fetch_tag_i/adj_queue_manager_i/fetch_state}
 add wave -noupdate -group FETCH_TAG_3 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[3]/fetch_tag_i/message_fetch_state}
 add wave -noupdate -group FETCH_TAG_3 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[3]/fetch_tag_i/adj_queue_manager_i/fetch_state}
 add wave -noupdate -group FETCH_TAG_3 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[3]/fetch_tag_i/message_fetch_state}
 add wave -noupdate -group FETCH_TAG_3 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[3]/fetch_tag_i/adj_queue_manager_i/fetch_state}
 add wave -noupdate -group FETCH_TAG_3 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[3]/fetch_tag_i/message_fetch_state}
 add wave -noupdate -group FETCH_TAG_3 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[3]/fetch_tag_i/adj_queue_manager_i/fetch_state}
+add wave -noupdate -group FETCH_TAG_3 -label message_fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[3]/fetch_tag_i/message_fetch_state}
+add wave -noupdate -group FETCH_TAG_3 -label fetch_state {/top_wrapper_tb/top_i/prefetcher_i/feature_bank_i/genblk1[3]/fetch_tag_i/adj_queue_manager_i/fetch_state}
+add wave -noupdate -group AGE -label nsb_age_req_valid /top_wrapper_tb/top_i/aggregation_engine_i/nsb_age_req_valid
+add wave -noupdate -group AGE -label nsb_age_req_ready /top_wrapper_tb/top_i/aggregation_engine_i/nsb_age_req_ready
+add wave -noupdate -group AGE -label nsb_age_req /top_wrapper_tb/top_i/aggregation_engine_i/nsb_age_req
+add wave -noupdate -group AGE -label nsb_age_resp_valid /top_wrapper_tb/top_i/aggregation_engine_i/nsb_age_resp_valid
+add wave -noupdate -group AGE -label nsb_age_resp /top_wrapper_tb/top_i/aggregation_engine_i/nsb_age_resp
 add wave -noupdate -group AGE -label nsb_age_req_valid /top_wrapper_tb/top_i/aggregation_engine_i/nsb_age_req_valid
 add wave -noupdate -group AGE -label nsb_age_req_ready /top_wrapper_tb/top_i/aggregation_engine_i/nsb_age_req_ready
 add wave -noupdate -group AGE -label nsb_age_req /top_wrapper_tb/top_i/aggregation_engine_i/nsb_age_req
@@ -221,6 +268,16 @@ add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label allocation_req {/top_wrappe
 add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label agm_req_valid {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/agm_req_valid}
 add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label agm_req_ready {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/agm_req_ready}
 add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label agm_req {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/agm_req}
+add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label allocation_req_valid {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/allocation_req_valid}
+add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label allocation_req_ready {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/allocation_req_ready}
+add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label allocation_req {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/allocation_req}
+add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label agm_req_valid {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/agm_req_valid}
+add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label agm_req_ready {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/agm_req_ready}
+add wave -noupdate -group FLOAT_AGC_ALLOCATOR -label agm_req {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agc_allocator/agm_req}
+add wave -noupdate -group FLOAT_AGM -label agm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agm_block[0]/agm_i/agm_state}
+add wave -noupdate -group FLOAT_AGM -label agm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agm_block[1]/agm_i/agm_state}
+add wave -noupdate -group FLOAT_AGM -label agm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agm_block[2]/agm_i/agm_state}
+add wave -noupdate -group FLOAT_AGM -label agm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agm_block[3]/agm_i/agm_state}
 add wave -noupdate -group FLOAT_AGM -label agm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agm_block[0]/agm_i/agm_state}
 add wave -noupdate -group FLOAT_AGM -label agm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agm_block[1]/agm_i/agm_state}
 add wave -noupdate -group FLOAT_AGM -label agm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/agm_block[2]/agm_i/agm_state}
@@ -281,6 +338,26 @@ add wave -noupdate -group FLOAT_AGC -label row3_col0 {/top_wrapper_tb/top_i/aggr
 add wave -noupdate -group FLOAT_AGC -label row3_col1 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[3]/col_gen[1]/agc_i/agc_state}
 add wave -noupdate -group FLOAT_AGC -label row3_col2 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[3]/col_gen[2]/agc_i/agc_state}
 add wave -noupdate -group FLOAT_AGC -label row3_col3 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[3]/col_gen[3]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row0_col0 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[0]/col_gen[0]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row0_col1 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[0]/col_gen[1]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row0_col2 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[0]/col_gen[2]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row0_col3 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[0]/col_gen[3]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row1_col0 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[1]/col_gen[0]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row1_col1 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[1]/col_gen[1]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row1_col2 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[1]/col_gen[2]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row1_col3 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[1]/col_gen[3]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row2_col0 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[2]/col_gen[0]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row2_col1 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[2]/col_gen[1]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row2_col2 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[2]/col_gen[2]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row2_col3 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[2]/col_gen[3]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row3_col0 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[3]/col_gen[0]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row3_col1 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[3]/col_gen[1]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row3_col2 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[3]/col_gen[2]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_AGC -label row3_col3 {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/row_gen[3]/col_gen[3]/agc_i/agc_state}
+add wave -noupdate -group FLOAT_BM -label bm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/bm_block[0]/buffer_manager_i/bm_state}
+add wave -noupdate -group FLOAT_BM -label bm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/bm_block[1]/buffer_manager_i/bm_state}
+add wave -noupdate -group FLOAT_BM -label bm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/bm_block[2]/buffer_manager_i/bm_state}
+add wave -noupdate -group FLOAT_BM -label bm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/bm_block[3]/buffer_manager_i/bm_state}
 add wave -noupdate -group FLOAT_BM -label bm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/bm_block[0]/buffer_manager_i/bm_state}
 add wave -noupdate -group FLOAT_BM -label bm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/bm_block[1]/buffer_manager_i/bm_state}
 add wave -noupdate -group FLOAT_BM -label bm_state {/top_wrapper_tb/top_i/aggregation_engine_i/precision_block[0]/mesh_block[1]/aggregation_mesh_i/bm_block[2]/buffer_manager_i/bm_state}
@@ -299,6 +376,105 @@ add wave -noupdate -group FTE -label float_core_state {/top_wrapper_tb/top_i/tra
 add wave -noupdate -group FTE -label pulse_systolic_module {/top_wrapper_tb/top_i/transformation_engine_i/genblk1[0]/feature_transformation_core_i/pulse_systolic_module}
 add wave -noupdate -group FTE -label float_core_state {/top_wrapper_tb/top_i/transformation_engine_i/genblk1[0]/feature_transformation_core_i/fte_state}
 add wave -noupdate -group FTE -label pulse_systolic_module {/top_wrapper_tb/top_i/transformation_engine_i/genblk1[0]/feature_transformation_core_i/pulse_systolic_module}
+add wave -noupdate -group FTE -label float_core_state {/top_wrapper_tb/top_i/transformation_engine_i/genblk1[0]/feature_transformation_core_i/fte_state}
+add wave -noupdate -group FTE -label pulse_systolic_module {/top_wrapper_tb/top_i/transformation_engine_i/genblk1[0]/feature_transformation_core_i/pulse_systolic_module}
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/clk
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/rst
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_awaddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_awprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_awvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_awready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_wdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_wstrb
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_wvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_wready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_bresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_bvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_bready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_araddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_arprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_arvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_arready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_rdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_rresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_rvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_rready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_awaddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_awprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_awvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_awready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_wdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_wstrb
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_wvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_wready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_bresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_bvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_bready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_araddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_arprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_arvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_arready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_rdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_rresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_rvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m00_axil_rready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_awaddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_awprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_awvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_awready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_wdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_wstrb
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_wvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_wready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_bresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_bvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_bready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_araddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_arprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_arvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_arready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_rdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_rresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_rvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m01_axil_rready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_awaddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_awprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_awvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_awready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_wdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_wstrb
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_wvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_wready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_bresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_bvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_bready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_araddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_arprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_arvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_arready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_rdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_rresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_rvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m02_axil_rready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_awaddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_awprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_awvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_awready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_wdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_wstrb
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_wvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_wready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_bresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_bvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_bready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_araddr
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_arprot
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_arvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_arready
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_rdata
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_rresp
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_rvalid
+add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/m03_axil_rready
 add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/clk
 add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/rst
 add wave -noupdate -group AXI-L-Interconnect /top_wrapper_tb/top_i/axil_interconnect_i/s00_axil_awaddr
@@ -647,6 +823,25 @@ add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engin
 add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_bresp
 add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_bvalid
 add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_bready
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_awaddr
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_awprot
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_awvalid
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_awready
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_wdata
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_wstrb
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_wvalid
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_wready
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_araddr
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_arprot
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_arvalid
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_arready
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_rdata
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_rresp
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_rvalid
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_rready
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_bresp
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_bvalid
+add wave -noupdate -group AXI-REGBANK /top_wrapper_tb/top_i/transformation_engine_i/s_axi_bready
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req_valid
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req_ready
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req
@@ -706,6 +901,24 @@ add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transforma
 add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/ctrl_buffering_enable_value
 add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/ctrl_writeback_enable_strobe
 add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/ctrl_writeback_enable_value
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_in_features_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_in_features_count
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_out_features_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_out_features_count
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_activation_function_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_activation_function_value
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_bias_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_bias_value
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_leaky_relu_alpha_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_leaky_relu_alpha_value
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_out_features_address_msb_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_out_features_address_lsb_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_out_features_address_msb_value
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/layer_config_out_features_address_lsb_value
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/ctrl_buffering_enable_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/ctrl_buffering_enable_value
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/ctrl_writeback_enable_strobe
+add wave -noupdate -group NSB-FTE -group CONFIG /top_wrapper_tb/top_i/transformation_engine_i/ctrl_writeback_enable_value
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req_valid
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req_ready
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req
@@ -716,6 +929,16 @@ add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_resp_valid
 add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_resp
+add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req_valid
+add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req_ready
+add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_req
+add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_resp_valid
+add wave -noupdate -group NSB-FTE /top_wrapper_tb/top_i/transformation_engine_i/nsb_fte_resp
+add wave -noupdate -group AGG-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/aggregation_buffer_node_id
+add wave -noupdate -group AGG-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/aggregation_buffer_pop
+add wave -noupdate -group AGG-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/aggregation_buffer_out_feature_valid
+add wave -noupdate -group AGG-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/aggregation_buffer_out_feature
+add wave -noupdate -group AGG-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/aggregation_buffer_slot_free
 add wave -noupdate -group AGG-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/aggregation_buffer_node_id
 add wave -noupdate -group AGG-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/aggregation_buffer_pop
 add wave -noupdate -group AGG-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/aggregation_buffer_out_feature_valid
@@ -746,6 +969,48 @@ add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_en
 add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_engine_i/weight_channel_req
 add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_engine_i/weight_channel_resp_valid
 add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_engine_i/weight_channel_resp_ready
+add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_engine_i/weight_channel_req_valid
+add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_engine_i/weight_channel_req_ready
+add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_engine_i/weight_channel_req
+add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_engine_i/weight_channel_resp_valid
+add wave -noupdate -group WEIGHT-CHANNEL /top_wrapper_tb/top_i/transformation_engine_i/weight_channel_resp_ready
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_araddr
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arburst
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arcache
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arid
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arlen
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arlock
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arprot
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arqos
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arsize
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arvalid
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arready
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_rdata
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_rid
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_rlast
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_rready
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_rresp
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_rvalid
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awaddr
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awburst
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awcache
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awid
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awlen
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awlock
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awprot
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awqos
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awready
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awsize
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_awvalid
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_wdata
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_wlast
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_wready
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_wstrb
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_wvalid
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_bid
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_bready
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_bresp
+add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_bvalid
 add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_araddr
 add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arburst
 add wave -noupdate -group TFE-AXI-INTERCONNECT /top_wrapper_tb/top_i/transformation_engine_i/transformation_engine_axi_interconnect_axi_arcache
@@ -893,6 +1158,15 @@ add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapp
 add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_data
 add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_resp_valid
 add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_resp_ready
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_req_valid
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_req_ready
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_req_start_address
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_req_len
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_pop
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_data_valid
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_data
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_resp_valid
+add wave -noupdate -group TC-AXI-WRITE-MASTER -group AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/axi_write_master_resp_ready
 add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_req_valid
 add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_req_ready
 add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_req_start_address
@@ -911,6 +1185,22 @@ add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformati
 add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_data
 add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_resp_valid
 add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_resp_ready
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_req_valid
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_req_ready
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_req_start_address
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_req_len
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_pop
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_data_valid
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_data
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_resp_valid
+add wave -noupdate -group TC-AXI-WRITE-MASTER /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_axi_write_master_resp_ready
+add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_req_ready
+add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_resp_valid
+add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_resp_ready
+add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_resp
+add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_resp_valid_bin
+add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_write_master_alloc_bin
+add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_write_master_alloc_bin_q
 add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_req_ready
 add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_resp_valid
 add wave -noupdate -group TRANS-CORE /top_wrapper_tb/top_i/transformation_engine_i/transformation_core_resp_ready
@@ -941,6 +1231,17 @@ add wave -noupdate -group TRANS-BUFFER /top_wrapper_tb/top_i/transformation_engi
 add wave -noupdate -group TRANS-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/transformation_buffer_write_enable
 add wave -noupdate -group TRANS-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/transformation_buffer_write_address
 add wave -noupdate -group TRANS-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/transformation_buffer_slot_free
+add wave -noupdate -group TRANS-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/transformation_buffer_write_enable
+add wave -noupdate -group TRANS-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/transformation_buffer_write_address
+add wave -noupdate -group TRANS-BUFFER /top_wrapper_tb/top_i/transformation_engine_i/transformation_buffer_slot_free
+add wave -noupdate /top_wrapper_tb/sys_clk
+add wave -noupdate /top_wrapper_tb/sys_rst
+add wave -noupdate /top_wrapper_tb/regbank_clk
+add wave -noupdate /top_wrapper_tb/regbank_resetn
+add wave -noupdate /top_wrapper_tb/top_i/transformation_engine_i/core_clk
+add wave -noupdate /top_wrapper_tb/top_i/transformation_engine_i/resetn
+add wave -noupdate /top_wrapper_tb/top_i/transformation_engine_i/regbank_clk
+add wave -noupdate /top_wrapper_tb/top_i/transformation_engine_i/regbank_resetn
 add wave -noupdate /top_wrapper_tb/sys_clk
 add wave -noupdate /top_wrapper_tb/sys_rst
 add wave -noupdate /top_wrapper_tb/regbank_clk
@@ -1236,8 +1537,8 @@ add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i
 add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_msb_strobe
 add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_msb_msb
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {18272400 ps} 0} {{Cursor 2} {40560698 ps} 0}
-quietly wave cursor active 2
+WaveRestoreCursors {{Cursor 1} {15584777 ps} 0} {{Cursor 2} {40560698 ps} 0}
+quietly wave cursor active 1
 configure wave -namecolwidth 430
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -1252,6 +1553,6 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {16422 ns}
+WaveRestoreZoom {13457250 ps} {17562750 ps}
 bookmark add wave bookmark0 {{17959609 ps} {22111537 ps}} 0
 bookmark add wave bookmark1 {{18551117 ps} {18990769 ps}} 0

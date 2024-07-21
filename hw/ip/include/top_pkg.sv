@@ -13,6 +13,11 @@ package top_pkg;
 
 // New arrangement
 parameter MESH_MULTIPLIER = 4;
++
+
+// parameter WRITE_BACK_FTE_HBM = 1;
+// parameter WRITE_BACK_FTE_DRAM = 1;
+
 
 parameter AGGREGATION_CHANNELS = 4; // per mesh
 parameter TRANSFORMATION_CHANNELS = 32; // 64 4 Jul 

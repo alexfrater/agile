@@ -94,6 +94,16 @@ def load_graph(graph_path = '/home/aw1223/ip/agile/graph.pth'):
 
     return x_loaded,edge_index_loaded
 
+def remove_bias(model):
+    state_dict = model.state_dict()
+    for key in state_dict:
+        if 'bias' in key:
+            state_dict[key] = torch.tensor([0] * state_dict[key].size()[0])#torch.zeros_like(state_dict[key])
+
+    model.load_state_dict(state_dict)
+    return model
+
+
 async def graph_test_runner(dut):
 
     dut._log.info("Starting Graph Test")
@@ -135,15 +145,15 @@ async def graph_test_runner(dut):
 
     # # Load the modified state_dict back into the model
     # model.load_state_dict(state_dict)
-    state_dict = model.state_dict()
-    state_dict['layers.0.bias'] = torch.tensor([0] * state_dict['layers.0.bias'].size()[0])
-    state_dict['layers.1.bias'] = torch.tensor([0] * state_dict['layers.1.bias'].size()[0])
-    # state_dict['layers.2.bias'] = torch.tensor([0] * state_dict['layers.2.bias'].size()[0])
-    # state_dict['layers.3.bias'] = torch.tensor([0] * state_dict['layers.3.bias'].size()[0])
+    # state_dict = model.state_dict()
+    # state_dict['layers.0.bias'] = torch.tensor([0] * state_dict['layers.0.bias'].size()[0])
+    # state_dict['layers.1.bias'] = torch.tensor([0] * state_dict['layers.1.bias'].size()[0])
+    # # state_dict['layers.2.bias'] = torch.tensor([0] * state_dict['layers.2.bias'].size()[0])
+    # # state_dict['layers.3.bias'] = torch.tensor([0] * state_dict['layers.3.bias'].size()[0])
 
-    print(state_dict['layers.0.bias'].size())
-    model.load_state_dict(state_dict)
-    
+    # print(state_dict['layers.0.bias'].size())
+    # model.load_state_dict(state_dict)
+    model = remove_bias(model)
     ####
 
 
@@ -208,7 +218,7 @@ async def graph_test_runner(dut):
             print(test.axi_monitor.expected_layer_features_by_address)
 
 
-        test.dut._log.info("Layer finished.")
+        test.dut._log.info("Layer {layer_idx} finished.")
         # del test.axi_monitor
 
         await delay(dut.regbank_clk, 10)

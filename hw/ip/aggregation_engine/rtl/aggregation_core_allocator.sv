@@ -84,10 +84,10 @@ if (ALLOCATION_MODE == age_pkg::AGC_ALLOCATION_MODE_STATIC) begin
 
             //Final AGC may take less than 16 features
             if (allocation_slot == (agm_req.required_agcs-1) && |layer_config_in_features_count[3:0]) begin
-                agm_req.num_features [allocation_slot] <= layer_config_in_features_count[3:0];
+                agm_req.num_features [allocation_slot] <= layer_config_in_features_count[3:0]; //Non blocking in combinatorial block
             end
             else begin
-                agm_req.num_features [allocation_slot] <= 16;
+                agm_req.num_features [allocation_slot] <= 16; //Non blocking in combinatorial block
             end
         end
     end

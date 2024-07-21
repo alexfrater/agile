@@ -1,21 +1,38 @@
-# Makefile
 include sources.mk
 
 # defaults
 SIM ?= verilator
-
-
 
 TOPLEVEL_LANG ?=verilog
 TEST_RUNNER   ?=runner
 MODULE        ?=runner
 TOPLEVEL      ?=top_wrapper_tb
 INCLUDE_DIR = $(WORKAREA)/hw/build/ip/include/
-# VERILATOR_FLAGS += $(addprefix -I, $(VERILOG_INCLUDE_DIRS)) -I$(INCLUDE_DIR)
-# VERILATOR_FLAGS += -I$(INCLUDE_DIR)
-EXTRA_ARGS +=  -I$(INCLUDE_DIR)
+
+EXTRA_ARGS += -I$(INCLUDE_DIR)
+EXTRA_ARGS += +define+SIMULATION
 
 
+# Verilator flags
+EXTRA_ARGS += --trace
+EXTRA_ARGS += --debug
+EXTRA_ARGS += -Wno-PINMISSING
+EXTRA_ARGS += -Wno-lint
+EXTRA_ARGS += -Wno-style
+
+# Diagnostic: Print VERILATOR_FLAGS to verify they are set correctly
+$(info EXTRA_ARGS: $(EXTRA_ARGS))
+
+.PHONY: all depend
+
+all: depend
+	$(MAKE) -f Makefile.sim
+
+depend: sources.mk
+	@echo "Updating sources.mk..."
+	@# Update the sources.mk file with the latest source files
+	@# You can add your script or command here to update sources.mk
+	@# For example:
+	# source $(WORKAREA)/scripts/add_hash.sh
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
-# source $(WORKAREA)/scripts/add_hash.sh

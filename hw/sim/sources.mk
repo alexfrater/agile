@@ -10,9 +10,6 @@ VERILOG_INCLUDE_DIRS = \
 # Xilinx IP
 VERILOG_SOURCES = \
 	$(WORKAREA)/hw/sim/glbl.v \
-	$(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
-	$(WORKAREA)/hw/build/build_project.gen/sources_1/ip/aggregation_buffer_sdp_bram/sim/aggregation_buffer_sdp_bram.v \
-	$(WORKAREA)/hw/build/build_project.gen/sources_1/ip/scale_factor_queue/sim/scale_factor_queue.v \
 	$(WORKAREA)/hw/build/ip/lib/buffers/ultraram.v \
 	$(WORKAREA)/hw/build/ip/include/arch_defines.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axi_ram.v \
@@ -21,11 +18,12 @@ VERILOG_SOURCES = \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_crossbar.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_interconnect.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_interconnect_wrap_1x4.v \
-
+	# $(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
+	# $(WORKAREA)/hw/build/build_project.gen/sources_1/ip/aggregation_buffer_sdp_bram/sim/aggregation_buffer_sdp_bram.v \
+	# $(WORKAREA)/hw/build/build_project.gen/sources_1/ip/scale_factor_queue/sim/scale_factor_queue.v \
 
 # Imports
 VERILOG_SOURCES += \
-	$(WORKAREA)/hw/build/ip/include/arch_package.sv \
 	$(WORKAREA)/imports/nocrouter/src/rtl/noc/noc_pkg.sv \
 	$(WORKAREA)/imports/nocrouter/src/rtl/input_port/circular_buffer.sv \
 	$(WORKAREA)/imports/nocrouter/src/rtl/crossbar/crossbar.sv \
@@ -46,6 +44,7 @@ VERILOG_SOURCES += \
 	$(WORKAREA)/imports/nocrouter/src/rtl/allocators/switch_allocator.sv \
 	$(WORKAREA)/imports/nocrouter/src/if/switch_allocator2crossbar.sv \
 	$(WORKAREA)/imports/nocrouter/src/rtl/allocators/vc_allocator.sv \
+#	$(WORKAREA)/hw/build/ip/include/arch_package.sv \
 
 # Packages
 VERILOG_SOURCES += \

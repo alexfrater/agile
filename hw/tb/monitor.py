@@ -22,8 +22,10 @@ class Monitor:
 
     def stop(self) -> None:
         """Stop monitor"""
+        print('Stop monitor')
         if self._coro is None:
-            raise RuntimeError("AGE Monitor never started")
+            raise RuntimeError("Monitor never started")
+        
         self._coro.kill()
         self._coro = None
 

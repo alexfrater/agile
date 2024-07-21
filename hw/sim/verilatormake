@@ -1,0 +1,34 @@
+SIM ?= verilator
+
+TOPLEVEL_LANG ?= verilog
+
+COCOTB_HDL_TIMEUNIT = 1ns
+
+COCOTB_HDL_TIMEPRECISION = 1ps
+
+#VERILOG_SOURCES += $(PWD)/file1.sv file2.sv file3.sv
+
+TOPLEVEL =top_wrapper_rb
+
+MODULE = test_my_design
+
+export PYTHONPATH := $(shell pwd):$(PYTHONPATH)
+
+CONDA_ENV ?= ample
+
+EXTRA_ARGS += --trace --trace-structs
+
+# TIMING_OPTION = --timing # Enable timing
+
+# EXTRA_ARGS += $(TIMING_OPTION)
+
+# Path to DPI shared library
+# DPI_LIB_PATH = /home/testing
+
+# DPI_LIB = memory_dpi.so
+
+# export LD_LIBRARY_PATH := $(DPI_LIB_PATH):$(LD_LIBRARY_PATH)
+
+# SIM_ARGS += -LDFLAGS "-L$(DPI_LIB_PATH) -l:$(DPI_LIB) -Wl,-rpath,$(DPI_LIB_PATH)"
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

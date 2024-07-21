@@ -147,7 +147,7 @@ logic [top_pkg::TRANSFORMATION_BUFFER_SLOTS-1:0]     transformation_buffer_slot_
 // Writeback logic
 logic [$clog2(MAX_WRITEBACK_BEATS_PER_NODESLOT):0]   sent_writeback_beats;
 logic [$clog2(MAX_WRITEBACK_BEATS_PER_NODESLOT):0]   writeback_required_beats;
-logic [MATRIX_N:0] [top_pkg::NODE_ID_WIDTH-1:0]      sys_module_node_id_snapshot;
+logic [MATRIX_N-1:0] [top_pkg::NODE_ID_WIDTH-1:0]      sys_module_node_id_snapshot;
 logic [$clog2(top_pkg::MAX_FEATURE_COUNT * 4) - 1:0] out_features_required_bytes;
 
 logic [31:0]                       fast_pulse_counter;
@@ -399,22 +399,46 @@ always_ff @(posedge core_clk or negedge resetn) begin
 end
 
 for (genvar row = 0; row < MATRIX_N; row++) begin : per_row_logic
-    always_ff @(posedge core_clk or negedge resetn) begin
-        if (!resetn) begin
-            sys_module_node_id_snapshot [row]          <= '0;
+    if (row == MATRIX_N-1) begin
+        always_ff @(posedge core_clk or negedge resetn) begin
+            if (!resetn) begin
+                sys_module_node_id_snapshot [row]          <= '0;
+                
+            // Starting multiplication
+            end else if ((fte_state == FTE_FSM_IDLE) && (fte_state_n == FTE_FSM_REQ_WC)) begin
+                sys_module_node_id_snapshot [row]          <= transformation_core_aggregation_buffer_node_id [row];
             
-        // Starting multiplication
-        end else if ((fte_state == FTE_FSM_IDLE) && (fte_state_n == FTE_FSM_REQ_WC)) begin
-            sys_module_node_id_snapshot [row]          <= transformation_core_aggregation_buffer_node_id [row];
-        
-        // Shift node IDs
-        end else if (fte_state == FTE_FSM_SHIFT) begin
-            sys_module_node_id_snapshot [row]          <= sys_module_node_id_snapshot [row+1];
+            // Shift node IDs
+            end else if (fte_state == FTE_FSM_SHIFT) begin
+                sys_module_node_id_snapshot [row]          <= 0;
+            end
+        end
+    end else begin
+        always_ff @(posedge core_clk or negedge resetn) begin
+            if (!resetn) begin
+                sys_module_node_id_snapshot [row]          <= '0;
+                
+            // Starting multiplication
+            end else if ((fte_state == FTE_FSM_IDLE) && (fte_state_n == FTE_FSM_REQ_WC)) begin
+                sys_module_node_id_snapshot [row]          <= transformation_core_aggregation_buffer_node_id [row];
+            
+            // Shift node IDs
+            end else if (fte_state == FTE_FSM_SHIFT) begin
+                sys_module_node_id_snapshot [row]          <= sys_module_node_id_snapshot [row+1];
+            end
         end
     end
 end : per_row_logic
 
-assign sys_module_node_id_snapshot [MATRIX_N] = '0;
+
+// always_ff @(posedge core_clk or negedge resetn) begin
+//     if (!resetn) begin
+//         sys_module_node_id_snapshot <= '0;
+//     end else begin
+//         sys_module_node_id_snapshot <= valid_row << 1;
+//     end
+// end
+// assign sys_module_node_id_snapshot [MATRIX_N] = '0;
 
 // Driving systolic module
 // -------------------------------------------------------------------------------------
