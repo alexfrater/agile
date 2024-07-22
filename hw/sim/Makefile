@@ -3,8 +3,16 @@
 # Default target
 all: modelsim
 
-modelsim:
-	$(MAKE) -f Makefile.modelsim
+
+build:
+	$(MAKE) -f Makefile.modelsim build
+
+run_simgui:
+	$(MAKE) -f Makefile.modelsim run_sim GUI=1
+
+run_sim:
+	$(MAKE) -f Makefile.modelsim run_sim
+
 
 verilator:
 	$(MAKE) -f Makefile.verilator
