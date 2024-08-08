@@ -7,3 +7,6 @@
 [submodule "imports/cocotbext-axi"]
 	path = imports/cocotbext-axi
 	url = https://github.com/pgimenes/cocotbext-axi.git
+[submodule "imports/neural-lam"]
+	path = imports/neural-lam
+	url = https://github.com/alexfrater/neural-lam.git
