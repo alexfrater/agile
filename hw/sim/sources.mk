@@ -20,6 +20,7 @@ VERILOG_SOURCES = \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_crossbar.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_interconnect.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_interconnect_wrap_1x4.v \
+	$(WORKAREA)/hw/build/build_project.gen/sources_1/ip/axi_interconnect_ample/sim/axi_interconnect_ample.v \
 
 # Imports
 VERILOG_SOURCES += \
