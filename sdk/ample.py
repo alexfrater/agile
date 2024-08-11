@@ -62,7 +62,7 @@ class Ample():
             trained (bool): If True, initialize the model with trained embeddings.
         """
         self.model = model
-        self.trace_model(self.model, eval_loader)
+        self.trace_model_hooks(self.model, eval_loader)
         if plot:
             self.plot_model()
         if self.model_trace is None:
@@ -168,7 +168,7 @@ class Ample():
 
     
 
-    def trace_model(self, model, dataloader):
+    def trace_model_hooks(self, model, dataloader):
         """
         Traces the PyTorch Lightning model to get the names of input and output tensors 
         along with the module hierarchy using a provided DataLoader, including the order

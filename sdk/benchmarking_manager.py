@@ -87,18 +87,34 @@ class CPUBenchmarkWrapper():
 
 
 class BenchmarkingManager:
-    def __init__(self, model, graph, args):
+    def __init__(self, model, graph, args = None):
         if (torch.cuda.is_available()):
             self.bman = BenchmarkWrapper(model)
         else:
             self.bman = CPUBenchmarkWrapper(model) #Temp
+
+        # self.graph = graph
+        # self.cpu = args.cpu if not None else False
+        # self.gpu = args.gpuif not None else False
+        # self.sim = args.sim if not None else False
+        # self.fpga_clk_freq = args.fpga_clk_freq
+        # self.args = args if not None else False
+        # self.device = args.device if not None else False
+
         self.graph = graph
-        self.cpu = args.cpu
-        self.gpu = args.gpu
-        self.sim = args.sim
-        self.fpga_clk_freq = args.fpga_clk_freq
-        self.args = args
-        self.device = args.device
+        self.cpu = args.cpu if hasattr(args, 'cpu') else False
+        self.gpu = args.gpu if hasattr(args, 'gpu') else False
+        self.sim = args.sim if hasattr(args, 'sim') else False
+        self.fpga_clk_freq = args.fpga_clk_freq if hasattr(args, 'fpga_clk_freq') else 200e6
+        self.args = args  # Presuming you want to store the args irrespective of content
+        self.device = args.device if hasattr(args, 'device') else None
+        self.preload = args.preload if hasattr(args, 'preload') else False
+        self.preload_path = args.preload_path if hasattr(args, 'preload_path') else None
+        self.tb_log_level = args.tb_log_level if hasattr(args, 'tb_log_level') else 'INFO'
+        self.tb_tolerance = args.tb_tolerance if hasattr(args, 'tb_tolerance') else 0.1
+        self.build = args.build if hasattr(args, 'build') else False 
+        self.gui = args.gui if hasattr(args, 'gui') else False
+
 
     def gpu_run_inference(self):
         print(f"device {self.device}")
@@ -187,11 +203,13 @@ class BenchmarkingManager:
                 }
 
     def fpga_benchmark(self):
-
+        
         # * Load layer config
-        if (self.args.preload):
+
+
+        if (self.preload):
             dest_dir = os.environ.get(f"WORKAREA") + "/hw/sim/layer_config"
-            config_path = f"{self.args.preload_path}/layer_configs/layer_config_degree_{self.graph.avg_degree}_nodes_{self.graph.num_nodes}"
+            config_path = f"{self.preload_path}/layer_configs/layer_config_degree_{self.graph.avg_degree}_nodes_{self.graph.num_nodes}"
             
             assert os.path.isdir(config_path), f"{config_path} was not found"
 
@@ -206,18 +224,18 @@ class BenchmarkingManager:
             print(f"==== Running {cm}")
             subprocess.run(cm, shell=True, capture_output=False, text=True)
 
-        os.environ['AMPLE_GRAPH_TB_TOLERANCE'] = str(self.args.tb_tolerance)
-        os.environ['AMPLE_GRAPH_TB_LOG_LEVEL'] = str(self.args.tb_log_level)
+        os.environ['AMPLE_GRAPH_TB_TOLERANCE'] = str(self.tb_tolerance)
+        os.environ['AMPLE_GRAPH_TB_LOG_LEVEL'] = str(self.tb_log_level)
         os.environ['AMPLE_GRAPH_TB_NODESLOT_COUNT'] = '64'
 
         # * Run simulation (assume )
         path = os.environ.get("WORKAREA") + "/hw/sim"
         print(f"cd {path}")
         command = ""
-        if (self.args.build):
+        if (self.build):
             command += f"cd {path}; make build"
 
-        if (self.args.gui):
+        if (self.gui):
             command += f"cd {path}; make run_simgui"
 
         else:
@@ -262,6 +280,22 @@ class BenchmarkingManager:
                 cycles_dict[layer] = cycles
 
         return cycles_dict
+
+        # self.metrics = {}
+
+    def benchmark_cpu(self):
+        metrics = {}
+        metrics["cpu"] = self.cpu_benchmark()
+        return metrics
+
+    def benchmark_gpu(self):
+        metrics = {}
+        metrics["gpu"] = self.gpu_benchmark()
+        return metrics
+    def benchmark_fpga(self):
+        metrics = {}
+        metrics["fpga"] = self.fpga_benchmark()
+        return metrics
 
     def benchmark(self):
         metrics = {}

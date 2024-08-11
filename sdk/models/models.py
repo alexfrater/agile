@@ -188,7 +188,7 @@ MLP
 '''
 
 class MLP_Model(torch.nn.Module):
-    def __init__(self, in_channels, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
         super().__init__()
         self.precision = precision
         self.layers = nn.ModuleList()

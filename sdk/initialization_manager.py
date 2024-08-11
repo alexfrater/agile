@@ -6,7 +6,7 @@ import torch
 from .utilities import dump_byte_list, binary_to_hex
 
 from sdk.memory_mapper import Memory_Mapper
-from sdk.graph_tracer import GraphTracer
+# from sdk.graph_tracer import GraphTracer
 
 import logging
 
@@ -57,26 +57,6 @@ class InitManager:
         # Nodeslot programming
         self.nodeslot_programming = []
         self.nodeslot_programming_group_start_address = []
-
-        # self.traced_model = GraphTracer(model)
-
-        # # Print the input and output layers
-        # self.traced_model.print_input_output_layers()
-
-    
-
-    # def get_model_hierarchy(self):
-    #     model_hierarchy = []
-    #     if hasattr(self.model, 'named_children') and len(list(self.model.children()))>1:
-    #         for name, module in self.model.named_children():
-    #             print(f'{name}: {module.__class__.__name__}')
-    #             model_hierarchy.append(self.get_feature_counts(module))
-    #     else:
-    #         model_hierarchy.append(self.get_feature_counts(self.model))
-    #         print('Simple hierarchy')
-    #     return model_hierarchy
-
-
 
 
     # Nodeslot programming and layer configuration
