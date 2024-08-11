@@ -82,7 +82,7 @@ hw/sim/vsim.dbg
 hw/sim/sim_time.txt
 imports/verilog-axi
 imports/nocrouter
-imports/
+# imports/
 
 hw/tb/module_tests/lib/test/*
 
