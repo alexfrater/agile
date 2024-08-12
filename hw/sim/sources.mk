@@ -9,7 +9,6 @@ VERILOG_INCLUDE_DIRS = \
 # Xilinx IP
 VERILOG_SOURCES = \
 	$(WORKAREA)/hw/sim/glbl.v \
-	$(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
 	$(WORKAREA)/hw/build/build_project.gen/sources_1/ip/aggregation_buffer_sdp_bram/sim/aggregation_buffer_sdp_bram.v \
 	$(WORKAREA)/hw/build/build_project.gen/sources_1/ip/scale_factor_queue/sim/scale_factor_queue.v \
 	$(WORKAREA)/hw/build/ip/lib/buffers/ultraram.v \
@@ -20,6 +19,7 @@ VERILOG_SOURCES = \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_crossbar.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_interconnect.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_interconnect_wrap_1x4.v \
+	# $(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
 
 # Imports
 VERILOG_SOURCES += \
