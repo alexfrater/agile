@@ -174,14 +174,14 @@ class BaseTest:
         cocotb.start_soon(self.axi_monitor.monitor_write_transactions())
 
         ######Start all monitors#####
-        # self.nsb_monitor.running = True
-        # self.nsb_monitor.start()
-        # self.prefetcher_monitor.running = True
-        # self.prefetcher_monitor.start()
-        # self.fte_monitor.running = True
-        # self.fte_monitor.start()
-        # self.age_monitor.running = True
-        # self.age_monitor.start()
+        self.nsb_monitor.running = True
+        self.nsb_monitor.start()
+        self.prefetcher_monitor.running = True
+        self.prefetcher_monitor.start()
+        self.fte_monitor.running = True
+        self.fte_monitor.start()
+        self.age_monitor.running = True
+        self.age_monitor.start()
 
         self.state_monitor.running = True
         self.state_monitor.start()
@@ -198,10 +198,10 @@ class BaseTest:
         # self.nsb_monitor.running = False
         self.axi_monitor.running = False
         ######Stop all monitors######
-        # self.nsb_monitor.running = False
-        # self.prefetcher_monitor.running = False
-        # self.fte_monitor.running = False
-        # self.age_monitor.running = False
+        self.nsb_monitor.running = False
+        self.prefetcher_monitor.running = False
+        self.fte_monitor.running = False
+        self.age_monitor.running = False
         self.state_monitor.running = False
         # self.state_monitor.stop()
         #############################

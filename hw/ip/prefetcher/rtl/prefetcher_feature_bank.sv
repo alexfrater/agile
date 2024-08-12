@@ -5,7 +5,7 @@ module prefetcher_feature_bank #(
     parameter AXI_ADDRESS_WIDTH = 34,
     parameter AXI_DATA_WIDTH    = 512,
     parameter FETCH_TAG_COUNT   = top_pkg::MESSAGE_CHANNEL_COUNT,
-    parameter HBM_BANKS = 32
+    parameter HBM_BANKS = top_pkg::HBM_BANKS
 ) (
     input logic core_clk,
     input logic resetn,
@@ -108,7 +108,7 @@ logic [HBM_BANKS - 1 : 0] [FETCH_TAG_COUNT-1:0]         chosen_fetch_tag_rm_req;
 logic [HBM_BANKS - 1 : 0] [$clog2(FETCH_TAG_COUNT)-1:0] chosen_fetch_tag_rm_req_bin;
 logic [HBM_BANKS - 1 : 0] [$clog2(FETCH_TAG_COUNT)-1:0] chosen_fetch_tag_rm_req_bin_q;
 
-logic [HBM_BANKS - 1 : 0] [FETCH_TAG_COUNT / HBM_BANKS - 1 : 0] requesting_fetch_tags;
+logic [HBM_BANKS - 1 : 0] [(FETCH_TAG_COUNT / HBM_BANKS) - 1 : 0] requesting_fetch_tags; //Problematic when setting HBM count to 1?
 logic [HBM_BANKS-1:0] fetch_req_was_adj_q;
 logic [HBM_BANKS-1:0] fetch_req_was_msg_q;
 

@@ -33,7 +33,8 @@ async def graph_test_runner(dut):
     log_level = get_log_level()
     dut._log.setLevel(log_level)  # Set to the desired level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
-    nodeslot_count = int(os.environ.get('AMPLE_GRAPH_TB_NODESLOT_COUNT', 64))
+    # nodeslot_count = int(os.environ.get('AMPLE_GRAPH_TB_NODESLOT_COUNT', 32))
+    nodeslot_count =32
     test = BaseTest(dut,nodeslot_count,tolerance,log_level)
     
     test.log_info(dut, "Starting Graph Test")
@@ -76,7 +77,7 @@ async def graph_test_runner(dut):
        
         #Temp TODO program nodeslot start address for layer
         # print(f"Layer {layer_idx} nodeslot start address: {test.layers[layer_idx]['nodeslot_start_address']}")
-        
+        print('about to program ctrl_start_nodeslot_fetch_value')
         await test.driver.axil_driver.axil_write(test.driver.nsb_regs["ctrl_start_nodeslot_fetch_start_addr"], test.layers[layer_idx]['nodeslot_start_address'])
         await test.driver.axil_driver.axil_write(test.driver.nsb_regs["concat_width"], test.layers[layer_idx]['concat_width'])
 

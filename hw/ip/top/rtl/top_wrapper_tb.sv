@@ -80,26 +80,26 @@ logic [HBM_BANKS-1:0]                          read_master_axi_rvalid;
 logic [HBM_BANKS-1:0]                          read_master_axi_rready;
 
 // Nodeslot programmer -> DRAM C0
-logic  [7:0]                   nodeslot_fetch_axi_awid;
-logic  [33:0]                  nodeslot_fetch_axi_awaddr;
-logic  [7:0]                   nodeslot_fetch_axi_awlen;
-logic  [2:0]                   nodeslot_fetch_axi_awsize;
-logic  [1:0]                   nodeslot_fetch_axi_awburst;
-logic  [0:0]                   nodeslot_fetch_axi_awlock;
-logic  [3:0]                   nodeslot_fetch_axi_awcache;
-logic  [2:0]                   nodeslot_fetch_axi_awprot;
-logic  [3:0]                   nodeslot_fetch_axi_awqos;
-logic                          nodeslot_fetch_axi_awvalid;
-logic                          nodeslot_fetch_axi_awready;
-logic  [511:0]                 nodeslot_fetch_axi_wdata;
-logic  [63:0]                  nodeslot_fetch_axi_wstrb;
-logic                          nodeslot_fetch_axi_wlast;
-logic                          nodeslot_fetch_axi_wvalid;
-logic                          nodeslot_fetch_axi_wready;
-logic [7:0]                    nodeslot_fetch_axi_bid;
-logic [1:0]                    nodeslot_fetch_axi_bresp;
-logic                          nodeslot_fetch_axi_bvalid;
-logic                          nodeslot_fetch_axi_bready;
+// logic  [7:0]                   nodeslot_fetch_axi_awid;
+// logic  [33:0]                  nodeslot_fetch_axi_awaddr;
+// logic  [7:0]                   nodeslot_fetch_axi_awlen;
+// logic  [2:0]                   nodeslot_fetch_axi_awsize;
+// logic  [1:0]                   nodeslot_fetch_axi_awburst;
+// logic  [0:0]                   nodeslot_fetch_axi_awlock;
+// logic  [3:0]                   nodeslot_fetch_axi_awcache;
+// logic  [2:0]                   nodeslot_fetch_axi_awprot;
+// logic  [3:0]                   nodeslot_fetch_axi_awqos;
+// logic                          nodeslot_fetch_axi_awvalid;
+// logic                          nodeslot_fetch_axi_awready;
+// logic  [511:0]                 nodeslot_fetch_axi_wdata;
+// logic  [63:0]                  nodeslot_fetch_axi_wstrb;
+// logic                          nodeslot_fetch_axi_wlast;
+// logic                          nodeslot_fetch_axi_wvalid;
+// logic                          nodeslot_fetch_axi_wready;
+// logic [7:0]                    nodeslot_fetch_axi_bid;
+// logic [1:0]                    nodeslot_fetch_axi_bresp;
+// logic                          nodeslot_fetch_axi_bvalid;
+// logic                          nodeslot_fetch_axi_bready;
 logic  [7:0]                   nodeslot_fetch_axi_arid;
 logic  [33:0]                  nodeslot_fetch_axi_araddr;
 logic  [7:0]                   nodeslot_fetch_axi_arlen;
@@ -244,26 +244,26 @@ top top_i
     .transformation_engine_axi_rvalid,
     .transformation_engine_axi_rready,
 
-    .nodeslot_fetch_axi_awid                (nodeslot_fetch_axi_awid),
-    .nodeslot_fetch_axi_awaddr              (nodeslot_fetch_axi_awaddr),
-    .nodeslot_fetch_axi_awlen               (nodeslot_fetch_axi_awlen),
-    .nodeslot_fetch_axi_awsize              (nodeslot_fetch_axi_awsize),
-    .nodeslot_fetch_axi_awburst             (nodeslot_fetch_axi_awburst),
-    .nodeslot_fetch_axi_awlock              (nodeslot_fetch_axi_awlock),
-    .nodeslot_fetch_axi_awcache             (nodeslot_fetch_axi_awcache),
-    .nodeslot_fetch_axi_awprot              (nodeslot_fetch_axi_awprot),
-    .nodeslot_fetch_axi_awqos               (nodeslot_fetch_axi_awqos),
-    .nodeslot_fetch_axi_awvalid             (nodeslot_fetch_axi_awvalid),
-    .nodeslot_fetch_axi_awready             (nodeslot_fetch_axi_awready),
-    .nodeslot_fetch_axi_wdata               (nodeslot_fetch_axi_wdata),
-    .nodeslot_fetch_axi_wstrb               (nodeslot_fetch_axi_wstrb),
-    .nodeslot_fetch_axi_wlast               (nodeslot_fetch_axi_wlast),
-    .nodeslot_fetch_axi_wvalid              (nodeslot_fetch_axi_wvalid),
-    .nodeslot_fetch_axi_wready              (nodeslot_fetch_axi_wready),
-    .nodeslot_fetch_axi_bid                 (nodeslot_fetch_axi_bid),
-    .nodeslot_fetch_axi_bresp               (nodeslot_fetch_axi_bresp),
-    .nodeslot_fetch_axi_bvalid              (nodeslot_fetch_axi_bvalid),
-    .nodeslot_fetch_axi_bready              (nodeslot_fetch_axi_bready),
+    // .nodeslot_fetch_axi_awid                (nodeslot_fetch_axi_awid),
+    // .nodeslot_fetch_axi_awaddr              (nodeslot_fetch_axi_awaddr),
+    // .nodeslot_fetch_axi_awlen               (nodeslot_fetch_axi_awlen),
+    // .nodeslot_fetch_axi_awsize              (nodeslot_fetch_axi_awsize),
+    // .nodeslot_fetch_axi_awburst             (nodeslot_fetch_axi_awburst),
+    // .nodeslot_fetch_axi_awlock              (nodeslot_fetch_axi_awlock),
+    // .nodeslot_fetch_axi_awcache             (nodeslot_fetch_axi_awcache),
+    // .nodeslot_fetch_axi_awprot              (nodeslot_fetch_axi_awprot),
+    // .nodeslot_fetch_axi_awqos               (nodeslot_fetch_axi_awqos),
+    // .nodeslot_fetch_axi_awvalid             (nodeslot_fetch_axi_awvalid),
+    // .nodeslot_fetch_axi_awready             (nodeslot_fetch_axi_awready),
+    // .nodeslot_fetch_axi_wdata               (nodeslot_fetch_axi_wdata),
+    // .nodeslot_fetch_axi_wstrb               (nodeslot_fetch_axi_wstrb),
+    // .nodeslot_fetch_axi_wlast               (nodeslot_fetch_axi_wlast),
+    // .nodeslot_fetch_axi_wvalid              (nodeslot_fetch_axi_wvalid),
+    // .nodeslot_fetch_axi_wready              (nodeslot_fetch_axi_wready),
+    // .nodeslot_fetch_axi_bid                 (nodeslot_fetch_axi_bid),
+    // .nodeslot_fetch_axi_bresp               (nodeslot_fetch_axi_bresp),
+    // .nodeslot_fetch_axi_bvalid              (nodeslot_fetch_axi_bvalid),
+    // .nodeslot_fetch_axi_bready              (nodeslot_fetch_axi_bready),
     .nodeslot_fetch_axi_arid                (nodeslot_fetch_axi_arid),
     .nodeslot_fetch_axi_araddr              (nodeslot_fetch_axi_araddr),
     .nodeslot_fetch_axi_arlen               (nodeslot_fetch_axi_arlen),
@@ -354,25 +354,25 @@ axi_ram #(
     .clk                    (sys_clk),
     .rst                    (sys_rst),
 
-    .s_axi_awid             (nodeslot_fetch_axi_awid    ),
-    .s_axi_awaddr           (nodeslot_fetch_axi_awaddr  ),
-    .s_axi_awlen            (nodeslot_fetch_axi_awlen   ),
-    .s_axi_awsize           (nodeslot_fetch_axi_awsize  ),
-    .s_axi_awburst          (nodeslot_fetch_axi_awburst ),
-    .s_axi_awlock           (nodeslot_fetch_axi_awlock  ),
-    .s_axi_awcache          (nodeslot_fetch_axi_awcache ),
-    .s_axi_awprot           (nodeslot_fetch_axi_awprot  ),
-    .s_axi_awvalid          (nodeslot_fetch_axi_awvalid ),
-    .s_axi_awready          (nodeslot_fetch_axi_awready ),
-    .s_axi_wdata            (nodeslot_fetch_axi_wdata   ),
-    .s_axi_wstrb            (nodeslot_fetch_axi_wstrb   ),
-    .s_axi_wlast            (nodeslot_fetch_axi_wlast   ),
-    .s_axi_wvalid           (nodeslot_fetch_axi_wvalid  ),
-    .s_axi_wready           (nodeslot_fetch_axi_wready  ),
-    .s_axi_bid              (nodeslot_fetch_axi_bid     ),
-    .s_axi_bresp            (nodeslot_fetch_axi_bresp   ),
-    .s_axi_bvalid           (nodeslot_fetch_axi_bvalid  ),
-    .s_axi_bready           (nodeslot_fetch_axi_bready  ),
+    // .s_axi_awid             (nodeslot_fetch_axi_awid    ),
+    // .s_axi_awaddr           (nodeslot_fetch_axi_awaddr  ),
+    // .s_axi_awlen            (nodeslot_fetch_axi_awlen   ),
+    // .s_axi_awsize           (nodeslot_fetch_axi_awsize  ),
+    // .s_axi_awburst          (nodeslot_fetch_axi_awburst ),
+    // .s_axi_awlock           (nodeslot_fetch_axi_awlock  ),
+    // .s_axi_awcache          (nodeslot_fetch_axi_awcache ),
+    // .s_axi_awprot           (nodeslot_fetch_axi_awprot  ),
+    // .s_axi_awvalid          (nodeslot_fetch_axi_awvalid ),
+    // .s_axi_awready          (nodeslot_fetch_axi_awready ),
+    // .s_axi_wdata            (nodeslot_fetch_axi_wdata   ),
+    // .s_axi_wstrb            (nodeslot_fetch_axi_wstrb   ),
+    // .s_axi_wlast            (nodeslot_fetch_axi_wlast   ),
+    // .s_axi_wvalid           (nodeslot_fetch_axi_wvalid  ),
+    // .s_axi_wready           (nodeslot_fetch_axi_wready  ),
+    // .s_axi_bid              (nodeslot_fetch_axi_bid     ),
+    // .s_axi_bresp            (nodeslot_fetch_axi_bresp   ),
+    // .s_axi_bvalid           (nodeslot_fetch_axi_bvalid  ),
+    // .s_axi_bready           (nodeslot_fetch_axi_bready  ),
     .s_axi_arid             (nodeslot_fetch_axi_arid    ),
     .s_axi_araddr           (nodeslot_fetch_axi_araddr  ),
     .s_axi_arlen            (nodeslot_fetch_axi_arlen   ),

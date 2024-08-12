@@ -10,26 +10,6 @@ module nodeslot_prefetcher (
     input logic resetn,
 
     // Instruction fetching AXI interface
-    output logic  [7:0]                   read_master_axi_awid,
-    output logic  [33:0]                  read_master_axi_awaddr,
-    output logic  [7:0]                   read_master_axi_awlen,
-    output logic  [2:0]                   read_master_axi_awsize,
-    output logic  [1:0]                   read_master_axi_awburst,
-    output logic  [0:0]                   read_master_axi_awlock,
-    output logic  [3:0]                   read_master_axi_awcache,
-    output logic  [2:0]                   read_master_axi_awprot,
-    output logic  [3:0]                   read_master_axi_awqos,
-    output logic                          read_master_axi_awvalid,
-    input  logic                          read_master_axi_awready,
-    output logic  [511:0]                 read_master_axi_wdata,
-    output logic  [63:0]                  read_master_axi_wstrb,
-    output logic                          read_master_axi_wlast,
-    output logic                          read_master_axi_wvalid,
-    input  logic                          read_master_axi_wready,
-    input  logic [7:0]                    read_master_axi_bid,
-    input  logic [1:0]                    read_master_axi_bresp,
-    input  logic                          read_master_axi_bvalid,
-    output logic                          read_master_axi_bready,
     output logic  [7:0]                   read_master_axi_arid,
     output logic  [33:0]                  read_master_axi_araddr,
     output logic  [7:0]                   read_master_axi_arlen,
@@ -292,7 +272,7 @@ for (genvar nodeslot = 0; nodeslot < top_pkg::MAX_NODESLOT_COUNT; nodeslot++) be
         nsb_nodeslot_node_id_id_hw_n              [nodeslot] = nsb_nodeslot_node_id_id_hw                [nodeslot];
         nsb_nodeslot_neighbour_count_count_hw_n   [nodeslot] = nsb_nodeslot_neighbour_count_count_hw     [nodeslot];
         nsb_nodeslot_precision_precision_hw_n     [nodeslot] = nsb_nodeslot_precision_precision_hw       [nodeslot];
-        nsb_nodeslot_config_make_valid_value_hw_n [nodeslot] = nsb_nodeslot_config_make_valid_value_hw_n [nodeslot]; //Is this a bug .._n = .._n
+        nsb_nodeslot_config_make_valid_value_hw_n [nodeslot] = nsb_nodeslot_config_make_valid_value_hw [nodeslot]; //Is this a bug .._n = .._n
         
         // Auto clear make valid register
         if (nsb_nodeslot_config_make_valid_value_hw[nodeslot]) begin
@@ -363,23 +343,23 @@ end
 // Read only interface
 // ---------------------------------------------------------
 
-always_comb begin
-    read_master_axi_awaddr  = '0;
-    read_master_axi_awburst = '0;
-    read_master_axi_awcache = '0;
-    read_master_axi_awid    = '0;
-    read_master_axi_awlen   = '0;
-    read_master_axi_awlock  = '0;
-    read_master_axi_awprot  = '0;
-    read_master_axi_awqos   = '0;
-    read_master_axi_awsize  = '0;
-    read_master_axi_awvalid = '0;
-    read_master_axi_bready  = '0;
-    read_master_axi_wdata   = '0;
-    read_master_axi_wlast   = '0;
-    read_master_axi_wstrb   = '0;
-    read_master_axi_wvalid  = '0;
-end
+// always_comb begin
+//     read_master_axi_awaddr  = '0;
+//     read_master_axi_awburst = '0;
+//     read_master_axi_awcache = '0;
+//     read_master_axi_awid    = '0;
+//     read_master_axi_awlen   = '0;
+//     read_master_axi_awlock  = '0;
+//     read_master_axi_awprot  = '0;
+//     read_master_axi_awqos   = '0;
+//     read_master_axi_awsize  = '0;
+//     read_master_axi_awvalid = '0;
+//     read_master_axi_bready  = '0;
+//     read_master_axi_wdata   = '0;
+//     read_master_axi_wlast   = '0;
+//     read_master_axi_wstrb   = '0;
+//     read_master_axi_wvalid  = '0;
+// end
 
 // Debug
 // ---------------------------------------------------------

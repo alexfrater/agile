@@ -3,7 +3,7 @@ import noc_pkg::*;
 
 module prefetcher #(
     parameter FETCH_TAG_COUNT = top_pkg::MESSAGE_CHANNEL_COUNT,
-    parameter HBM_BANKS = 32
+    parameter HBM_BANKS = top_pkg::HBM_BANKS
 ) (
     input logic                               core_clk,
     input logic                               resetn,
