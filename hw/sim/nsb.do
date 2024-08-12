@@ -812,26 +812,6 @@ add wave -noupdate -expand -group NSB -group 224-255 -label node_state_254 {/top
 add wave -noupdate -expand -group NSB -group 224-255 -label node_state_255 {/top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state[255]}
 add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/core_clk
 add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/resetn
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awid
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awaddr
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awlen
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awsize
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awburst
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awlock
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awcache
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awprot
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awqos
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awvalid
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_awready
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_wdata
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_wstrb
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_wlast
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_wvalid
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_wready
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_bid
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_bresp
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_bvalid
-add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_bready
 add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_arid
 add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_araddr
 add wave -noupdate -group Nodeslot-Prefetcher /top_wrapper_tb/top_i/nodeslot_prefetcher_i/read_master_axi_arlen
@@ -1623,11 +1603,11 @@ add wave -noupdate -group NSB_FTE /top_wrapper_tb/top_i/node_scoreboard_i/nsb_ft
 add wave -noupdate -group NSB_FTE /top_wrapper_tb/top_i/node_scoreboard_i/nsb_fte_req
 add wave -noupdate -group NSB_FTE /top_wrapper_tb/top_i/node_scoreboard_i/nsb_fte_resp_valid
 add wave -noupdate -group NSB_FTE /top_wrapper_tb/top_i/node_scoreboard_i/nsb_fte_resp
-add wave -noupdate -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req_valid
-add wave -noupdate -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req_ready
-add wave -noupdate -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req
-add wave -noupdate -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_resp_valid
-add wave -noupdate -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_resp
+add wave -noupdate -expand -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req_valid
+add wave -noupdate -expand -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req_ready
+add wave -noupdate -expand -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req
+add wave -noupdate -expand -group NSB_PREF /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_resp_valid
+add wave -noupdate -expand -group NSB_PREF -expand /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_resp
 add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i/graph_config_node_count_strobe
 add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i/graph_config_node_count_value
 add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_scale_factors_address_lsb_value
@@ -1648,8 +1628,162 @@ add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i
 add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_lsb_lsb
 add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_msb_strobe
 add wave -noupdate -group {Layer Config} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_msb_msb
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/core_clk
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/resetn
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/regbank_clk
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/regbank_resetn
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_awaddr
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_awprot
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_awvalid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_awready
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_wdata
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_wstrb
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_wvalid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_wready
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_araddr
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_arprot
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_arvalid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_arready
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_rdata
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_rresp
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_rvalid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_rready
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_bresp
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_bvalid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/s_axi_bready
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_age_req_valid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_age_req_ready
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_age_req
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_age_resp_valid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_age_resp
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_fte_req_valid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_fte_req_ready
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_fte_req
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_fte_resp_valid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_fte_resp
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req_valid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req_ready
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_req
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_resp_valid
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_prefetcher_resp
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/graph_config_node_count_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_start_nodeslot_fetch_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_start_nodeslot_fetch_start_addr_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_start_nodeslot_fetch_done_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_start_nodeslot_fetch_done_ack_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslot_finished
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_neighbour_count_count_hw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_id_id_hw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_precision_precision_hw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_config_make_valid_value_hw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_neighbour_count_strobe_hw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_id_strobe_hw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_precision_strobe_hw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_config_make_valid_strobe_hw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_0_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_1_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_2_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_3_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_4_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_5_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_6_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_7_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_fetch_layer_weights_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_fetch_layer_weights_fetch
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_fetch_layer_weights_precision_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_fetch_layer_weights_precision_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_fetch_layer_weights_done_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_fetch_layer_weights_done_done
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_fetch_layer_weights_done_ack_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_fetch_layer_weights_done_ack_ack
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_start_nodeslot_fetch_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_start_nodeslot_fetch_start_addr_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/concat_width_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/concat_width_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_start_nodeslot_fetch_done_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/ctrl_start_nodeslot_fetch_done_ack_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/graph_config_node_count_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_valid_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_valid_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_in_features_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_in_features_count
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_out_features_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_out_features_count
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_adjacency_list_address_lsb_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_adjacency_list_address_lsb_lsb
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_adjacency_list_address_msb_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_adjacency_list_address_msb_msb
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_lsb_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_lsb_lsb
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_msb_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_weights_address_msb_msb
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_aggregate_enable_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_aggregate_enable_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_state
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_state_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_aggregation_function_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_aggregation_function_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_config_aggregation_wait_count_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_config_aggregation_wait_count_count
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_allocated_fetch_tag_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_allocated_fetch_tag_fetch_tag
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslot_state
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslot_state_n
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/fetch_nb_list_resp_received
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/fetch_scale_factors_resp_received
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/fetch_nbs_resp_received
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/aggregation_done
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/transformation_done
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslots_waiting_nb_list_fetch
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslots_waiting_neighbour_fetch
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslots_waiting_scale_factor_fetch
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslots_waiting_prefetcher
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslots_waiting_aggregation
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nodeslots_waiting_transformation
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/accepting_prefetch_request
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/accepting_aggregation_request
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/accepting_transformation_request
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/aggregation_buffer_population_count
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/prefetcher_arbiter_grant_oh
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/prefetcher_arbiter_grant_bin
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/age_arbiter_grant_bin
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/weights_fetched
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/waiting_weights_fetch_req
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/active_weights_fetch_precision
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/aggregation_buffer_waiting_transformation
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/aggregation_buffer_slots_waiting_transformation
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/aggregation_buffer_precision_arb_bin
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/fte_request_timeout
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_lsb_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_lsb_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_msb_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_msb_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_scale_factors_address_lsb_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_scale_factors_address_lsb_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_scale_factors_address_msb_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/layer_config_scale_factors_address_msb_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_neighbour_count_count
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_id_id
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_precision_precision
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_config_make_valid_value
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_neighbour_count_count_sw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_id_id_sw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_precision_precision_sw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_config_make_valid_value_sw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_neighbour_count_strobe_sw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_node_id_strobe_sw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_precision_strobe_sw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/nsb_nodeslot_config_make_valid_strobe_sw
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_0_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_1_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_2_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_3_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_4_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_5_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_6_strobe
+add wave -noupdate -expand -group {NSB Logic} /top_wrapper_tb/top_i/node_scoreboard_i/status_nodeslots_empty_mask_7_strobe
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {34383659 ps} 0} {{Cursor 2} {1044140000 ps} 0}
+WaveRestoreCursors {{Cursor 1} {35032396 ps} 0} {{Cursor 2} {1044140000 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 430
 configure wave -valuecolwidth 100
@@ -1665,6 +1799,6 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {338366464 ps}
+WaveRestoreZoom {32572460 ps} {38596396 ps}
 bookmark add wave bookmark0 {{17959609 ps} {22111537 ps}} 0
 bookmark add wave bookmark1 {{18551117 ps} {18990769 ps}} 0
