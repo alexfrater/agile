@@ -49,22 +49,20 @@ module top_wrapper (
 
 
     // PCIe DMA Interface
-    input  logic                                xdma_sys_clk,             // input wire sys_clk
-    input  logic                                xdma_sys_clk_gt,          // input wire sys_clk_gt
-    input  logic                                xdma_sys_rst_n,           // input wire sys_rst_n
-    output logic                                xdma_user_lnk_up,         // output wire user_lnk_up
-    output logic [15:0]                         xdma_pci_exp_txp,          // output wire [15 : 0] pci_exp_txp
-    output logic [15:0]                         xdma_pci_exp_txn,          // output wire [15 : 0] pci_exp_txn
-    input  logic [15:0]                         xdma_pci_exp_rxp,          // input wire [15 : 0] pci_exp_rxp
-    input  logic [15:0]                         xdma_pci_exp_rxn,          // input wire [15 : 0] pci_exp_rxn
-    output logic                                xdma_axi_aclk,             // output wire axi_aclk
-    output logic                                xdma_axi_aresetn,          // output wire axi_aresetn
-    input  logic [0:0]                          xdma_usr_irq_req,          // input wire [0 : 0] usr_irq_req
-    output logic [0:0]                          xdma_usr_irq_ack,          // output wire [0 : 0] usr_irq_ack
-    output logic                                xdma_msi_enable,           // output wire msi_enable
-    output logic [2:0]                          xdma_msi_vector_width,     // output wire [2 : 0] msi_vector_width
-
-    
+    input  logic                                xdma_sys_clk,
+    input  logic                                xdma_sys_clk_gt,
+    input  logic                                xdma_sys_rst_n,
+    output logic                                xdma_user_lnk_up,
+    output logic [15:0]                         xdma_pci_exp_txp,
+    output logic [15:0]                         xdma_pci_exp_txn,
+    input  logic [15:0]                         xdma_pci_exp_rxp,          
+    input  logic [15:0]                         xdma_pci_exp_rxn,        
+    output logic                                xdma_axi_aclk,       
+    output logic                                xdma_axi_aresetn,        
+    input  logic [0:0]                          xdma_usr_irq_req,         
+    output logic [0:0]                          xdma_usr_irq_ack,      
+    output logic                                xdma_msi_enable,        
+    output logic [2:0]                          xdma_msi_vector_width     
 
 );
 
@@ -232,7 +230,7 @@ module top_wrapper (
   logic                          c0_ddr4_clk;
   logic                          c0_ddr4_rst;
   logic                          dbg_clk_0;
-  logic [511:0]                  dbg_bus_1;
+  logic [511:0]                  dbg_bus_0;
 
   logic                          c1_ddr4_aresetn;
   logic                          c1_ddr4_reset_n_int;
@@ -414,7 +412,7 @@ module top_wrapper (
       .nodeslot_fetch_axi_rresp               (nodeslot_axi_rresp),
       .nodeslot_fetch_axi_rlast               (nodeslot_axi_rlast),
       .nodeslot_fetch_axi_rvalid              (nodeslot_axi_rvalid),
-      .nodeslot_fetch_axi_rready              (nodeslot_axi_rready),
+      .nodeslot_fetch_axi_rready              (nodeslot_axi_rready)
   );
 
 
@@ -544,7 +542,6 @@ module top_wrapper (
   (
       .DATA_WIDTH(512),
       .ADDR_WIDTH(34),
-      .STRB_WIDTH(DATA_WIDTH/8),
       .ID_WIDTH(4)
   ) xdma_write_interconnect_i
   (
@@ -600,7 +597,7 @@ module top_wrapper (
       .m00_axi_awsize         (xdma_mem_axi_awsize),
       .m00_axi_awburst        (xdma_mem_axi_awburst),
       .m00_axi_awlock         (xdma_mem_axi_awlock),
-      .m00_axi_awcac          (xdma_mem_axi_awcache),
+      .m00_axi_awcache          (xdma_mem_axi_awcache),
       .m00_axi_awprot         (xdma_mem_axi_awprot),
       .m00_axi_awqos          (xdma_mem_axi_awqos),
       .m00_axi_awregion       (4'd0), 
@@ -665,7 +662,7 @@ module top_wrapper (
       .m01_axi_bresp          (nodeslot_axi_bresp),
       .m01_axi_buser          (1'b0), 
       .m01_axi_bvalid         (nodeslot_axi_bvalid),
-      .m01_axi_bready         (nodeslot_axi_bready),
+      .m01_axi_bready         (nodeslot_axi_bready)
 
 );
 
@@ -675,9 +672,8 @@ axi_interconnect_wrap_2x1 #
     (
     .DATA_WIDTH(512),
     .ADDR_WIDTH(34),
-    .STRB_WIDTH(DATA_WIDTH/8),
     .ID_WIDTH(4)
-    ) xdma_write_interconnect_i
+    ) ample_xdma_mem_interconnect_i
     (
       .clk                    (clk),
       .rst                    (rst),
@@ -729,10 +725,10 @@ axi_interconnect_wrap_2x1 #
       .s01_axi_awsize         (xdma_mem_axi_awsize),
       .s01_axi_awburst        (xdma_mem_axi_awburst),
       .s01_axi_awlock         (xdma_mem_axi_awlock),
-      .s01_axi_awcac          (xdma_mem_axi_awcache),
+      .s01_axi_awcache        (xdma_mem_axi_awcache),
       .s01_axi_awprot         (xdma_mem_axi_awprot),
       .s01_axi_awqos          (xdma_mem_axi_awqos),
-      .s01_axi_awregion       (4'd0), 
+      // .s01_axi_awregion       (4'd0), 
       .s01_axi_awuser         (1'b0),
       .s01_axi_awvalid        (xdma_mem_axi_awvalid),
       .s01_axi_awready        (xdma_mem_axi_awready),
@@ -756,7 +752,7 @@ axi_interconnect_wrap_2x1 #
       .s01_axi_arcache        (xdma_mem_axi_arcache),
       .s01_axi_arprot         (xdma_mem_axi_arprot),
       .s01_axi_arqos          (xdma_mem_axi_arqos),
-      .s01_axi_arregion       (4'd0), 
+      // .s01_axi_arregion       (4'd0), 
       .s01_axi_aruser         (1'b0), 
       .s01_axi_arvalid        (xdma_mem_axi_arvalid),
       .s01_axi_arready        (xdma_mem_axi_arready),
@@ -778,7 +774,7 @@ axi_interconnect_wrap_2x1 #
       .m00_axi_awcache        (c0_ddr4_s_axi_awcache),
       .m00_axi_awprot         (c0_ddr4_s_axi_awprot),
       .m00_axi_awqos          (c0_ddr4_s_axi_awqos),
-      .m00_axi_awregion       (4'd0),  
+      // .m00_axi_awregion       (4'd0),  
       .m00_axi_awuser         (1'b0),  
       .m00_axi_awvalid        (c0_ddr4_s_axi_awvalid),
       .m00_axi_awready        (c0_ddr4_s_axi_awready),

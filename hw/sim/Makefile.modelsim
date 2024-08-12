@@ -6,7 +6,7 @@ include sources.mk
 TOPLEVEL_LANG ?=verilog
 TEST_RUNNER   ?=runner
 MODULE        ?=runner
-TOPLEVEL      ?=top_wrapper_tb
+TOPLEVEL      ?=top_wrapper
 
 CMD_BIN := vsim
 

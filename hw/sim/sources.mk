@@ -9,7 +9,6 @@ VERILOG_INCLUDE_DIRS = \
 # Xilinx IP
 VERILOG_SOURCES = \
 	$(WORKAREA)/hw/sim/glbl.v \
-	$(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
 	$(WORKAREA)/hw/build/build_project.gen/sources_1/ip/aggregation_buffer_sdp_bram/sim/aggregation_buffer_sdp_bram.v \
 	$(WORKAREA)/hw/build/build_project.gen/sources_1/ip/scale_factor_queue/sim/scale_factor_queue.v \
 	$(WORKAREA)/hw/build/ip/lib/buffers/ultraram.v \
@@ -18,8 +17,15 @@ VERILOG_SOURCES = \
 	$(WORKAREA)/imports/verilog-axi/rtl/priority_encoder.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/arbiter.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_crossbar.v \
+	$(WORKAREA)/imports/verilog-axi/rtl/axi_crossbar.v \
 	$(WORKAREA)/imports/verilog-axi/rtl/axil_interconnect.v \
-	$(WORKAREA)/imports/verilog-axi/rtl/axil_interconnect_wrap_1x4.v \
+	$(WORKAREA)/imports/verilog-axi/rtl/axi_interconnect.v \
+	$(WORKAREA)/hw/ip/lib/axi/axil_interconnect_wrap_1x4.v \
+	$(WORKAREA)/hw/ip/lib/axi/axi_interconnect_wrap_3x1.v \
+	$(WORKAREA)/hw/ip/lib/axi/axi_interconnect_wrap_1x2.v \
+	$(WORKAREA)/hw/ip/lib/axi/axi_interconnect_wrap_2x1.v \
+	#$(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
+	$(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
 
 # Imports
 VERILOG_SOURCES += \
@@ -112,7 +118,8 @@ VERILOG_SOURCES += \
 	$(WORKAREA)/hw/build/ip/node_scoreboard/rtl/nodeslot_prefetcher.sv \
 	$(WORKAREA)/hw/build/ip/node_scoreboard/rtl/node_scoreboard.sv \
 	$(WORKAREA)/hw/build/ip/top/rtl/top.sv \
-	$(WORKAREA)/hw/build/ip/top/rtl/top_wrapper_tb.sv
+	$(WORKAREA)/hw/build/ip/top/rtl/top_wrapper_tb.sv \
+	$(WORKAREA)/hw/build/ip/top/rtl/top_wrapper.sv
 
 VSIM_LIBS = \
 	axi_infrastructure_v1_1_0 \
