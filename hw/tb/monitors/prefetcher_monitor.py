@@ -45,6 +45,7 @@ class Prefetcher_Monitor (Monitor):
                     self._sample(data, self.message_channel_responses[mc])
                     # self._log.debug("Observed Message Channel response through MC %d.", mc)
                     self.dut._log.debug("Observed Message Channel response through MC %s. Last Feature: %s", mc, data["last_feature"].value)
+                    # self.dut._log.debug("Observed Message Channel response through MC %s. Data %s  Last Feature: %s", mc, hex(data["data"].value), data["last_feature"].value)
 
             # Weight Channel Response
             for wc in range(self.precision_count):
@@ -56,4 +57,11 @@ class Prefetcher_Monitor (Monitor):
                     }
                     self._sample(data, self.weight_channel_responses[wc])
                     # self._log.debug("Observed Weight Channel response through WC %d.", wc)
-                    self._log.debug("Observed Weight Channel response through WC %d. Done: %s", wc, data["done"].value)
+                    # self._log.debug("Observed Weight Channel response through WC %d. Done: %s", wc, data["done"].value)
+                    # self._log.debug("Observed Weight Channel response through WC %d. Data %s Done: %s", wc, hex(data["data"].value.integer), data["done"].value)
+                    # self._log.debug(
+                    #     "Observed Weight Channel response through WC %d. Data %s Done: %s",
+                    #     wc,
+                    #     data["data"].value.hex,
+                    #     data["done"].value
+                    # )

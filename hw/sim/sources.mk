@@ -24,8 +24,8 @@ VERILOG_SOURCES = \
 	$(WORKAREA)/hw/ip/lib/axi/axi_interconnect_wrap_3x1.v \
 	$(WORKAREA)/hw/ip/lib/axi/axi_interconnect_wrap_1x2.v \
 	$(WORKAREA)/hw/ip/lib/axi/axi_interconnect_wrap_2x1.v \
-	#$(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
 	$(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
+	# $(WORKAREA)/hw/build/build_project.ip_user_files/ipstatic/simulation/blk_mem_gen_v8_4.v \
 
 # Imports
 VERILOG_SOURCES += \

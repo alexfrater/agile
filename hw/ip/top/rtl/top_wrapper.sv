@@ -65,7 +65,7 @@ module top_wrapper (
 
   // =============================Ample Axi Interface==============================================
   logic [3:0]         ample_axi_awid;
-  logic [31:0]        ample_axi_awaddr;
+  logic [33:0]        ample_axi_awaddr;
   logic [7:0]         ample_axi_awlen;
   logic [2:0]         ample_axi_awsize;
   logic [1:0]         ample_axi_awburst;
@@ -85,7 +85,7 @@ module top_wrapper (
   logic               ample_axi_bvalid;
   logic               ample_axi_bready;
   logic [3:0]         ample_axi_arid;
-  logic [31:0]        ample_axi_araddr;
+  logic [33:0]        ample_axi_araddr;
   logic [7:0]         ample_axi_arlen;
   logic [2:0]         ample_axi_arsize;
   logic [1:0]         ample_axi_arburst;
@@ -268,9 +268,8 @@ module top_wrapper (
     axi_ram #(
         .DATA_WIDTH(512),
         .ADDR_WIDTH(34),
-        .ID_WIDTH(8),
-        .DATA_FILE  ("$WORKAREA/hw/sim/layer_config/nodeslots.mem")
-
+        .ID_WIDTH(4),
+        .DATA_FILE  ("$WORKAREA/hw/sim/layer_config/memory.mem")
     ) dram_c0_sim (
         .clk                    (sys_clk),
         .rst                    (sys_rst),

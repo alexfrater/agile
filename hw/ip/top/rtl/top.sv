@@ -38,7 +38,7 @@ module top
     // Memory Interface
    
     output logic [3:0]                   ample_axi_awid,
-    output logic [31:0]                  ample_axi_awaddr,
+    output logic [33:0]                  ample_axi_awaddr,
     output logic [7:0]                   ample_axi_awlen,
     output logic [2:0]                   ample_axi_awsize,
     output logic [1:0]                   ample_axi_awburst,
@@ -58,7 +58,7 @@ module top
     input  logic                         ample_axi_bvalid,
     output logic                         ample_axi_bready,
     output logic [3:0]                   ample_axi_arid,
-    output logic [31:0]                  ample_axi_araddr,
+    output logic [33:0]                  ample_axi_araddr,
     output logic [7:0]                   ample_axi_arlen,
     output logic [2:0]                   ample_axi_arsize,
     output logic [1:0]                   ample_axi_arburst,
@@ -833,8 +833,7 @@ feature_transformation_engine transformation_engine_i (
     .transformation_engine_axi_interconnect_axi_wready    (transformation_engine_axi_wready),
     .transformation_engine_axi_interconnect_axi_wstrb     (transformation_engine_axi_wstrb),
     .transformation_engine_axi_interconnect_axi_wvalid    (transformation_engine_axi_wvalid)
-
-
+    
 );  
 
 // ====================================================================================
@@ -1073,7 +1072,7 @@ axi_interconnect_wrap_3x1 #(
     .s02_axi_bvalid                      (weight_bank_axi_bvalid),
     .s02_axi_bready                      (weight_bank_axi_bready),
     .s02_axi_arid                        (weight_bank_axi_arid),
-    .s02_axi_araddr                      (weight_bank_axi_araddr),
+    .s02_axi_araddr                      ({12'b0,weight_bank_axi_araddr[21:0]}),
     .s02_axi_arlen                       (weight_bank_axi_arlen),
     .s02_axi_arsize                      (weight_bank_axi_arsize),
     .s02_axi_arburst                     (weight_bank_axi_arburst),
@@ -1131,11 +1130,5 @@ axi_interconnect_wrap_3x1 #(
     .m00_axi_rvalid                      (ample_axi_rvalid),
     .m00_axi_rready                      (ample_axi_rready)
 );
-
-
-
-
-
-
 
 endmodule
