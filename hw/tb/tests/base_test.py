@@ -188,16 +188,15 @@ class BaseTest:
 
         ############################
         
-    async def stop_monitors(self):
-        # self.fte_monitor.stop()
-        # self.axi_monitor._monitor_write_transactions.kill()
-        pass
+    # async def stop_monitors(self):
+    #     # self.fte_monitor.stop()
+    #     # self.axi_monitor._monitor_write_transactions.kill()
+    #     pass
 
     async def end_test(self):
         # Stop monitors
-        # self.nsb_monitor.running = False
-        self.axi_monitor.running = False
         ######Stop all monitors######
+        self.axi_monitor.running = False
         self.nsb_monitor.running = False
         self.prefetcher_monitor.running = False
         self.fte_monitor.running = False

@@ -552,7 +552,7 @@ module top_wrapper (
       * AXI slave interface
       */
       .s00_axi_awid           (xdma_m_axi_awid),
-      .s00_axi_awaddr         (xdma_m_axi_awaddr),
+      .s00_axi_awaddr         (xdma_m_axi_awaddr[33:0]),
       .s00_axi_awlen          (xdma_m_axi_awlen),
       .s00_axi_awsize         (xdma_m_axi_awsize),
       .s00_axi_awburst        (xdma_m_axi_awburst),
@@ -572,7 +572,7 @@ module top_wrapper (
       .s00_axi_bvalid         (xdma_m_axi_bvalid),
       .s00_axi_bready         (xdma_m_axi_bready),
       .s00_axi_arid           (xdma_m_axi_arid),
-      .s00_axi_araddr         (xdma_m_axi_araddr),
+      .s00_axi_araddr         (xdma_m_axi_araddr[33:0]),
       .s00_axi_arlen          (xdma_m_axi_arlen),
       .s00_axi_arsize         (xdma_m_axi_arsize),
       .s00_axi_arburst        (xdma_m_axi_arburst),
