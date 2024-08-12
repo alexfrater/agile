@@ -75,27 +75,27 @@ module top
     input  logic                         ample_axi_rvalid,
     output logic                         ample_axi_rready,
 
-    // // Nodeslot fetch AXI interface -> DRAM Channel 1
-    // output logic [7:0]                   nodeslot_fetch_axi_awid,
-    // output logic [33:0]                  nodeslot_fetch_axi_awaddr,
-    // output logic [7:0]                   nodeslot_fetch_axi_awlen,
-    // output logic [2:0]                   nodeslot_fetch_axi_awsize,
-    // output logic [1:0]                   nodeslot_fetch_axi_awburst,
-    // output logic [0:0]                   nodeslot_fetch_axi_awlock,
-    // output logic [3:0]                   nodeslot_fetch_axi_awcache,
-    // output logic [2:0]                   nodeslot_fetch_axi_awprot,
-    // output logic [3:0]                   nodeslot_fetch_axi_awqos,
-    // output logic                         nodeslot_fetch_axi_awvalid,
-    // input  logic                         nodeslot_fetch_axi_awready,
-    // output logic [511:0]                 nodeslot_fetch_axi_wdata,
-    // output logic [63:0]                  nodeslot_fetch_axi_wstrb,
-    // output logic                         nodeslot_fetch_axi_wlast,
-    // output logic                         nodeslot_fetch_axi_wvalid,
-    // input  logic                         nodeslot_fetch_axi_wready,
-    // input  logic [7:0]                   nodeslot_fetch_axi_bid,
-    // input  logic [1:0]                   nodeslot_fetch_axi_bresp,
-    // input  logic                         nodeslot_fetch_axi_bvalid,
-    // output logic                         nodeslot_fetch_axi_bready,
+    // Nodeslot fetch AXI interface -> DRAM Channel 1
+    output logic [7:0]                   nodeslot_fetch_axi_awid,
+    output logic [33:0]                  nodeslot_fetch_axi_awaddr,
+    output logic [7:0]                   nodeslot_fetch_axi_awlen,
+    output logic [2:0]                   nodeslot_fetch_axi_awsize,
+    output logic [1:0]                   nodeslot_fetch_axi_awburst,
+    output logic [0:0]                   nodeslot_fetch_axi_awlock,
+    output logic [3:0]                   nodeslot_fetch_axi_awcache,
+    output logic [2:0]                   nodeslot_fetch_axi_awprot,
+    output logic [3:0]                   nodeslot_fetch_axi_awqos,
+    output logic                         nodeslot_fetch_axi_awvalid,
+    input  logic                         nodeslot_fetch_axi_awready,
+    output logic [511:0]                 nodeslot_fetch_axi_wdata,
+    output logic [63:0]                  nodeslot_fetch_axi_wstrb,
+    output logic                         nodeslot_fetch_axi_wlast,
+    output logic                         nodeslot_fetch_axi_wvalid,
+    input  logic                         nodeslot_fetch_axi_wready,
+    input  logic [7:0]                   nodeslot_fetch_axi_bid,
+    input  logic [1:0]                   nodeslot_fetch_axi_bresp,
+    input  logic                         nodeslot_fetch_axi_bvalid,
+    output logic                         nodeslot_fetch_axi_bready,
     output logic [7:0]                   nodeslot_fetch_axi_arid,
     output logic [33:0]                  nodeslot_fetch_axi_araddr,
     output logic [7:0]                   nodeslot_fetch_axi_arlen,
@@ -219,63 +219,6 @@ logic                              read_master_axi_wlast;
 logic                              read_master_axi_wready;
 logic [63:0]                       read_master_axi_wstrb;
 logic                              read_master_axi_wvalid;
-
-
-
-
-logic [33:0]                       transformation_engine_axi_araddr;
-logic [1:0]                        transformation_engine_axi_arburst;
-logic [3:0]                        transformation_engine_axi_arcache;
-logic [3:0]                        transformation_engine_axi_arid;
-logic [7:0]                        transformation_engine_axi_arlen;
-logic [0:0]                        transformation_engine_axi_arlock;
-logic [2:0]                        transformation_engine_axi_arprot;
-logic [3:0]                        transformation_engine_axi_arqos;
-logic [2:0]                        transformation_engine_axi_arsize;
-logic                              transformation_engine_axi_arvalid;
-logic                              transformation_engine_axi_arready;
-logic [511:0]                      transformation_engine_axi_rdata;
-logic [3:0]                        transformation_engine_axi_rid;
-logic                              transformation_engine_axi_rlast;
-logic                              transformation_engine_axi_rready;
-logic [1:0]                        transformation_engine_axi_rresp;
-logic                              transformation_engine_axi_rvalid;
-
-
-logic [511:0]                      transformation_engine_axi_wdata;
-logic                              transformation_engine_axi_wlast;
-logic                              transformation_engine_axi_wready;
-logic [63:0]                       transformation_engine_axi_wstrb;
-logic                              transformation_engine_axi_wvalid;
-logic [33:0]                       transformation_engine_axi_awaddr;
-logic [1:0]                        transformation_engine_axi_awburst;
-logic [3:0]                        transformation_engine_axi_awcache;
-logic [3:0]                        transformation_engine_axi_awid;
-logic [7:0]                        transformation_engine_axi_awlen;
-logic [0:0]                        transformation_engine_axi_awlock;
-logic [2:0]                        transformation_engine_axi_awprot;
-logic [3:0]                        transformation_engine_axi_awqos;
-logic                              transformation_engine_axi_awready;
-logic [2:0]                        transformation_engine_axi_awsize;
-logic                              transformation_engine_axi_awvalid;
-logic [3:0]                        transformation_engine_axi_bid;
-logic                              transformation_engine_axi_bready;
-logic [1:0]                        transformation_engine_axi_bresp;
-logic                              transformation_engine_axi_bvalid;
-
-
-assign transformation_engine_axi_araddr  = 34'd0;
-assign transformation_engine_axi_arburst = 2'b0;
-assign transformation_engine_axi_arcache = 4'b0;
-assign transformation_engine_axi_arid    = 4'b0;
-assign transformation_engine_axi_arlen   = 8'b0;
-assign transformation_engine_axi_arlock  = 1'b0;
-assign transformation_engine_axi_arprot  = 3'b0;
-assign transformation_engine_axi_arqos   = 4'b0;
-assign transformation_engine_axi_arsize  = 3'b0;
-assign transformation_engine_axi_arvalid = 1'b0;
-assign transformation_engine_axi_rready  = 1'b0;
-
 
 // NSB -> Aggregation Engine Interface
 logic                                                nsb_age_req_valid;
@@ -468,7 +411,27 @@ nodeslot_prefetcher nodeslot_prefetcher_i (
     .core_clk                    (sys_clk),
     .resetn                      (!sys_rst),
 
-
+    // Instruction fetching AXI interface
+    // .read_master_axi_awid        (nodeslot_fetch_axi_awid),
+    // .read_master_axi_awaddr      (nodeslot_fetch_axi_awaddr),
+    // .read_master_axi_awlen       (nodeslot_fetch_axi_awlen),
+    // .read_master_axi_awsize      (nodeslot_fetch_axi_awsize),
+    // .read_master_axi_awburst     (nodeslot_fetch_axi_awburst),
+    // .read_master_axi_awlock      (nodeslot_fetch_axi_awlock),
+    // .read_master_axi_awcache     (nodeslot_fetch_axi_awcache),
+    // .read_master_axi_awprot      (nodeslot_fetch_axi_awprot),
+    // .read_master_axi_awqos       (nodeslot_fetch_axi_awqos),
+    // .read_master_axi_awvalid     (nodeslot_fetch_axi_awvalid),
+    // .read_master_axi_awready     (nodeslot_fetch_axi_awready),
+    // .read_master_axi_wdata       (nodeslot_fetch_axi_wdata),
+    // .read_master_axi_wstrb       (nodeslot_fetch_axi_wstrb),
+    // .read_master_axi_wlast       (nodeslot_fetch_axi_wlast),
+    // .read_master_axi_wvalid      (nodeslot_fetch_axi_wvalid),
+    // .read_master_axi_wready      (nodeslot_fetch_axi_wready),
+    // .read_master_axi_bid         (nodeslot_fetch_axi_bid),
+    // .read_master_axi_bresp       (nodeslot_fetch_axi_bresp),
+    // .read_master_axi_bvalid      (nodeslot_fetch_axi_bvalid),
+    // .read_master_axi_bready      (nodeslot_fetch_axi_bready),
     .read_master_axi_arid        (nodeslot_fetch_axi_arid),
     .read_master_axi_araddr      (nodeslot_fetch_axi_araddr),
     .read_master_axi_arlen       (nodeslot_fetch_axi_arlen),
@@ -813,6 +776,18 @@ feature_transformation_engine transformation_engine_i (
     .weight_channel_resp_valid                          (weight_channel_resp_valid),
     .weight_channel_resp_ready                          (weight_channel_resp_ready),
     .weight_channel_resp                                (weight_channel_resp),
+
+    .transformation_engine_axi_interconnect_axi_araddr    (transformation_engine_axi_araddr),
+    .transformation_engine_axi_interconnect_axi_arburst   (transformation_engine_axi_arburst),
+    .transformation_engine_axi_interconnect_axi_arcache   (transformation_engine_axi_arcache),
+    .transformation_engine_axi_interconnect_axi_arid      (transformation_engine_axi_arid),
+    .transformation_engine_axi_interconnect_axi_arlen     (transformation_engine_axi_arlen),
+    .transformation_engine_axi_interconnect_axi_arlock    (transformation_engine_axi_arlock),
+    .transformation_engine_axi_interconnect_axi_arprot    (transformation_engine_axi_arprot),
+    .transformation_engine_axi_interconnect_axi_arqos     (transformation_engine_axi_arqos),
+    .transformation_engine_axi_interconnect_axi_arsize    (transformation_engine_axi_arsize),
+    .transformation_engine_axi_interconnect_axi_arvalid   (transformation_engine_axi_arvalid),
+    .transformation_engine_axi_interconnect_axi_arready   (transformation_engine_axi_arready),
     .transformation_engine_axi_interconnect_axi_awaddr    (transformation_engine_axi_awaddr),
     .transformation_engine_axi_interconnect_axi_awburst   (transformation_engine_axi_awburst),
     .transformation_engine_axi_interconnect_axi_awcache   (transformation_engine_axi_awcache),
@@ -828,14 +803,18 @@ feature_transformation_engine transformation_engine_i (
     .transformation_engine_axi_interconnect_axi_bready    (transformation_engine_axi_bready),
     .transformation_engine_axi_interconnect_axi_bresp     (transformation_engine_axi_bresp),
     .transformation_engine_axi_interconnect_axi_bvalid    (transformation_engine_axi_bvalid),
+    .transformation_engine_axi_interconnect_axi_rdata     (transformation_engine_axi_rdata),
+    .transformation_engine_axi_interconnect_axi_rid       (transformation_engine_axi_rid),
+    .transformation_engine_axi_interconnect_axi_rlast     (transformation_engine_axi_rlast),
+    .transformation_engine_axi_interconnect_axi_rready    (transformation_engine_axi_rready),
+    .transformation_engine_axi_interconnect_axi_rresp     (transformation_engine_axi_rresp),
+    .transformation_engine_axi_interconnect_axi_rvalid    (transformation_engine_axi_rvalid),
     .transformation_engine_axi_interconnect_axi_wdata     (transformation_engine_axi_wdata),
     .transformation_engine_axi_interconnect_axi_wlast     (transformation_engine_axi_wlast),
     .transformation_engine_axi_interconnect_axi_wready    (transformation_engine_axi_wready),
     .transformation_engine_axi_interconnect_axi_wstrb     (transformation_engine_axi_wstrb),
     .transformation_engine_axi_interconnect_axi_wvalid    (transformation_engine_axi_wvalid)
-
-
-);  
+);
 
 // ====================================================================================
 // AXI-L Register Control Crossbar
@@ -965,8 +944,8 @@ axi_interconnect_wrap_3x1 #(
     .ADDR_WIDTH                          (34),  
     .ID_WIDTH                            (4)   
 ) memory_interconnect (
-    .clk                                 (sys_clk),
-    .rst                                 (sys_rst),
+    .clk                                 (clk),
+    .rst                                 (rst),
 
     .s00_axi_awid                        (read_master_axi_awid          ), //Set [0] as designed to have paramterized number of masters
     .s00_axi_awaddr                      (read_master_axi_awaddr        ),
@@ -977,17 +956,18 @@ axi_interconnect_wrap_3x1 #(
     .s00_axi_awcache                     (read_master_axi_awcache       ),
     .s00_axi_awprot                      (read_master_axi_awprot        ),
     .s00_axi_awqos                       (read_master_axi_awqos         ),
-    .s00_axi_awuser                      (1'b0), 
+    // .s00_axi_awuser                      (1'b0), 
     .s00_axi_awvalid                     (read_master_axi_awvalid       ),
     .s00_axi_awready                     (read_master_axi_awready       ),
     .s00_axi_wdata                       (read_master_axi_wdata         ),
     .s00_axi_wstrb                       (read_master_axi_wstrb         ),
     .s00_axi_wlast                       (read_master_axi_wlast         ),
-    .s00_axi_wuser                       (1'b0), 
+    // .s00_axi_wuser                       (1'b0), 
     .s00_axi_wvalid                      (read_master_axi_wvalid        ),
     .s00_axi_wready                      (read_master_axi_wready        ),
     .s00_axi_bid                         (read_master_axi_bid           ),
     .s00_axi_bresp                       (read_master_axi_bresp         ),
+    // .s00_axi_buser                       (1'b0), 
     .s00_axi_bvalid                      (read_master_axi_bvalid        ),
     .s00_axi_bready                      (read_master_axi_bready        ),
     .s00_axi_arid                        (read_master_axi_arid          ),
@@ -999,13 +979,14 @@ axi_interconnect_wrap_3x1 #(
     .s00_axi_arcache                     (read_master_axi_arcache       ),
     .s00_axi_arprot                      (read_master_axi_arprot        ),
     .s00_axi_arqos                       (read_master_axi_arqos         ),
-    .s00_axi_aruser                      (1'b0), 
+    // .s00_axi_aruser                      (1'b0), 
     .s00_axi_arvalid                     (read_master_axi_arvalid       ),
     .s00_axi_arready                     (read_master_axi_arready       ),
     .s00_axi_rid                         (read_master_axi_rid           ),
     .s00_axi_rdata                       (read_master_axi_rdata         ),
     .s00_axi_rresp                       (read_master_axi_rresp         ),
     .s00_axi_rlast                       (read_master_axi_rlast         ),
+    // .s00_axi_ruser                       (1'b0), 
     .s00_axi_rvalid                      (read_master_axi_rvalid        ),
     .s00_axi_rready                      (read_master_axi_rready        ),
 
@@ -1018,17 +999,18 @@ axi_interconnect_wrap_3x1 #(
     .s01_axi_awcache                     (transformation_engine_axi_awcache),
     .s01_axi_awprot                      (transformation_engine_axi_awprot),
     .s01_axi_awqos                       (transformation_engine_axi_awqos),
-    .s01_axi_awuser                      (1'b0), 
+    // .s01_axi_awuser                      (1'b0), 
     .s01_axi_awvalid                     (transformation_engine_axi_awvalid),
     .s01_axi_awready                     (transformation_engine_axi_awready),
     .s01_axi_wdata                       (transformation_engine_axi_wdata),
     .s01_axi_wstrb                       (transformation_engine_axi_wstrb),
     .s01_axi_wlast                       (transformation_engine_axi_wlast),
-    .s01_axi_wuser                       (1'b0), 
+    // .s01_axi_wuser                       (1'b0), 
     .s01_axi_wvalid                      (transformation_engine_axi_wvalid),
     .s01_axi_wready                      (transformation_engine_axi_wready),
     .s01_axi_bid                         (transformation_engine_axi_bid),
     .s01_axi_bresp                       (transformation_engine_axi_bresp),
+    // .s01_axi_buser                       (1'b0), 
     .s01_axi_bvalid                      (transformation_engine_axi_bvalid),
     .s01_axi_bready                      (transformation_engine_axi_bready),
     .s01_axi_arid                        (transformation_engine_axi_arid),
@@ -1040,13 +1022,14 @@ axi_interconnect_wrap_3x1 #(
     .s01_axi_arcache                     (transformation_engine_axi_arcache),
     .s01_axi_arprot                      (transformation_engine_axi_arprot),
     .s01_axi_arqos                       (transformation_engine_axi_arqos),
-    .s01_axi_aruser                      (1'b0), 
+    // .s01_axi_aruser                      (1'b0), 
     .s01_axi_arvalid                     (transformation_engine_axi_arvalid),
     .s01_axi_arready                     (transformation_engine_axi_arready),
     .s01_axi_rid                         (transformation_engine_axi_rid),
     .s01_axi_rdata                       (transformation_engine_axi_rdata),
     .s01_axi_rresp                       (transformation_engine_axi_rresp),
     .s01_axi_rlast                       (transformation_engine_axi_rlast),
+    // .s01_axi_ruser                       (1'b0),
     .s01_axi_rvalid                      (transformation_engine_axi_rvalid),
     .s01_axi_rready                      (transformation_engine_axi_rready),
 
@@ -1059,17 +1042,18 @@ axi_interconnect_wrap_3x1 #(
     .s02_axi_awcache                     (weight_bank_axi_awcache),
     .s02_axi_awprot                      (weight_bank_axi_awprot),
     .s02_axi_awqos                       (weight_bank_axi_awqos),
-    .s02_axi_awuser                      (1'b0), // Assuming no user signals
+    // .s02_axi_awuser                      (1'b0), // Assuming no user signals
     .s02_axi_awvalid                     (weight_bank_axi_awvalid),
     .s02_axi_awready                     (weight_bank_axi_awready),
     .s02_axi_wdata                       (weight_bank_axi_wdata),
     .s02_axi_wstrb                       (weight_bank_axi_wstrb),
     .s02_axi_wlast                       (weight_bank_axi_wlast),
-    .s02_axi_wuser                       (1'b0), // Assuming no user signals
+    // .s02_axi_wuser                       (1'b0), // Assuming no user signals
     .s02_axi_wvalid                      (weight_bank_axi_wvalid),
     .s02_axi_wready                      (weight_bank_axi_wready),
     .s02_axi_bid                         (weight_bank_axi_bid),
     .s02_axi_bresp                       (weight_bank_axi_bresp),
+    // .s02_axi_buser                       (1'b0), // Assuming no user signals
     .s02_axi_bvalid                      (weight_bank_axi_bvalid),
     .s02_axi_bready                      (weight_bank_axi_bready),
     .s02_axi_arid                        (weight_bank_axi_arid),
@@ -1081,13 +1065,14 @@ axi_interconnect_wrap_3x1 #(
     .s02_axi_arcache                     (weight_bank_axi_arcache),
     .s02_axi_arprot                      (weight_bank_axi_arprot),
     .s02_axi_arqos                       (weight_bank_axi_arqos),
-    .s02_axi_aruser                      (1'b0), 
+    // .s02_axi_aruser                      (1'b0), 
     .s02_axi_arvalid                     (weight_bank_axi_arvalid),
     .s02_axi_arready                     (weight_bank_axi_arready),
     .s02_axi_rid                         (weight_bank_axi_rid),
     .s02_axi_rdata                       (weight_bank_axi_rdata),
     .s02_axi_rresp                       (weight_bank_axi_rresp),
     .s02_axi_rlast                       (weight_bank_axi_rlast),
+    // .s02_axi_ruser                       (1'b0), 
     .s02_axi_rvalid                      (weight_bank_axi_rvalid),
     .s02_axi_rready                      (weight_bank_axi_rready),
 
@@ -1099,17 +1084,20 @@ axi_interconnect_wrap_3x1 #(
     .m00_axi_awlock                      (ample_axi_awlock),
     .m00_axi_awcache                     (ample_axi_awcache),
     .m00_axi_awprot                      (ample_axi_awprot),
-    .m00_axi_awqos                       (ample_axi_awqos),  
+    .m00_axi_awqos                       (ample_axi_awqos),
+    // .m00_axi_awregion                    (4'b0000), 
+    // .m00_axi_awuser                      (1'b0),   
     .m00_axi_awvalid                     (ample_axi_awvalid),
     .m00_axi_awready                     (ample_axi_awready),
     .m00_axi_wdata                       (ample_axi_wdata),
     .m00_axi_wstrb                       (ample_axi_wstrb),
     .m00_axi_wlast                       (ample_axi_wlast),
+    // .m00_axi_wuser                       (1'b0),    
     .m00_axi_wvalid                      (ample_axi_wvalid),
     .m00_axi_wready                      (ample_axi_wready),
     .m00_axi_bid                         (ample_axi_bid),
     .m00_axi_bresp                       (ample_axi_bresp),
-    .m00_axi_buser                       (1'b0),    
+    // .m00_axi_buser                       (1'b0),    
     .m00_axi_bvalid                      (ample_axi_bvalid),
     .m00_axi_bready                      (ample_axi_bready),
     .m00_axi_arid                        (ample_axi_arid),
@@ -1120,14 +1108,16 @@ axi_interconnect_wrap_3x1 #(
     .m00_axi_arlock                      (ample_axi_arlock),
     .m00_axi_arcache                     (ample_axi_arcache),
     .m00_axi_arprot                      (ample_axi_arprot),
-    .m00_axi_arqos                       (ample_axi_arqos),    
+    .m00_axi_arqos                       (ample_axi_arqos),
+    // .m00_axi_arregion                    (4'b0000), 
+    // .m00_axi_aruser                      (1'b0),    
     .m00_axi_arvalid                     (ample_axi_arvalid),
     .m00_axi_arready                     (ample_axi_arready),
     .m00_axi_rid                         (ample_axi_rid),
     .m00_axi_rdata                       (ample_axi_rdata),
     .m00_axi_rresp                       (ample_axi_rresp),
     .m00_axi_rlast                       (ample_axi_rlast),
-    .m00_axi_ruser                       (1'b0),    
+    // .m00_axi_ruser                       (1'b0),    
     .m00_axi_rvalid                      (ample_axi_rvalid),
     .m00_axi_rready                      (ample_axi_rready)
 );

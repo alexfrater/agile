@@ -291,7 +291,9 @@ axi_interconnect_inst (
     .s_axi_rdata({ s00_axi_rdata }),
     .s_axi_rresp({ s00_axi_rresp }),
     .s_axi_rlast({ s00_axi_rlast }),
-    .s_axi_ruser({ s00_axi_ruser }),
+    .s_axi_ruser({ 
+        
+     }),
     .s_axi_rvalid({ s00_axi_rvalid }),
     .s_axi_rready({ s00_axi_rready }),
     .m_axi_awid({ m01_axi_awid, m00_axi_awid }),

@@ -9,9 +9,9 @@ view wave3
 do age.do
 view wave4
 do fte.do
-run -all
 view wave
-wave zoom full
+do top.do
+run -all
 view wave1
 wave zoom full
 view wave2
@@ -19,4 +19,6 @@ wave zoom full
 view wave3
 wave zoom full
 view wave4
+wave zoom full
+view wave
 wave zoom full
