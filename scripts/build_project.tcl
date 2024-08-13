@@ -49,6 +49,7 @@ import_ip -files $env(WORKAREA)/hw/xilinx_ip/aggregation_buffer_sdp_bram.xci
 import_ip -files $env(WORKAREA)/hw/xilinx_ip/scale_factor_queue.xci
 import_ip -files $env(WORKAREA)/hw/xilinx_ip/ddr4_0.xci
 import_ip -files $env(WORKAREA)/hw/xilinx_ip/ddr4_1.xci
+import_ip -files $env(WORKAREA)/hw/xilinx_ip/xdma_0.xci
 
 generate_target all [get_ips]
 

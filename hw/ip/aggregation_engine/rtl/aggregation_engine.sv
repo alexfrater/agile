@@ -95,23 +95,23 @@ logic [31:0] layer_config_upsampling_parameter_value;
 // ------------------------------------------------------------
 
 // AGE -> Aggregation Mesh: Request Interface
-logic [top_pkg::PRECISION_COUNT-1:0] [MESH_MULTIPLIER-1:0]                                  aggregation_req_valid;
-logic [top_pkg::PRECISION_COUNT-1:0] [MESH_MULTIPLIER-1:0]                                  aggregation_req_ready;
+logic [top_pkg::PRECISION_COUNT-1:0] [top_pkg::MESH_MULTIPLIER-1:0]                                  aggregation_req_valid;
+logic [top_pkg::PRECISION_COUNT-1:0] [top_pkg::MESH_MULTIPLIER-1:0]                                  aggregation_req_ready;
 top_pkg::NSB_AGE_REQ_t                                                                      aggregation_req;
 
 // Aggregation Mesh -> AGE : Request Interface
-logic [top_pkg::PRECISION_COUNT-1:0] [MESH_MULTIPLIER-1:0] [AGGREGATION_ROWS-1:0]                                           aggregation_manager_done_valid;
-logic [top_pkg::PRECISION_COUNT-1:0] [MESH_MULTIPLIER-1:0] [AGGREGATION_ROWS-1:0] [$clog2(top_pkg::MAX_NODESLOT_COUNT)-1:0] aggregation_manager_done_nodeslot;
-logic [top_pkg::PRECISION_COUNT-1:0] [MESH_MULTIPLIER-1:0] [AGGREGATION_ROWS-1:0]                                           aggregation_manager_done_ready;
+logic [top_pkg::PRECISION_COUNT-1:0] [top_pkg::MESH_MULTIPLIER-1:0] [AGGREGATION_ROWS-1:0]                                           aggregation_manager_done_valid;
+logic [top_pkg::PRECISION_COUNT-1:0] [top_pkg::MESH_MULTIPLIER-1:0] [AGGREGATION_ROWS-1:0] [$clog2(top_pkg::MAX_NODESLOT_COUNT)-1:0] aggregation_manager_done_nodeslot;
+logic [top_pkg::PRECISION_COUNT-1:0] [top_pkg::MESH_MULTIPLIER-1:0] [AGGREGATION_ROWS-1:0]                                           aggregation_manager_done_ready;
 
 // AGM-wise signal for reading from AGM resp arbitration
-logic [top_pkg::PRECISION_COUNT * MESH_MULTIPLIER * AGGREGATION_ROWS -1:0] [$clog2(top_pkg::MAX_NODESLOT_COUNT)-1:0] agm_nodeslot;
+logic [top_pkg::PRECISION_COUNT * top_pkg::MESH_MULTIPLIER * AGGREGATION_ROWS -1:0] [$clog2(top_pkg::MAX_NODESLOT_COUNT)-1:0] agm_nodeslot;
 
 // NSB Response Arbitration
 // ------------------------------------------------------------
 
-logic [top_pkg::PRECISION_COUNT * MESH_MULTIPLIER * AGGREGATION_ROWS - 1 : 0] aggregation_manager_resp_arbitration_oh;
-logic [$clog2(top_pkg::PRECISION_COUNT * MESH_MULTIPLIER * AGGREGATION_ROWS) - 1 : 0] aggregation_manager_resp_arbitration_bin;
+logic [top_pkg::PRECISION_COUNT * top_pkg::MESH_MULTIPLIER * AGGREGATION_ROWS - 1 : 0] aggregation_manager_resp_arbitration_oh;
+logic [$clog2(top_pkg::PRECISION_COUNT * top_pkg::MESH_MULTIPLIER * AGGREGATION_ROWS) - 1 : 0] aggregation_manager_resp_arbitration_bin;
 
 // Buffer manager arbiter
 // ------------------------------------------------------------
@@ -175,7 +175,7 @@ aggregation_engine_regbank_wrapper #(
 for (genvar precision = 0; precision < top_pkg::PRECISION_COUNT; precision++) begin : precision_block
 
     // Multiple mesh blocks to interleave columns of aggregation managers
-    for (genvar mesh = 0; mesh < MESH_MULTIPLIER; mesh++) begin : mesh_block
+    for (genvar mesh = 0; mesh < top_pkg::MESH_MULTIPLIER; mesh++) begin : mesh_block
 
         aggregation_mesh #(
             .AGGREGATION_ROWS            (AGGREGATION_ROWS),

@@ -12,7 +12,7 @@ package top_pkg;
 // ----------------------------------------------------
 
 // New arrangement
-parameter MESH_MULTIPLIER = 4;
+parameter MESH_MULTIPLIER = 2;
 
 parameter AGGREGATION_CHANNELS = 4; // per mesh
 parameter TRANSFORMATION_CHANNELS = 8;
@@ -20,7 +20,7 @@ parameter TRANSFORMATION_CHANNELS = 8;
 // Graph parameters
 parameter MAX_NODES = 1024*1024; // 1M
 parameter MAX_NODESLOT_COUNT = 32;
-parameter MAX_NEIGHBOURS = 1024;
+parameter MAX_NEIGHBOURS = 256;
 parameter MAX_FEATURE_COUNT = 1024;
 parameter FEATURE_COUNT = 64;
 
@@ -68,7 +68,7 @@ parameter TRANSFORMATION_ROWS = TRANSFORMATION_CHANNELS;
 parameter SYSTOLIC_MODULE_COUNT = FEATURE_COUNT/TRANSFORMATION_CHANNELS;
 
 // Transformation Buffer
-parameter TRANSFORMATION_BUFFER_SLOTS = 16;
+parameter TRANSFORMATION_BUFFER_SLOTS = 1;
 parameter TRANSFORMATION_BUFFER_WRITE_DEPTH = 1024*32/512; // == 64
 parameter TRANSFORMATION_BUFFER_WRITE_WIDTH = 512;
 parameter TRANSFORMATION_BUFFER_READ_DEPTH = MAX_FEATURE_COUNT * 4 / 4; // 4 bytes per float
