@@ -16,7 +16,7 @@ Graph Convolutional Network
 '''
 
 class GCN_Model(torch.nn.Module):
-    def __init__(self, in_channels: int, out_channels: int, layer_count=1, hidden_dimension=64, precision = torch.float32):
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=64, precision = torch.float32):
         super().__init__()
         self.precision = precision
         self.layers = nn.ModuleList()
@@ -59,7 +59,7 @@ Graph Isomorphism Network
 '''
 
 class GINLinear(pl.LightningModule):
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels=32, out_channels=32):
         super().__init__()
         self.layer = torch.nn.Linear(in_channels, out_channels, bias=False)
     
@@ -67,7 +67,7 @@ class GINLinear(pl.LightningModule):
         return self.layer(x)
 
 class GIN_Model(pl.LightningModule):
-    def __init__(self, in_channels, out_channels, layer_count=1, hidden_dimension=64):
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=64):
         super().__init__()
         self.layers = nn.ModuleList()
         if layer_count == 1:
@@ -96,7 +96,7 @@ Graph Attention Network
 '''
 
 class GAT_Model(pl.LightningModule):
-    def __init__(self, num_features, num_classes):
+    def __init__(self, num_features=32, num_classes=2):
         super().__init__()
 
         self.hid = 8
@@ -120,7 +120,7 @@ class GAT_Model(pl.LightningModule):
 GraphSAGE
 '''
 class GraphSAGE_Model(pl.LightningModule):
-    def __init__(self, in_channels, out_channels, layer_count=1, hidden_dimension=64):
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=64):
         super().__init__()
         self.layers = nn.ModuleList()
         if layer_count == 1:
@@ -142,7 +142,7 @@ Graph Convolutional Network with attatched linear layers
 '''
 
 class GCN_MLP_Model(nn.Module):
-    def __init__(self, in_channels, out_channels, layer_count=1, hidden_dimension=32,precision = torch.float32):
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=32,precision = torch.float32):
         super().__init__()
         self.precision = precision
         self.layers = nn.ModuleList()
@@ -188,7 +188,7 @@ MLP
 '''
 
 class MLP_Model(torch.nn.Module):
-    def __init__(self, in_channels, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
         super().__init__()
         self.precision = precision
         self.layers = nn.ModuleList()

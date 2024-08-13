@@ -142,6 +142,7 @@ python3 $WORKAREA/scripts/initialize.py --karate --mlp --payloads --random --lay
 
 Note: Defining ```SIMULATION``` in the Modelsim makefile  will simualte without Xillinx IP and ```SIMULATION_QUICK``` will simulate without FP units, activaiton, bias or aggregation
 
+Add data file from link to us neural lam
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
