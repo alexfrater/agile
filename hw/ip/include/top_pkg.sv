@@ -12,7 +12,7 @@ package top_pkg;
 // ----------------------------------------------------
 
 // New arrangement
-parameter MESH_MULTIPLIER = 2;
+parameter MESH_MULTIPLIER = 4;
 
 parameter AGGREGATION_CHANNELS = 4; // per mesh
 parameter TRANSFORMATION_CHANNELS = 8;
