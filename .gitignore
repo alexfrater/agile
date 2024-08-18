@@ -99,3 +99,6 @@ imports/verilog-axi
 hw/sim/hbm2.vcd
 hw/sim/stacked_plot.png
 hw/sim/wlftYTX1JF
+
+hw/ip_repo
+hw/pcie_1
