@@ -10,3 +10,6 @@
 [submodule "imports/neural-lam"]
 	path = imports/neural-lam
 	url = https://github.com/alexfrater/neural-lam.git
+[submodule "imports/mase"]
+	path = imports/mase
+	url = https://github.com/DeepWok/mase.git

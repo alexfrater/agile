@@ -214,18 +214,7 @@ def run_pass(
 
     #TODO Make function
     # Prepare data for the DataFrame with formatted metric names
-    rows = []
-    for component, values in metrics.items():
-        for metric, value in values.items():
-            formatted_metric = metric.replace("_", " ").replace("-", " ").title()
-            formatted_value = f"{value:.6f}" if isinstance(value, float) else f"{value:.6f}"
-            rows.append([component, formatted_metric, formatted_value])
-
-    # Create a DataFrame and print it
-    df = pd.DataFrame(rows, columns=["Component", "Metric", "Value"])
-    print(df.to_markdown(index=False))
-    
-
+    bman.print_results()
 
 
     return metrics

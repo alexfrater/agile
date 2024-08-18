@@ -4,6 +4,7 @@ import numpy as np
 import os
 import subprocess
 import shutil
+import pandas as pd
 
 def read_power_file(filename):
     powers = []
@@ -99,6 +100,7 @@ class BenchmarkingManager:
         self.fpga_clk_freq = args.fpga_clk_freq
         self.args = args
         self.device = args.device
+
 
     def gpu_run_inference(self):
         print(f"device {self.device}")
@@ -266,9 +268,24 @@ class BenchmarkingManager:
     def benchmark(self):
         metrics = {}
         if (self.cpu):
+            print('1')
+
             metrics["cpu"] = self.cpu_benchmark()
         if (self.gpu):
            metrics["gpu"] = self.gpu_benchmark()
         if (self.sim):
             metrics["fpga"] = self.fpga_benchmark()
         return metrics
+
+    def print_results(self, metrics):
+        rows = []
+        for component, values in metrics.items():
+            for metric, value in values.items():
+                formatted_metric = metric.replace("_", " ").replace("-", " ").title()
+                formatted_value = f"{value:.6f}" if isinstance(value, float) else f"{value:.6f}"
+                rows.append([component, formatted_metric, formatted_value])
+
+        # Create a DataFrame and print it
+        df = pd.DataFrame(rows, columns=["Component", "Metric", "Value"])
+        print(df.to_markdown(index=False))
+    
