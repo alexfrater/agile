@@ -72,7 +72,6 @@ class TrainedGraph:
                         self.calc_axi_addr(self.feature_count) * (src),  #SRC
                         self.calc_axi_addr(self.feature_count) * (edge_id), #Change to self feature count
                         self.calc_axi_addr(self.feature_count) * (rx + len(self.nx_graph.nodes) + len(self.nx_graph.edges)), #RX (edge_id), #
-                        # change to offset for rx embeddings - keep for now + len(self.nx_graph.nodes) + len(self.nx_graph.edges))  #add offset to access rx embedded
                     ]
                 }
 
@@ -80,7 +79,6 @@ class TrainedGraph:
                 self.nx_graph[src][rx]['meta'] = edge_features
                 node_neighbours = rx_node_edge_neighbours #Use edges as neighbours (MPNN)
         else:
-            # node_neighbours = self.nx_graph.neighbors #Use nodes as neighbours
             node_neighbours = [list(self.nx_graph.neighbors(node)) for node in self.nx_graph.nodes()]
 
             # print('node_neighbours')

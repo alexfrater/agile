@@ -214,7 +214,7 @@ def run_pass(
 
     #TODO Make function
     # Prepare data for the DataFrame with formatted metric names
-    bman.print_results()
+    bman.print_results(metrics)
 
 
     return metrics

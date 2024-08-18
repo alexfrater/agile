@@ -550,6 +550,7 @@ class InitManager:
         nodeslot_memory_pointer = 0
         nodeslot_byte_list = []
         for group,nodeslot_group in enumerate(self.nodeslot_programming):
+
             # print('node group',group)
             # print(nodeslot_group)
             self.nodeslot_programming_group_start_address.append(nodeslot_memory_pointer)
