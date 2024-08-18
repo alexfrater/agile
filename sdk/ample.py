@@ -119,12 +119,13 @@ class Ample():
             self.trace_model_fx(self.model, graph_data)
         else:
 
-            self.trace_model_hooks_dataloader(self.model, data_loader)
+            data = self.trace_model_hooks_dataloader(self.model, data_loader)
 
 
         all_outputs = set()
         for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
             all_outputs.update(output_names)
+
         
         # Identify external inputs
         external_inputs = set()
@@ -133,17 +134,38 @@ class Ample():
                 if input_name not in all_outputs:
                     external_inputs.add(input_name)
 
-        inputs_dict = model.preprocess_inputs()
+        ############################
+        #TODO Temporary - Need to find a way to map input files/edges/nodes to model - may require new programming model
+        inputs_dict = model.preprocess_inputs(data)
+        for input_name, input_data in inputs_dict.items():
+            print('-' * 40)
+            print(input_name)
+            # if 'index ' in input_name:
+            #     print('Index:', input_data)
+            print(input_data)
+            print('Shape:', input_data.shape)
+        print('External inputs')
+        print(external_inputs)
+        ############################
+        # inputs_dict['edge_index1'] = data.edge_index
+        # edge_index = edge_index - edge_index.min(dim=1, keepdim=True)[0]
+
         
+
         for name, (input_names, output_names, order, module_type) in self.model_trace.items():
             # assert module_type in self.model_map, f"Module type {module_type} not supported."
-            # model = self.model_map[module_type]()
-            print('name', name)
-            print(input_names)
-            print(output_names)
-            print(order)
-            print(module_type)
-        # print(self.model_trace)
+            if module_type in self.model_map:
+                # model = self.model_map[module_type]()
+                print('name', name)
+                print(input_names)
+                print(output_names)
+                print(order)
+                print(module_type)
+            else:
+                #TODO change neural lam to remove unspoorted modules which are not relevant to prevent this message from showing incorrectly
+                print('Module type not supported')
+
+        ############################
 
         if plot:
             self.plot_model()
@@ -298,98 +320,7 @@ class Ample():
                 self.model_trace[node.name] = (input_names, [], order_counter, 'Output')
                 order_counter += 1
 
-    def trace_model_hooks_dataloader_2(self, model, dataloader):
-        self.model_trace = {}
-        tensor_id_to_name = {}
-        order_counter = 0
-
-        def register_hooks(module, module_name, leaf=False):
-            def hook(module, inputs, outputs):
-                nonlocal order_counter
-                # Capture the full module name
-                full_module_name = module_name
-                # Record the inputs
-                input_names = []
-                input_order = []
-                for i, inp in enumerate(inputs):
-                    if isinstance(inp, torch.Tensor):
-                        tensor_id = id(inp)
-                        if tensor_id not in tensor_id_to_name:
-                            tensor_name = f"{full_module_name}_input_{i}"
-                            tensor_id_to_name[tensor_id] = tensor_name
-                        else:
-                            tensor_name = tensor_id_to_name[tensor_id]
-                        input_names.append(tensor_name)
-                        input_order.append(order_counter)
-                        order_counter += 1
-
-                # Record the outputs
-                output_names = []
-                output_order = []
-                if isinstance(outputs, (tuple, list)):
-                    for i, out in enumerate(outputs):
-                        if isinstance(out, torch.Tensor):
-                            tensor_id = id(out)
-                            tensor_name = f"{full_module_name}_output_{i}"
-                            tensor_id_to_name[tensor_id] = tensor_name
-                            output_names.append(tensor_name)
-                            output_order.append(order_counter)
-                            order_counter += 1
-                else:
-                    if isinstance(outputs, torch.Tensor):
-                        tensor_id = id(outputs)
-                        tensor_name = f"{full_module_name}_output_0"
-                        tensor_id_to_name[tensor_id] = tensor_name
-                        output_names.append(tensor_name)
-                        output_order.append(order_counter)
-                        order_counter += 1
-
-                # Store the mapping for this module
-                module_type = type(module).__name__
-                self.model_trace[full_module_name] = (
-                    input_names,
-                    output_names,
-                    input_order + output_order,
-                    module_type,
-                )
-
-            module.register_forward_hook(hook)
-
-            # If the module is Sequential or any custom sequential container, go one level deeper
-            # if isinstance(module, torch.nn.Sequential) or module.__module__.startswith(
-            #     "torch_geometric.nn.sequential"
-            # ):
-
-            #     last_module =None
-
-            #     # first_module_inputs = self.model_trace[module_name][0]
-            #     for sub_name, sub_module in module.named_children():
-            #         full_name = f"{module_name}.{sub_name}"
-            #         register_hooks(sub_module, full_name, leaf=True)
-            #         last_module = full_name
-
-    
-
-                
-
-        for name, module in model.named_children():
-            register_hooks(module, name)
-
-        # Perform a forward pass using the dataloader to trigger the hooks
-        model.eval()
-        with torch.no_grad():
-            for batch in dataloader:
-                model.common_step(batch)  # Trigger forward pass
-                break  # Only need one batch to trace
-
-            # for batch in dataloader:
-            #     (init_states,
-            #     target_states,
-            #     batch_static_features,
-            #     forcing_features,
-            #     ) = batch
-            #     model.predict_step(init_states,target_states,batch_static_features,forcing_features)  # Trigger forward pass
-            #     break  #
+   
     def trace_model_hooks_dataloader(self, model, dataloader):
         self.model_trace = {}
         tensor_id_to_name = {}
@@ -456,11 +387,13 @@ class Ample():
 
         # Perform a forward pass using the dataloader to trigger the hooks
         model.eval()
+        data = None
         with torch.no_grad():
             for batch in dataloader:
+                data = batch
                 model.common_step(batch)  # Trigger forward pass
                 break  # Only need one batch to trace
-   
+        return data
 
     def get_node_color(self, module_type):
 

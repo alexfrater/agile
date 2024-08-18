@@ -18,7 +18,7 @@ from sdk.initialization_manager import InitManager
 from sdk.graphs.matrix_graph import MatrixGraph
 from sdk.graphs.karate_club import KarateClubGraph
 from sdk.graphs.random_graph import RandomGraph
-from sdk.graphs.planetoid_graph import PlanetoidGraph
+from sdk.graphs.planetoid_graph import MatrixGraph
 from sdk.graphs.large_graphs import RedditGraph, FlickrGraph, YelpGraph, AmazonProductsGraph
 
 from sdk.models.models import GCN_Model, GAT_Model, GraphSAGE_Model, GIN_Model, GCN_MLP_Model, MLP_Model, Edge_Embedding_Model, Interaction_Net_Model
