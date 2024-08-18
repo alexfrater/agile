@@ -12,12 +12,33 @@ import torch.fx as fx
 from sdk.initialization_manager import InitManager
 from sdk.benchmarking_manager import BenchmarkingManager
 from sdk.models.models import GCN_Model, GAT_Model, GraphSAGE_Model, GIN_Model, GCN_MLP_Model, MLP_Model, Edge_Embedding_Model, Interaction_Net_Model
+from neural_lam.interaction_net import InteractionNet
 
 #TODO remove
 from sdk.graphs.random_graph import RandomGraph
 from tb.variant import Variant
 
+from functools import wraps
+# import pyg 
+import torch_geometric.nn as pyg_nn
 
+# import torch_geometric as pyg
+# from torch_geometric.nn import Sequential as pygSequential
+
+# from torch_geometric.nn import Sequential
+# from torch_geometric.nn import Sequential as PyGSequential
+import torch_geometric as pyg
+class CustomTracer(fx.Tracer):
+    def __init__(self, model_map):
+        super().__init__()
+        self.model_map = model_map
+
+
+    def is_leaf_module(self, m, module_qualified_name):
+            # Check if the module is an instance of a class in self.model_map
+        if isinstance(m, tuple(self.model_map.values())):
+            return True
+        return super().is_leaf_module(m, module_qualified_name)
 #Class to configure and communicate with Ample - pass configured model and target graph 
 
 class Ample():
@@ -39,7 +60,7 @@ class Ample():
             'gcn_mlp': GCN_MLP_Model,
             'Sequential': MLP_Model,
             'edge': Edge_Embedding_Model,
-            'InteractionNet': Interaction_Net_Model
+            'InteractionNet': InteractionNet
         }
         self.ample = self.connect_to_device()
         self.variant = Variant(message_channel_count, precision_count, aggregation_buffer_slots)
@@ -66,11 +87,11 @@ class Ample():
                 #    return ample_pcie name  
         return None
 
-    def to_device(self, model, device,graph):
+    def to_device(self, model, device,data_loader,graph= None, ):
         if device == 'ample':
             print('Moving model to Ample')
             print('Compiling model')
-            self.compile(model,graph_data=graph,trace_mode='fx')
+            self.compile(model,data_loader=data_loader,trace_mode='hooks')
             # self.model = model
         else:
             print(f'Moving model to {device}...')
@@ -83,6 +104,7 @@ class Ample():
         model,
         graph= None,
         graph_data = None,
+        data_loader = None,
         base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config",
         precision = 'FLOAT_32',
         reduce =False,
@@ -96,7 +118,32 @@ class Ample():
         if trace_mode == 'fx':
             self.trace_model_fx(self.model, graph_data)
         else:
-            self.trace_model_hooks(self.model, graph_data)
+
+            self.trace_model_hooks_dataloader(self.model, data_loader)
+
+
+        all_outputs = set()
+        for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
+            all_outputs.update(output_names)
+        
+        # Identify external inputs
+        external_inputs = set()
+        for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
+            for input_name in input_names:
+                if input_name not in all_outputs:
+                    external_inputs.add(input_name)
+
+        inputs_dict = model.preprocess_inputs()
+        
+        for name, (input_names, output_names, order, module_type) in self.model_trace.items():
+            # assert module_type in self.model_map, f"Module type {module_type} not supported."
+            # model = self.model_map[module_type]()
+            print('name', name)
+            print(input_names)
+            print(output_names)
+            print(order)
+            print(module_type)
+        # print(self.model_trace)
 
         if plot:
             self.plot_model()
@@ -105,24 +152,25 @@ class Ample():
             print("Model tracing failed. Please ensure the model is traceable.")
             return
 
-        for name, (input_names, output_names,order, module_type) in self.model_trace.items():
-            assert module_type in self.model_map, f"Module type {module_type} not supported."
 
-            model = self.model_map[module_type]()
+        # for name, (input_names, output_names,order, module_type) in self.model_trace.items():
+        #     assert module_type in self.model_map, f"Module type {module_type} not supported."
 
-            #TODO integrate graph
-            if module_type == 'Sequential':
-                edge = False
-            else:
-                edge = True
+        #     model = self.model_map[module_type]()
 
-            #TODO using random graph as dummy data
-            #TODO fix this : If model does not use edges, dont set edges to be true - will brrak things 
-            if graph is None:   
-                graph = RandomGraph(num_nodes=10, avg_degree=1, num_channels=32, graph_precision="FLOAT_32",edge_dim=32,edges = edge) #TODO add var
+        #     #TODO integrate graph
+        #     if module_type == 'Sequential':
+        #         edge = False
+        #     else:
+        #         edge = True
 
-            self.initialize_node_memory(model,graph)
-            # ample.sim()
+        #     #TODO using random graph as dummy data
+        #     #TODO fix this : If model does not use edges, dont set edges to be true - will brrak things 
+        #     if graph is None:   
+        #         graph = RandomGraph(num_nodes=10, avg_degree=1, num_channels=32, graph_precision="FLOAT_32",edge_dim=32,edges = edge) #TODO add var
+
+        #     self.initialize_node_memory(model,graph)
+        #     # ample.sim()
 
 
 
@@ -197,39 +245,19 @@ class Ample():
 
         return dtype
 
-
     def trace_model_fx(self, model, dataloader):
+        # Use the custom tracer to selectively trace the model
+        tracer = CustomTracer(self.model_map)
+        traced_graph = tracer.trace(model)
 
-        # Define a tracer and trace the model
-        traced_graph = fx.symbolic_trace(model)
-        
         self.model_trace = {}
         order_counter = 0
         tensor_id_to_name = {}
 
-        for node in traced_graph.graph.nodes:
-            if node.op == 'placeholder':
-                # Input node
-                tensor_id = id(node)
-                tensor_name = f"{node.name}_input"
-                tensor_id_to_name[tensor_id] = tensor_name
-                self.model_trace[node.name] = ([tensor_name], [], [order_counter], 'Input')
-                order_counter += 1
-            elif node.op == 'output':
-                # Output node
-                input_names = []
-                for i, inp in enumerate(node.args):
-                    tensor_id = id(inp)
-                    if tensor_id in tensor_id_to_name:
-                        tensor_name = tensor_id_to_name[tensor_id]
-                    else:
-                        tensor_name = f"{node.name}_output_{i}"
-                        tensor_id_to_name[tensor_id] = tensor_name
-                    input_names.append(tensor_name)
-                self.model_trace[node.name] = (input_names, [], [order_counter], 'Output')
-                order_counter += 1
-            elif node.op == 'call_module':
-                # Module call node
+        for node in traced_graph.nodes:
+            if node.op == 'call_module':
+                module_type = type(model.get_submodule(node.target)).__name__
+
                 input_names = []
                 output_names = []
                 for i, inp in enumerate(node.args):
@@ -240,27 +268,139 @@ class Ample():
                         tensor_name = f"{node.name}_input_{i}"
                         tensor_id_to_name[tensor_id] = tensor_name
                     input_names.append(tensor_name)
-                
+
                 for i, out in enumerate(node.users.keys()):
                     tensor_id = id(out)
                     tensor_name = f"{node.name}_output_{i}"
                     tensor_id_to_name[tensor_id] = tensor_name
                     output_names.append(tensor_name)
 
-                module_type = type(model.get_submodule(node.target)).__name__
-                self.model_trace[node.name] = (input_names, output_names, [order_counter], module_type)
+                self.model_trace[node.name] = (input_names, output_names, order_counter, module_type)
                 order_counter += 1
 
-    def trace_model_hooks(self, model, graph):
+            elif node.op == 'placeholder':
+                tensor_id = id(node)
+                tensor_name = f"{node.name}_input"
+                tensor_id_to_name[tensor_id] = tensor_name
+                self.model_trace[node.name] = ([tensor_name], [], order_counter, 'Input')
+                order_counter += 1
 
+            elif node.op == 'output':
+                input_names = []
+                for i, inp in enumerate(node.args):
+                    tensor_id = id(inp)
+                    if tensor_id in tensor_id_to_name:
+                        tensor_name = tensor_id_to_name[tensor_id]
+                    else:
+                        tensor_name = f"{node.name}_output_{i}"
+                        tensor_id_to_name[tensor_id] = tensor_name
+                    input_names.append(tensor_name)
+                self.model_trace[node.name] = (input_names, [], order_counter, 'Output')
+                order_counter += 1
+
+    def trace_model_hooks_dataloader_2(self, model, dataloader):
         self.model_trace = {}
         tensor_id_to_name = {}
         order_counter = 0
 
-        def register_hooks(module, module_name):
+        def register_hooks(module, module_name, leaf=False):
             def hook(module, inputs, outputs):
                 nonlocal order_counter
+                # Capture the full module name
+                full_module_name = module_name
+                # Record the inputs
+                input_names = []
+                input_order = []
+                for i, inp in enumerate(inputs):
+                    if isinstance(inp, torch.Tensor):
+                        tensor_id = id(inp)
+                        if tensor_id not in tensor_id_to_name:
+                            tensor_name = f"{full_module_name}_input_{i}"
+                            tensor_id_to_name[tensor_id] = tensor_name
+                        else:
+                            tensor_name = tensor_id_to_name[tensor_id]
+                        input_names.append(tensor_name)
+                        input_order.append(order_counter)
+                        order_counter += 1
+
+                # Record the outputs
+                output_names = []
+                output_order = []
+                if isinstance(outputs, (tuple, list)):
+                    for i, out in enumerate(outputs):
+                        if isinstance(out, torch.Tensor):
+                            tensor_id = id(out)
+                            tensor_name = f"{full_module_name}_output_{i}"
+                            tensor_id_to_name[tensor_id] = tensor_name
+                            output_names.append(tensor_name)
+                            output_order.append(order_counter)
+                            order_counter += 1
+                else:
+                    if isinstance(outputs, torch.Tensor):
+                        tensor_id = id(outputs)
+                        tensor_name = f"{full_module_name}_output_0"
+                        tensor_id_to_name[tensor_id] = tensor_name
+                        output_names.append(tensor_name)
+                        output_order.append(order_counter)
+                        order_counter += 1
+
+                # Store the mapping for this module
+                module_type = type(module).__name__
+                self.model_trace[full_module_name] = (
+                    input_names,
+                    output_names,
+                    input_order + output_order,
+                    module_type,
+                )
+
+            module.register_forward_hook(hook)
+
+            # If the module is Sequential or any custom sequential container, go one level deeper
+            # if isinstance(module, torch.nn.Sequential) or module.__module__.startswith(
+            #     "torch_geometric.nn.sequential"
+            # ):
+
+            #     last_module =None
+
+            #     # first_module_inputs = self.model_trace[module_name][0]
+            #     for sub_name, sub_module in module.named_children():
+            #         full_name = f"{module_name}.{sub_name}"
+            #         register_hooks(sub_module, full_name, leaf=True)
+            #         last_module = full_name
+
+    
+
+                
+
+        for name, module in model.named_children():
+            register_hooks(module, name)
+
+        # Perform a forward pass using the dataloader to trigger the hooks
+        model.eval()
+        with torch.no_grad():
+            for batch in dataloader:
+                model.common_step(batch)  # Trigger forward pass
+                break  # Only need one batch to trace
+
+            # for batch in dataloader:
+            #     (init_states,
+            #     target_states,
+            #     batch_static_features,
+            #     forcing_features,
+            #     ) = batch
+            #     model.predict_step(init_states,target_states,batch_static_features,forcing_features)  # Trigger forward pass
+            #     break  #
+    def trace_model_hooks_dataloader(self, model, dataloader):
+        self.model_trace = {}
+        tensor_id_to_name = {}
+        order_counter = 0
+
+        def register_hooks(module, module_name,leaf = False):
+            def hook(module, inputs, outputs):
+                nonlocal order_counter
+                # Capture the top-level module name
                 top_level_module_name = module_name.split('.')[0]
+                # Record the inputs
                 input_names = []
                 input_order = []
                 for i, inp in enumerate(inputs):
@@ -275,6 +415,7 @@ class Ample():
                         input_order.append(order_counter)
                         order_counter += 1
 
+                # Record the outputs
                 output_names = []
                 output_order = []
                 if isinstance(outputs, (tuple, list)):
@@ -295,63 +436,94 @@ class Ample():
                         output_order.append(order_counter)
                         order_counter += 1
 
+                # Store the mapping for this module
                 module_type = type(module).__name__
                 self.model_trace[top_level_module_name] = (input_names, output_names, input_order + output_order, module_type)
-            
-            module.register_forward_hook(hook)
 
+            module.register_forward_hook(hook)
+            # print(module)
+            # print(type(module))
+            # print('leaf',leaf)
+            # If the module is Sequential, go one level deeper
+            if isinstance(module, torch.nn.Sequential) or module.__module__.startswith("torch_geometric.nn.sequential"):
+                for sub_name, sub_module in module.named_children():
+                    full_name = f"{module_name}.{sub_name}"
+                    register_hooks(sub_module, full_name,leaf=True)
+
+           
         for name, module in model.named_children():
             register_hooks(module, name)
 
+        # Perform a forward pass using the dataloader to trigger the hooks
         model.eval()
         with torch.no_grad():
-            model.common_step(graph)  
-          
+            for batch in dataloader:
+                model.common_step(batch)  # Trigger forward pass
+                break  # Only need one batch to trace
+   
 
+    def get_node_color(self, module_type):
 
-    def get_node_color(self,module_type):
-
+        # Single module logic
         if module_type == 'Linear':
-            return 'lightblue'
-        elif module_type == 'Interaction_Net_Model' or module_type == 'Interaction_Net_Model':
-            return 'lightgreen'
-        elif module_type == 'Sequential':
             return 'orange'
+        if module_type == 'Sequential':
+            return 'lightblue'
+        if module_type == 'LayerNorm':
+            return 'pink'
+        if module_type == 'ExpandToBatch':
+            return 'yellow'
+        elif module_type == 'InteractionNet' or module_type == 'Interaction_Net_Model':
+            return 'lightgreen'
+
         return 'white'  # Default color
 
+    
+    def plot_model(self, format='png', dpi=500):
+        dot = Digraph(comment='Simplified Model I/O Graph with Order')
+        dot.attr(rankdir='TB', size='10')  # TB for top-bottom layout
 
-    def plot_model(self, format='png', dpi=300):
+        tensor_seen = set()
 
-      dot = Digraph(comment='Simplified Model I/O Graph with Order')
-      dot.attr(rankdir='TB', size='10')  # TB for top-bottom layout
+        # print(self.model_trace)
+        
+        for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
+            node_color = self.get_node_color(module_type)
+            shape = 'ellipse' if node_color != 'white' else 'box'
 
-      tensor_seen = set()
+            annotation = f"{module_name}\nType: {module_type}"
+            
+            if module_name not in dot.node_attr:
+                dot.node(module_name, annotation, shape=shape, style='filled', fillcolor=node_color)
 
-      for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
-          node_color = self.get_node_color(module_type)
-          shape = 'box' if node_color != 'white' else 'ellipse'
+            for i, input_name in enumerate(input_names):
+                if input_name not in tensor_seen:
+                    tensor_seen.add(input_name)
+                    dot.node(input_name, input_name, shape='ellipse')
+                dot.edge(input_name, module_name, label=str(order))
 
-          annotation = f"{module_name}\nType: {module_type}"
-          
-          if module_name not in dot.node_attr:
-              dot.node(module_name, annotation, shape=shape, style='filled', fillcolor=node_color)
+            for i, output_name in enumerate(output_names):
+                if output_name not in tensor_seen:
+                    tensor_seen.add(output_name)
+                    dot.node(output_name, output_name, shape='ellipse')
+                dot.edge(module_name, output_name, label=str(order))
 
-          for i, input_name in enumerate(input_names):
-              if input_name not in tensor_seen:
-                  tensor_seen.add(input_name)
-                  dot.node(input_name, input_name, shape='ellipse')
-              dot.edge(input_name, module_name, label=str(order[i]))
+        dot.attr(dpi=str(dpi))
+               # Specify the output format (e.g., 'png', 'pdf', 'svg', etc.)
+        output_format = 'png'  # or any other format you want
+        workarea = os.getenv('WORKAREA')
 
-          for i, output_name in enumerate(output_names):
-              if output_name not in tensor_seen:
-                  tensor_seen.add(output_name)
-                  dot.node(output_name, output_name, shape='ellipse')
-              dot.edge(module_name, output_name, label=str(order[len(input_names) + i]))
+        # Save the file to disk
+        print('Rendering graph...')
+        output_file = os.path.join(workarea, 'graph_output')  # Name of the output file without extension
+        
+        dot.render(output_file, format=output_format)
 
-      dot.attr(dpi=str(dpi))
 
-      display(Image(dot.pipe(format=format)))
+        display(Image(dot.pipe(format=format)))
 
+
+ 
     # def to_device(self):
     #     print('Programming Ample device')
     #     #Need su access
