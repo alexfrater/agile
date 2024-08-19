@@ -12,7 +12,9 @@ import torch.fx as fx
 from sdk.initialization_manager import InitManager
 from sdk.benchmarking_manager import BenchmarkingManager
 from sdk.models.models import GCN_Model, GAT_Model, GraphSAGE_Model, GIN_Model, GCN_MLP_Model, MLP_Model, Edge_Embedding_Model, Interaction_Net_Model
-from neural_lam.interaction_net import InteractionNet
+# from neural_lam.interaction_net import InteractionNet
+from torch_geometric.datasets import FakeDataset #TODO remove
+from sdk.trained_graph import TrainedGraph
 
 #TODO remove
 from sdk.graphs.random_graph import RandomGraph
@@ -21,6 +23,9 @@ from tb.variant import Variant
 from functools import wraps
 # import pyg 
 import torch_geometric.nn as pyg_nn
+
+from torch_geometric.data import Data
+
 
 # import torch_geometric as pyg
 # from torch_geometric.nn import Sequential as pygSequential
@@ -53,14 +58,14 @@ class Ample():
         self.model_trace = None
         self.model = None
         self.model_map = {
-            'gcn': GCN_Model,
-            'gat': GAT_Model,
-            'gin': GIN_Model,
-            'sage': GraphSAGE_Model,
-            'gcn_mlp': GCN_MLP_Model,
-            'Sequential': MLP_Model,
-            'edge': Edge_Embedding_Model,
-            'InteractionNet': InteractionNet
+            'GCN_Model': GCN_Model, #TODO
+            'GAT_Model': GAT_Model,
+            'GIN_Model': GIN_Model,
+            'GraphSAGE_Model': GraphSAGE_Model,
+            'GCN_MLP_Model': GCN_MLP_Model,
+            'MLP_Model': MLP_Model,
+            'Edge_Embedding_Model': Edge_Embedding_Model,
+            'InteractionNet': Interaction_Net_Model
         }
         self.ample = self.connect_to_device()
         self.variant = Variant(message_channel_count, precision_count, aggregation_buffer_slots)
@@ -92,11 +97,13 @@ class Ample():
             print('Moving model to Ample')
             print('Compiling model')
             self.compile(model,data_loader=data_loader,trace_mode='hooks')
+            # self.copy_data_to_device(data)
             # self.model = model
         else:
-            print(f'Moving model to {device}...')
+            print(f'Moving model to {device}')
             model.to(device) 
 
+    
 
 
     def compile(
@@ -118,9 +125,14 @@ class Ample():
         if trace_mode == 'fx':
             self.trace_model_fx(self.model, graph_data)
         else:
-
             data = self.trace_model_hooks_dataloader(self.model, data_loader)
 
+        if plot:
+            self.plot_model()
+
+        if self.model_trace is None:
+            print("Model tracing failed. Please ensure the model is traceable.")
+            return
 
         all_outputs = set()
         for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
@@ -136,43 +148,65 @@ class Ample():
 
         ############################
         #TODO Temporary - Need to find a way to map input files/edges/nodes to model - may require new programming model
-        inputs_dict = model.preprocess_inputs(data)
-        for input_name, input_data in inputs_dict.items():
+        inputs = model.preprocess_inputs(data)
+        for input_data in inputs[0]:
             print('-' * 40)
-            print(input_name)
-            # if 'index ' in input_name:
-            #     print('Index:', input_data)
-            print(input_data)
-            print('Shape:', input_data.shape)
-        print('External inputs')
-        print(external_inputs)
+            data =Data()
+            data.x = input_data
+            data.num_nodes = len(data.x)
+
+            print('data',data)
+
         ############################
         # inputs_dict['edge_index1'] = data.edge_index
         # edge_index = edge_index - edge_index.min(dim=1, keepdim=True)[0]
 
         
-
+        print('External inputs')
         for name, (input_names, output_names, order, module_type) in self.model_trace.items():
             # assert module_type in self.model_map, f"Module type {module_type} not supported."
+            if module_type == 'Sequential':
+                module_type  = 'MLP_Model'
             if module_type in self.model_map:
                 # model = self.model_map[module_type]()
                 print('name', name)
                 print(input_names)
                 print(output_names)
                 print(order)
-                print(module_type)
+
+                ###DATA###
+                # if any(name in external_inputs for name in input_names):
+                #     dataset = Data()
+                #     dataset.x = inputs[0].pop()
+                #     dataset.num_nodes = len(dataset.x)
+                # else:
+                # out_ptr = x
+
+                ######Fake Data#####
+                #TODO replace with out_ptr
+                dataset = FakeDataset(num_graphs=1, 
+                    avg_num_nodes = 20,
+                    avg_degree=1,
+                    num_channels=32,
+                    edge_dim=32
+                )[0]
+                ######Fake Data#####
+
+         
+                #Only add new memory for external inputs
+                base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" + name
+                # print('shape1',dataset.x[0].shape[0])
+                sub_model = self.model_map[module_type](dataset.x[0].shape[0])
+                # print('sub_model',sub_model)
+                self.initialize_node_memory(sub_model,dataset,base_path=base_path)
+
+
             else:
                 #TODO change neural lam to remove unspoorted modules which are not relevant to prevent this message from showing incorrectly
                 print('Module type not supported')
+                print(module_type)
 
-        ############################
 
-        if plot:
-            self.plot_model()
-
-        if self.model_trace is None:
-            print("Model tracing failed. Please ensure the model is traceable.")
-            return
 
 
         # for name, (input_names, output_names,order, module_type) in self.model_trace.items():
@@ -200,7 +234,7 @@ class Ample():
     def initialize_node_memory(
         self,
         model,
-        graph,
+        dataset,
         base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config",
         precision = 'FLOAT_32',
         reduce =False,
@@ -209,14 +243,15 @@ class Ample():
     ):
         
         d_type = self.get_dtype(precision)
-        self.graph = graph
-
+        self.graph = TrainedGraph(dataset)
         self.model = model
-        self.init_manager = InitManager(self.graph, self.model, base_path=base_path)
-        # bman = BenchmarkingManager(graph=graph, model=model, args=args)
 
-        self.init_manager.trained_graph.random_embeddings()
-            # init_manager.trained_graph.train_embeddings()
+        self.init_manager = InitManager(self.graph, self.model, base_path=base_path)
+        #bman = BenchmarkingManager(graph=graph, model=model, args=args)
+        print(dataset.x)
+        self.init_manager.trained_graph.load_embeddings()
+         
+        #init_manager.trained_graph.train_embeddings()
 
         #TODO Change to save to intermeiate file
         self.init_manager.map_memory() 
@@ -236,6 +271,7 @@ class Ample():
             metrics = bman.benchmark_gpu()
 
         metrics = bman.benchmark_fpga()
+        #TODO use bman results table
         rows = []
         for component, values in metrics.items():
             for metric, value in values.items():
@@ -486,6 +522,11 @@ class Ample():
             return original_forward(*args, **kwargs)
 
         self.model.forward = ample_forward
+
+
+    def copy_data_to_device(self, data):
+        print("Copying data to Ample")
+        # Logic to copy data to FPGA.
 
     def execute(self, data):
         print("Executing on Ample")

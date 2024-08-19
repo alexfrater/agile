@@ -11,7 +11,7 @@ from torch_geometric.utils import add_self_loops,add_remaining_self_loops
 import random
 
 import logging
-
+import torch
 from tqdm import tqdm
 
 import math
@@ -19,7 +19,14 @@ data_width = 64 #TODO Parameterise
 
 class TrainedGraph:
     def __init__(self, dataset, feature_count=None, embeddings=[], graph_precision="FLOAT_32", self_connection=False):
+
+        
         self.dataset = dataset
+        if self.dataset.edge_index is None:
+            num_nodes = self.dataset.x.size(0)  
+            self_connections = torch.arange(0, num_nodes)
+            self.dataset.edge_index = torch.stack([self_connections, self_connections], dim=0)
+            
         self.nx_graph = to_networkx(self.dataset)
         self.graph_precision = graph_precision
         # self.model = model #Need model to define the graph stucture e.g interaction net
@@ -42,6 +49,8 @@ class TrainedGraph:
 
         # Local copy of embeddings stored in node objects
         self.embeddings = embeddings #node embeddings
+
+        # print(f"Embeddings: {self.embeddings}")
         # TO DO: read dequantization parameter from QAT
         self.dequantization_parameter = 1
 
@@ -159,29 +168,47 @@ class TrainedGraph:
             logging.info(f"Data shape: {data.x.shape}")
             logging.info(f"Edge index: {data.edge_index.shape}")
             
-    # def random_embeddings(self):
-    #     logging.debug(f"Generating random graph embeddings.")
-        
-    #     self.dataset.x = torch.zeros((self.dataset.x.shape[0], self.feature_count))
-    #     self.embeddings = np.zeros((len(self.nx_graph.nodes), self.feature_count))
-    #     for node in self.nx_graph.nodes:
 
-    #         # Define range according to precision
-    #         if (self.nx_graph.nodes[node]["meta"]['precision'] == "FLOAT_32"):
-    #             embd = [random.uniform(-2, 2) for _ in range(self.feature_count)]
-    #         elif (self.nx_graph.nodes[node]["meta"]['precision'] == "FIXED_16"):
-    #             embd = [random.randint(-8, 7) for _ in range(self.feature_count)]
-    #         elif (self.nx_graph.nodes[node]["meta"]['precision'] == "FIXED_8"):
-    #             embd = [random.randint(-8, 7) for _ in range(self.feature_count)]
-    #         elif (self.nx_graph.nodes[node]["meta"]['precision'] == "FIXED_4"):
-    #             embd = [random.randint(-8, 7) for _ in range(self.feature_count)]
-    #         else:
-    #             print(f"Unrecognized precision, defaulting to float.")
-    #             embd = [random.uniform(-2, 2) for _ in range(self.feature_count)]
+    def load_embeddings(self):
+        logging.debug(f"Loading graph embeddings.")
+        for node in self.nx_graph.nodes:
+            # embd = self.embeddings[node]
+            embd = self.dataset.x[node].numpy()  # Convert to numpy array if necessary
+            precision = self.nx_graph.nodes[node]["meta"].get('precision', "FLOAT_32")
+            # print('embd',embd)
+            if precision == "FLOAT_32":
+                embd = embd.astype(np.float32)  # Cast to 32-bit floating point
+            elif precision == "FIXED_16":
+                embd = embd.astype(np.float16)  # Cast to 16-bit floating point
+            elif precision == "FIXED_8":
+                embd = embd.astype(np.uint8)  # Cast to 8-bit unsigned integer
+            elif precision == "FIXED_4":
+                embd = np.clip((embd * 15).round(), 0, 15).astype(np.uint8)  # 4-bit 
 
-    #         self.nx_graph.nodes[node]["meta"]['embedding'] = embd
-    #         self.embeddings[node] = embd
-    #         self.dataset.x[node] = torch.tensor(embd, dtype=torch.float)
+            # Store the embedding
+            self.nx_graph.nodes[node]["meta"]['embedding'] = embd
+            self.dataset.x[node] = torch.tensor(embd, dtype=torch.float)
+
+        # print('precision',precision)
+
+        if hasattr(self.dataset, 'edge_attr') and self.dataset.edge_attr is not None:
+            for idx, edge in enumerate(self.nx_graph.edges):
+                edge_meta = self.nx_graph.edges[edge].get("meta", {})
+                embd = self.dataset.edge_attr[node]
+
+                # precision = edge_meta.get('precision', "FLOAT_32")
+                # if precision == "FLOAT_32":
+                #     embd = [random.uniform(-2, 2) for _ in range(self.feature_count)]
+                # elif precision in ["FIXED_16", "FIXED_8", "FIXED_4"]:
+                #     embd = [random.randint(-8, 7) for _ in range(self.feature_count)]
+                # else:
+                #     print(f"Unrecognized edge precision, defaulting to float.")
+                #     embd = [random.uniform(-2, 2) for _ in range(self.feature_count)]
+
+                # Store the embedding
+                self.nx_graph.edges[edge]["meta"]['embedding'] = embd
+                self.dataset.edge_attr[idx] = torch.tensor(embd, dtype=torch.float)
+
 
 
     def random_embeddings(self):

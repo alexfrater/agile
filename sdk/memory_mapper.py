@@ -114,6 +114,7 @@ class Memory_Mapper:
         # Set offset for next memory range
         self.offsets['in_messages'] = len(self.memory_hex)
 
+    #TODO Change to use messages from previous sub_models or do init manager using layer offset
     def map_in_messages(self):
         for node in self.graph.nodes:
             self.memory_hex += float_list_to_byte_list(self.graph.nodes[node]["meta"]['embedding'], align=True, alignment=64)

@@ -202,6 +202,10 @@ logic [31:0] layer_config_scale_factors_address_lsb_value;
 logic layer_config_scale_factors_address_msb_strobe;
 logic [31:0] layer_config_scale_factors_address_msb_value;
 
+
+logic status_leds_strobe;
+logic [31:0] status_leds_value;
+
 // Instruction pre-fetcher
 logic [NODESLOT_COUNT-1:0] [19:0] nsb_nodeslot_neighbour_count_count;                 // value of field 'NSB_NODESLOT_NEIGHBOUR_COUNT.COUNT'
 logic [NODESLOT_COUNT-1:0] [19:0] nsb_nodeslot_node_id_id;                            // value of field 'NSB_NODESLOT_NODE_ID.ID'

@@ -100,3 +100,6 @@ hw/sim/wlftYTX1JF
 
 hw/ip_repo
 hw/pcie_1
+vivado_*
+vivado_projects_19_1
+vivado_projects_23_1
