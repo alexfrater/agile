@@ -18,7 +18,7 @@ import math
 data_width = 64 #TODO Parameterise
 
 class TrainedGraph:
-    def __init__(self, dataset, feature_count=None, embeddings=[], graph_precision="FLOAT_32", self_connection=False):
+    def __init__(self, dataset, feature_count=32, embeddings=[], graph_precision="FLOAT_32", self_connection=False):
 
         
         self.dataset = dataset
@@ -33,13 +33,16 @@ class TrainedGraph:
         # Node offsets in adjacency list
         node_ids, node_offsets = np.unique(dataset.edge_index[0], return_index=True)
 
-        self.node_offsets = [0] * len(self.nx_graph.nodes)
-        for idx, i in enumerate(node_ids):
-            self.node_offsets[i] = node_offsets[idx]
-        
-        # Feature count initialization may change when embeddings are trained
-        self.feature_count = dataset.x.shape[1] if feature_count is None else feature_count
-
+        if dataset.x is not None:
+            self.node_offsets = [0] * len(self.nx_graph.nodes)
+            for idx, i in enumerate(node_ids):
+                self.node_offsets[i] = node_offsets[idx]
+            
+            # Feature count initialization may change when embeddings are trained
+            self.feature_count = dataset.x.shape[1] if feature_count is None else feature_count
+        else:
+           self.feature_count = feature_count
+  
         #Check if using edge attributes:
         self.init_nx_graph(self_connection=self_connection) #TODO change to or to not accept edges
         #if edges:

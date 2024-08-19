@@ -362,8 +362,10 @@ class InitManager:
         #Can add precision here?
         self.layer_config['global_config'] = {
             "layer_count": len(self.model.layers),
-            "node_count": self.trained_graph.dataset.x.shape[0],
-            "edge_count": self.trained_graph.dataset.edge_index.shape[1],
+            # "node_count": self.trained_graph.dataset.x.shape[0],
+            "node_count": self.trained_graph.dataset.num_nodes,
+
+            "edge_count": self.trained_graph.dataset.edge_index.shape[1], #TODO check
         }
 
         if (isinstance(self.model, GraphSAGE_Model)):
@@ -656,5 +658,5 @@ class InitManager:
     def reduce_graph(self):
         self.trained_graph.reduce()
     
-    def map_memory(self):
-        self.memory_mapper.map_memory()
+    def map_memory(self,in_messages_addr = None):
+        return self.memory_mapper.map_memory(in_messages_addr)

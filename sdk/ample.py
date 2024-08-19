@@ -25,6 +25,8 @@ from functools import wraps
 import torch_geometric.nn as pyg_nn
 
 from torch_geometric.data import Data
+from collections import defaultdict, deque
+
 
 
 # import torch_geometric as pyg
@@ -135,98 +137,117 @@ class Ample():
             return
 
         all_outputs = set()
-        for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
-            all_outputs.update(output_names)
+        for sub_module_name, sub_module_dict in self.model_trace.items():
+            all_outputs.update(sub_module_dict['output_names'])
 
-        
+        #Ensure the modules are in the correct order to compile (i.e., input addresses calculated before module)
+        self.model_trace = self.reorder_modules(self.model_trace)
         # Identify external inputs
         external_inputs = set()
-        for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
-            for input_name in input_names:
+        for sub_module_name,sub_module_dict in self.model_trace.items():
+            for input_name in sub_module_dict['input_names']:
                 if input_name not in all_outputs:
                     external_inputs.add(input_name)
 
         ############################
         #TODO Temporary - Need to find a way to map input files/edges/nodes to model - may require new programming model
         inputs = model.preprocess_inputs(data)
-        for input_data in inputs[0]:
-            print('-' * 40)
-            data =Data()
-            data.x = input_data
-            data.num_nodes = len(data.x)
+        # for input_data in inputs[0]:
+        #     print('-' * 40)
+        #     data =Data()
+        #     data.x = input_data
+        #     data.num_nodes = len(data.x)
 
-            print('data',data)
+        #     print('data',data)
 
         ############################
         # inputs_dict['edge_index1'] = data.edge_index
         # edge_index = edge_index - edge_index.min(dim=1, keepdim=True)[0]
 
-        
-        print('External inputs')
-        for name, (input_names, output_names, order, module_type) in self.model_trace.items():
+        mem_ptr = 0 #keep track of memory address
+        print(self.model_trace)
+        # print('External inputs')
+        for sub_module_name,sub_module_dict in self.model_trace.items():
+            input_names = sub_module_dict['input_names']
             # assert module_type in self.model_map, f"Module type {module_type} not supported."
-            if module_type == 'Sequential':
-                module_type  = 'MLP_Model'
-            if module_type in self.model_map:
-                # model = self.model_map[module_type]()
-                print('name', name)
-                print(input_names)
-                print(output_names)
-                print(order)
+            if sub_module_dict['module_type'] == 'Sequential':
+                sub_module_dict['module_type']  = 'MLP_Model'
+            if sub_module_dict['module_type'] in self.model_map:
+                print(self.model_map[sub_module_dict['module_type']]())
+                print('name', sub_module_name)
+                # print(input_names)
+                # print(output_names)
+                # print(order)
 
                 ###DATA###
-                # if any(name in external_inputs for name in input_names):
-                #     dataset = Data()
-                #     dataset.x = inputs[0].pop()
-                #     dataset.num_nodes = len(dataset.x)
-                # else:
-                # out_ptr = x
+                if any(name in external_inputs for name in input_names):
+                    # dataset = Data()
+                    # dataset.x = inputs[0].pop()
+                    # dataset.num_nodes = len(dataset.x)
+
+                     ######Fake Data#####
+                    #TODO replace with out_ptr
+                    dataset = FakeDataset(num_graphs=1, 
+                        avg_num_nodes = 20,
+                        avg_degree=1,
+                        num_channels=32,
+                        edge_dim=32
+                    )[0]
+                    in_message_addr = None
+                    sub_module_dict['num_nodes'] = dataset.num_nodes
 
                 ######Fake Data#####
-                #TODO replace with out_ptr
-                dataset = FakeDataset(num_graphs=1, 
-                    avg_num_nodes = 20,
-                    avg_degree=1,
-                    num_channels=32,
-                    edge_dim=32
-                )[0]
-                ######Fake Data#####
+                else:
+                    # if any(name in external_inputs for name in input_names):
+                    # print('input_names')
+                    dataset = FakeDataset(num_graphs=1, 
+                        avg_num_nodes = 20,
+                        avg_degree=1,
+                        num_channels=32,
+                        edge_dim=32
+                    )[0]
+                    dataset.x= None
+                    # print('edge_index',dataset.edge_index)
+                    #TODO Find input node
+                    input_nodes = []
+    
+                    for item_name, item_data in self.model_trace.items():
+                        # if 'output_names' in item_data:
+                            # Check if any of the target names are in the output_names list
+                        if any(input_id in item_data['output_names'] for input_id in input_names):
+                            input_nodes.append(item_name)
+                    #TODO pass in edge index
+                    #TODO only picking first input, change to both  
+                    dataset.num_nodes = self.model_trace[input_nodes[0]]['num_nodes'] 
+                    in_message_addr = self.model_trace[input_nodes[0]]['out_addr']
 
-         
-                #Only add new memory for external inputs
-                base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" + name
-                # print('shape1',dataset.x[0].shape[0])
-                sub_model = self.model_map[module_type](dataset.x[0].shape[0])
-                # print('sub_model',sub_model)
-                self.initialize_node_memory(sub_model,dataset,base_path=base_path)
+                base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" + sub_module_name
+                if dataset.x is not None:
+                    sub_model = self.model_map[sub_module_dict['module_type']](dataset.x[0].shape[0]) #TODO get tensor input/output feature widths in trace
+                else:
+                    sub_model = self.model_map[sub_module_dict['module_type']]()
+                    
+                # print(self.model_trace[sub_module_name])
+                # print('edge_index',dataset.edge_index)
+
+                self.model_trace[sub_module_name]['out_addr'],mem_ptr = self.initialize_node_memory(sub_model,
+                                                                                            dataset,
+                                                                                            mem_ptr,
+                                                                                            feature_count=32,
+                                                                                            in_messages_addr=in_message_addr,
+                                                                                            base_path=base_path
+                                                                                            )
+                print(self.model_trace[sub_module_name])
 
 
             else:
                 #TODO change neural lam to remove unspoorted modules which are not relevant to prevent this message from showing incorrectly
                 print('Module type not supported')
-                print(module_type)
+                print(sub_module_name)
 
 
 
 
-        # for name, (input_names, output_names,order, module_type) in self.model_trace.items():
-        #     assert module_type in self.model_map, f"Module type {module_type} not supported."
-
-        #     model = self.model_map[module_type]()
-
-        #     #TODO integrate graph
-        #     if module_type == 'Sequential':
-        #         edge = False
-        #     else:
-        #         edge = True
-
-        #     #TODO using random graph as dummy data
-        #     #TODO fix this : If model does not use edges, dont set edges to be true - will brrak things 
-        #     if graph is None:   
-        #         graph = RandomGraph(num_nodes=10, avg_degree=1, num_channels=32, graph_precision="FLOAT_32",edge_dim=32,edges = edge) #TODO add var
-
-        #     self.initialize_node_memory(model,graph)
-        #     # ample.sim()
 
 
 
@@ -234,7 +255,10 @@ class Ample():
     def initialize_node_memory(
         self,
         model,
-        dataset,
+        dataset = None,
+        mem_ptr,
+        feature_count=32,
+        in_messages_addr = None,
         base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config",
         precision = 'FLOAT_32',
         reduce =False,
@@ -243,22 +267,21 @@ class Ample():
     ):
         
         d_type = self.get_dtype(precision)
-        self.graph = TrainedGraph(dataset)
+        self.graph = TrainedGraph(dataset,feature_count)
         self.model = model
 
         self.init_manager = InitManager(self.graph, self.model, base_path=base_path)
-        #bman = BenchmarkingManager(graph=graph, model=model, args=args)
-        print(dataset.x)
-        self.init_manager.trained_graph.load_embeddings()
+        if dataset.x is not None:
+            self.init_manager.trained_graph.load_embeddings()
          
         #init_manager.trained_graph.train_embeddings()
 
         #TODO Change to save to intermeiate file
-        self.init_manager.map_memory() 
+        out_messages_addr =  self.init_manager.map_memory(in_messages_addr) 
         self.init_manager.dump_memory()
         self.init_manager.dump_nodeslot_programming()
         self.init_manager.dump_layer_config()
-
+        return out_messages_addr,0
 
 
     def sim(self,cpu = True, gpu = False):
@@ -303,6 +326,7 @@ class Ample():
 
         return dtype
 
+    #TODO change to use subdicts
     def trace_model_fx(self, model, dataloader):
         # Use the custom tracer to selectively trace the model
         tracer = CustomTracer(self.model_map)
@@ -405,8 +429,16 @@ class Ample():
 
                 # Store the mapping for this module
                 module_type = type(module).__name__
-                self.model_trace[top_level_module_name] = (input_names, output_names, input_order + output_order, module_type)
-
+                # self.model_trace[top_level_module_name] = (input_names, output_names, input_order + output_order, module_type)
+                self.model_trace[top_level_module_name] = {
+                    'input_names': input_names,
+                    'output_names': output_names,
+                    'input_order': input_order,
+                    'output_order': output_order,
+                    'module_type': module_type,
+                    'num_nodes': None,
+                    'out_addr': None
+                }
             module.register_forward_hook(hook)
             # print(module)
             # print(type(module))
@@ -456,26 +488,32 @@ class Ample():
 
         # print(self.model_trace)
         
-        for module_name, (input_names, output_names, order, module_type) in self.model_trace.items():
+        for sub_module_name, sub_module_dict in self.model_trace.items():
+            
+            input_names = sub_module_dict['input_names']
+            output_names = sub_module_dict['output_names']
+            order = sub_module_dict['input_order']+sub_module_dict['output_order']
+            module_type = sub_module_dict['module_type']
+
             node_color = self.get_node_color(module_type)
             shape = 'ellipse' if node_color != 'white' else 'box'
 
-            annotation = f"{module_name}\nType: {module_type}"
+            annotation = f"{sub_module_name}\nType: {module_type}"
             
-            if module_name not in dot.node_attr:
-                dot.node(module_name, annotation, shape=shape, style='filled', fillcolor=node_color)
+            if sub_module_name not in dot.node_attr:
+                dot.node(sub_module_name, annotation, shape=shape, style='filled', fillcolor=node_color)
 
             for i, input_name in enumerate(input_names):
                 if input_name not in tensor_seen:
                     tensor_seen.add(input_name)
                     dot.node(input_name, input_name, shape='ellipse')
-                dot.edge(input_name, module_name, label=str(order))
+                dot.edge(input_name, sub_module_name, label=str(order))
 
             for i, output_name in enumerate(output_names):
                 if output_name not in tensor_seen:
                     tensor_seen.add(output_name)
                     dot.node(output_name, output_name, shape='ellipse')
-                dot.edge(module_name, output_name, label=str(order))
+                dot.edge(sub_module_name, output_name, label=str(order))
 
         dot.attr(dpi=str(dpi))
                # Specify the output format (e.g., 'png', 'pdf', 'svg', etc.)
@@ -530,6 +568,42 @@ class Ample():
 
     def execute(self, data):
         print("Executing on Ample")
+
+
+
+    def build_dependency_graph(self,data):
+        graph = defaultdict(list)
+        in_degree = defaultdict(int)
+
+        for module_name, module_data in data.items():
+            output_names = set(module_data.get('output_names', []))
+            for other_module, other_data in data.items():
+                if other_module != module_name:
+                    if any(input_name in output_names for input_name in other_data.get('input_names', [])):
+                        graph[module_name].append(other_module)
+                        in_degree[other_module] += 1
+
+        return graph, in_degree
+
+    def topological_sort(self,graph, in_degree):
+        queue = deque([node for node in graph if in_degree[node] == 0])
+        sorted_list = []
+
+        while queue:
+            node = queue.popleft()
+            sorted_list.append(node)
+
+            for neighbor in graph[node]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    queue.append(neighbor)
+
+        return sorted_list
+
+    def reorder_modules(self,data):
+        graph, in_degree = self.build_dependency_graph(data)
+        sorted_modules = self.topological_sort(graph, in_degree)
+        return {module_name: data[module_name] for module_name in sorted_modules}
 
 
 

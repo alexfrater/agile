@@ -31,22 +31,17 @@ class Memory_Mapper:
         else:
             self.edge_attr = 0
 
-    def map_memory(self):
+    def map_memory(self,in_messages_addr = None):
         logging.debug(f"Mapping memory contents.")
         self.memory_hex = []
         self.map_adj_list()
         self.map_scale_factors()
-        self.map_in_messages()
+        self.map_in_messages(in_messages_addr)
         self.map_weights()
+        return self.map_out_messages()
 
 
     def map_adj_list(self):
-
-
-        
-
-
-
         #TODO change adj list so it can be switched out and only serve a node group instead of all
         self.offsets['adj_list']['nbrs'] = len(self.memory_hex)
         for node in self.graph.nodes:
@@ -98,12 +93,13 @@ class Memory_Mapper:
             self.memory_hex += int_list_to_byte_list(concat_ptr, align=True, alignment=64, pad_side="right")
 
       
-        self.offsets['scale_factors'] = len(self.memory_hex)
    
     # def calc_axi_addr(self,feature_count):
     #     return math.ceil(4*feature_count / data_width) *data_width
 
     def map_scale_factors(self):
+        self.offsets['scale_factors'] = len(self.memory_hex)
+
         for node in self.graph.nodes:
             self.graph.nodes[node]["meta"]['scale_factors_address'] = len(self.memory_hex)
             if (self.graph.nodes[node]["meta"]['precision'] == 'FLOAT_32'):
@@ -112,26 +108,31 @@ class Memory_Mapper:
                 self.memory_hex += int_list_to_byte_list(self.graph.nodes[node]["meta"]['scale_factors'], align=True, alignment=64, pad_side='left')
         
         # Set offset for next memory range
-        self.offsets['in_messages'] = len(self.memory_hex)
 
     #TODO Change to use messages from previous sub_models or do init manager using layer offset
-    def map_in_messages(self):
-        for node in self.graph.nodes:
-            self.memory_hex += float_list_to_byte_list(self.graph.nodes[node]["meta"]['embedding'], align=True, alignment=64)
+    def map_in_messages(self,in_messages_addr):
+        if in_messages_addr is not None:
+            self.offsets['in_messages'] = in_messages_addr
 
-        #TODO:include edge attributes
+        else:
+            self.offsets['in_messages'] = len(self.memory_hex)
 
-        if self.edge_attr:
-            for edge in self.graph.edges:
-                edge_data = self.graph.edges[edge]["meta"] 
-                if 'embedding' in edge_data:
-                    # print('edge embedding',edge_data['embedding'])
-                    self.memory_hex += float_list_to_byte_list(self.graph.edges[edge]["meta"]['embedding'], align=True, alignment=64)
+            for node in self.graph.nodes:
+                self.memory_hex += float_list_to_byte_list(self.graph.nodes[node]["meta"]['embedding'], align=True, alignment=64)
+
+            #TODO:include edge attributes
+
+            if self.edge_attr:
+                for edge in self.graph.edges:
+                    edge_data = self.graph.edges[edge]["meta"] 
+                    if 'embedding' in edge_data:
+                        # print('edge embedding',edge_data['embedding'])
+                        self.memory_hex += float_list_to_byte_list(self.graph.edges[edge]["meta"]['embedding'], align=True, alignment=64)
 
         # Set offset for next memory range
-        self.offsets['weights'][0] = len(self.memory_hex)
 
     def map_weights(self):
+        self.offsets['weights'][0] = len(self.memory_hex)
         for idx,layer in enumerate(self.model.layers):
             # print('-----layer---j',idx,layer.name)
             if isinstance(layer, GCNConv):
@@ -155,9 +156,13 @@ class Memory_Mapper:
             if(idx < self.num_layers-1):
                 self.offsets['weights'][idx+1] = len(self.memory_hex)
         # Set offset for next memory range
+
+
+    def map_out_messages(self):
         self.offsets['out_messages'][0] = len(self.memory_hex)
         self.out_messages_ptr = len(self.memory_hex)
-
+        out_ptr = self.out_messages_ptr
+        return out_ptr
 
     # def map_out_messages(self):
     #     #    Set offset for next memory range
