@@ -173,7 +173,7 @@ class Ample():
             if sub_module_dict['module_type'] == 'Sequential':
                 sub_module_dict['module_type']  = 'MLP_Model'
             if sub_module_dict['module_type'] in self.model_map:
-                print(self.model_map[sub_module_dict['module_type']]())
+                # print(self.model_map[sub_module_dict['module_type']]())
                 print('name', sub_module_name)
                 # print(input_names)
                 # print(output_names)
@@ -237,7 +237,7 @@ class Ample():
                                                                                             in_messages_addr=in_message_addr,
                                                                                             base_path=base_path
                                                                                             )
-                print(self.model_trace[sub_module_name])
+                # print(self.model_trace[sub_module_name])
 
 
             else:
@@ -256,7 +256,7 @@ class Ample():
         self,
         model,
         dataset = None,
-        mem_ptr,
+        mem_ptr=0,
         feature_count=32,
         in_messages_addr = None,
         base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config",
@@ -492,7 +492,8 @@ class Ample():
             
             input_names = sub_module_dict['input_names']
             output_names = sub_module_dict['output_names']
-            order = sub_module_dict['input_order']+sub_module_dict['output_order']
+            input_order = sub_module_dict['input_order']
+            output_order = sub_module_dict['output_order']
             module_type = sub_module_dict['module_type']
 
             node_color = self.get_node_color(module_type)
@@ -507,13 +508,13 @@ class Ample():
                 if input_name not in tensor_seen:
                     tensor_seen.add(input_name)
                     dot.node(input_name, input_name, shape='ellipse')
-                dot.edge(input_name, sub_module_name, label=str(order))
+                dot.edge(input_name, sub_module_name, label=str(input_order))
 
             for i, output_name in enumerate(output_names):
                 if output_name not in tensor_seen:
                     tensor_seen.add(output_name)
                     dot.node(output_name, output_name, shape='ellipse')
-                dot.edge(sub_module_name, output_name, label=str(order))
+                dot.edge(sub_module_name, output_name, label=str(output_order))
 
         dot.attr(dpi=str(dpi))
                # Specify the output format (e.g., 'png', 'pdf', 'svg', etc.)
