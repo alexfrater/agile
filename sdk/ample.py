@@ -169,7 +169,7 @@ class Ample():
         # inputs_dict['edge_index1'] = data.edge_index
         # edge_index = edge_index - edge_index.min(dim=1, keepdim=True)[0]
 
-        mem_ptr = 0 #keep track of memory address
+        self.memory_ptr = 0 #keep track of memory address
         # print(self.model_trace)
         # print('External inputs')
         assert len(external_inputs) == len(inputs[0]) #Change name to features
@@ -257,7 +257,7 @@ class Ample():
                 # print(self.model_trace[sub_module_name])
                 # print('edge_index',dataset.edge_index)
 
-                self.model_trace[sub_module_name]['out_addr'],mem_ptr = self.initialize_node_memory(sub_model,
+                self.model_trace[sub_module_name]['out_addr'] = self.initialize_node_memory(sub_model,
                                                                                             dataset,
                                                                                             mem_ptr,
                                                                                             feature_count=32,
@@ -308,14 +308,15 @@ class Ample():
         #init_manager.trained_graph.train_embeddings()
 
         #TODO Change to save to intermeiate file
-        out_messages_addr =  self.init_manager.map_memory(in_messages_addr) 
+        self.init_manager.map_memory(self.memory_ptr,in_messages_addr) 
         self.init_manager.dump_memory(self.mem_append)
         self.init_manager.dump_nodeslot_programming(self.mem_append)
-        self.init_manager.dump_layer_config(self.mem_append)
+        self.memory_ptr,out_messages_addr = self.init_manager.dump_layer_config(self.mem_append)
+
         if self.mem_append == False: #TODO 
             print('Writing memory')
             self.mem_append = True
-        return out_messages_addr,0
+        return out_messages_addr
 
 
     def sim(self,cpu = True, gpu = False):

@@ -135,6 +135,7 @@ class InitManager:
             #Will need to modify if writing back edge embeddings as there is likely to be more edges than nodes
             #New out messages pointer = [data_needed_to_store(number of features in [this layer])] * number of nodes in graph
             self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.get_feature_counts(self.model))[idx]) * len(self.trained_graph.nx_graph.nodes[node_id])
+            memory_ptr = self.memory_mapper.out_messages_ptr
         return {
             'name' : layer.name,
             'nodeslot_count': len(self.trained_graph.nx_graph.nodes),
@@ -154,7 +155,7 @@ class InitManager:
             'edge_node': edge_node,
             'nodeslot_start_address': 0,
             'concat_width': 1
-        }
+        },memory_ptr,out_messages_addr
         
 
     def get_layer_config(self, layer,in_messages_address,idx,edge=0,linear=0,concat=0,concat_width =1):
@@ -318,6 +319,7 @@ class InitManager:
 
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.trained_graph.feature_count) * (len(self.trained_graph.nx_graph.nodes)))
         #6
+        out_messages_addr = self.memory_mapper.out_messages_ptr
 
         #######RX Edge Aggregate ######## 
         # Aggregate edge neighbours
@@ -330,8 +332,10 @@ class InitManager:
         in_messages_address = rx_node_embed_address
         l6 = self.get_layer_config(self.model.rx_node_update,in_messages_address = in_messages_address,idx=6,edge=0,linear=1,concat=1,concat_width=2)
         self.layer_config['layers'].append(l6)
-
-        self.memory_mapper.out_messages_ptr = out_message_end 
+        self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.trained_graph.feature_count) * (len(self.trained_graph.nx_graph.nodes)))
+        memory_ptr = self.memory_mapper.out_messages_ptr
+        return memory_ptr,out_messages_addr
+        # self.memory_mapper.out_messages_ptr = out_message_end  #TODO check
 
 
 
@@ -374,22 +378,25 @@ class InitManager:
         elif (isinstance(self.model, Edge_Embedding_Model)):
             self.set_layer_config_edge_embedder()
         elif (isinstance(self.model, Interaction_Net_Model)):
-            self.set_layer_config_interaction_net()
+            memory_ptr,out_messages_addr = self.set_layer_config_interaction_net()
 
         else :
            
             for idx,layer in enumerate(self.model.layers):
-                layer_config_i = self.get_default_layer_config(layer,idx)
+                layer_config_i,memory_ptr,out_messages_addr = self.get_default_layer_config(layer,idx)
                 self.layer_config['layers'].append(layer_config_i)
+
+        return memory_ptr,out_messages_addr
 
     def dump_layer_config (self,append_mode=False):
         mode = 'a' if append_mode else 'w'
 
         self.layer_config = {'global_config': {}, 'layers': []}
-        self.set_layer_config()
+        memory_ptr,out_messages_addr = self.set_layer_config()
         
         with open(self.layer_config_file, mode) as file:
             json.dump(self.layer_config, file, indent=4)
+        return memory_ptr,out_messages_addr
 
     def get_default_nodeslot(self, node_id):
         return {
@@ -542,8 +549,21 @@ class InitManager:
 
         # self.nodeslot_programming = {'nodeslots':[]}
         self.program_nodeslots()
-        with open(self.nodeslot_json_dump_file, mode) as file:
+        # if append_mode:
+        with open(self.nodeslot_json_dump_file, 'w') as file:
             json.dump(self.nodeslot_programming, file, indent=4)
+        # else:
+        #     with open(self.nodeslot_json_dump_file, 'r+') as file:
+        #             # Load existing data if present
+        #             existing_data = json.load(file)
+        #             # Combine existing data with new data
+        #             if isinstance(existing_data, list) and isinstance(self.nodeslot_programming, list):
+        #                 existing_data.extend(self.nodeslot_programming)
+        #             else:
+        #                 existing_data = existing_data + self.nodeslot_programming
+        #             # Move pointer to the start and write updated data
+        #             file.seek(0)
+        #             json.dump(existing_data, file, indent=4)
 
         nodeslot_memory_pointer = 0
         nodeslot_byte_list = []
@@ -559,7 +579,7 @@ class InitManager:
             nodeslot_memory_pointer += nmh_length
 
 
-        dump_byte_list(nodeslot_byte_list, self.nodeslot_mem_dump_file)
+        dump_byte_list(nodeslot_byte_list, self.nodeslot_mem_dump_file, append_mode)
 
     def dump_memory(self,append_mode=False):
         self.memory_mapper.dump_memory(append_mode)
@@ -654,5 +674,5 @@ class InitManager:
     def reduce_graph(self):
         self.trained_graph.reduce()
     
-    def map_memory(self,in_messages_addr = None):
-        return self.memory_mapper.map_memory(in_messages_addr)
+    def map_memory(self,memory_ptr=0,in_messages_addr = None):
+        self.memory_mapper.map_memory(memory_ptr,in_messages_addr)

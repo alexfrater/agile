@@ -31,19 +31,20 @@ class Memory_Mapper:
         else:
             self.edge_attr = 0
 
-    def map_memory(self,in_messages_addr = None):
+    def map_memory(self,memory_ptr=0,in_messages_addr = None):
+        self.memory_ptr = memory_ptr
         logging.debug(f"Mapping memory contents.")
         self.memory_hex = []
         self.map_adj_list()
         self.map_scale_factors()
         self.map_in_messages(in_messages_addr)
         self.map_weights()
-        return self.map_out_messages()
+        self.map_out_messages() #TODO change to map the actual out messages - currently returns start of intermediate data
 
 
     def map_adj_list(self):
         #TODO change adj list so it can be switched out and only serve a node group instead of all
-        self.offsets['adj_list']['nbrs'] = len(self.memory_hex)
+        self.offsets['adj_list']['nbrs'] = len(self.memory_hex) + self.memory_ptr
         for node in self.graph.nodes:
             node_metadata = self.graph.nodes[node]['meta']
             self.memory_hex += int_list_to_byte_list(node_metadata['neighbour_message_ptrs'], align=True, alignment=64, pad_side="right")
@@ -66,7 +67,7 @@ class Memory_Mapper:
 
 
         #if linear layers
-        self.offsets['adj_list']['self_ptr'] = len(self.memory_hex)
+        self.offsets['adj_list']['self_ptr'] = len(self.memory_hex) + self.memory_ptr
         for node in self.graph.nodes:
             node_metadata = self.graph.nodes[node]['meta']
             self.memory_hex += int_list_to_byte_list(node_metadata['self_ptr'], align=True, alignment=64, pad_side="right")
@@ -79,7 +80,7 @@ class Memory_Mapper:
         #Node update
 
 
-        self.offsets['adj_list']['concat_ptr'] = len(self.memory_hex)
+        self.offsets['adj_list']['concat_ptr'] = len(self.memory_hex) + self.memory_ptr
         last_node_key = max(self.graph.nodes.keys())
 
         concat_offset = self.graph.nodes[last_node_key]['meta']['self_ptr'][0]+128 #TODO change this
@@ -98,10 +99,10 @@ class Memory_Mapper:
     #     return math.ceil(4*feature_count / data_width) *data_width
 
     def map_scale_factors(self):
-        self.offsets['scale_factors'] = len(self.memory_hex)
+        self.offsets['scale_factors'] = len(self.memory_hex) + self.memory_ptr
 
         for node in self.graph.nodes:
-            self.graph.nodes[node]["meta"]['scale_factors_address'] = len(self.memory_hex)
+            self.graph.nodes[node]["meta"]['scale_factors_address'] = len(self.memory_hex) + self.memory_ptr
             if (self.graph.nodes[node]["meta"]['precision'] == 'FLOAT_32'):
                 self.memory_hex += float_list_to_byte_list(self.graph.nodes[node]["meta"]['scale_factors'], align=True, alignment=64, pad_side='left')
             else:
@@ -112,10 +113,10 @@ class Memory_Mapper:
     #TODO Change to use messages from previous sub_models or do init manager using layer offset
     def map_in_messages(self,in_messages_addr):
         if in_messages_addr is not None:
-            self.offsets['in_messages'] = in_messages_addr
+            self.offsets['in_messages'] = in_messages_addr 
 
         else:
-            self.offsets['in_messages'] = len(self.memory_hex)
+            self.offsets['in_messages'] = len(self.memory_hex) + self.memory_ptr
 
             for node in self.graph.nodes:
                 self.memory_hex += float_list_to_byte_list(self.graph.nodes[node]["meta"]['embedding'], align=True, alignment=64)
@@ -132,7 +133,7 @@ class Memory_Mapper:
         # Set offset for next memory range
 
     def map_weights(self):
-        self.offsets['weights'][0] = len(self.memory_hex)
+        self.offsets['weights'][0] = len(self.memory_hex)  + self.memory_ptr
         for idx,layer in enumerate(self.model.layers):
             # print('-----layer---j',idx,layer.name)
             if isinstance(layer, GCNConv):
@@ -154,13 +155,13 @@ class Memory_Mapper:
             for outf in range(out_feature_count):
                 self.memory_hex += float_list_to_byte_list(linear.weight[outf], align=True, alignment=64)
             if(idx < self.num_layers-1):
-                self.offsets['weights'][idx+1] = len(self.memory_hex)
+                self.offsets['weights'][idx+1] = len(self.memory_hex)  + self.memory_ptr
         # Set offset for next memory range
 
 
     def map_out_messages(self):
-        self.offsets['out_messages'][0] = len(self.memory_hex)
-        self.out_messages_ptr = len(self.memory_hex)
+        self.offsets['out_messages'][0] = len(self.memory_hex)  + self.memory_ptr
+        self.out_messages_ptr = len(self.memory_hex)  + self.memory_ptr
         out_ptr = self.out_messages_ptr
         return out_ptr
 

@@ -44,10 +44,12 @@ def float_list_to_byte_list(in_list, align=False, alignment=None, pad_side='righ
             hex_list = ['00'] * zeros + new_elements
     return hex_list
 
-def dump_byte_list(byte_list, dump_file):
+def dump_byte_list(byte_list, dump_file,append_mode=False):
+    # mode = 'ab' if append_mode else 'wb'
+
     with open(dump_file, 'w') as file:
         for i in range(len(byte_list)//64):
             file.write(''.join(byte_list[i*64:(i+1)*64]))
             file.write('\n')
         file.write(''.join(byte_list[64*(len(byte_list)//64):]))
-        file.write('\n')
+        file.write('\n') #TODO check

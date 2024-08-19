@@ -61,7 +61,8 @@ args = argparse.Namespace(
     lr=0.001,
     val_interval=1,
     split='val',
-    n_example_pred=1
+    n_example_pred=1,
+    n_nodes = 0, #Zero - all nodes
 )
 print('Neural LAM Args', args)
 #Change to neural-lam directory
