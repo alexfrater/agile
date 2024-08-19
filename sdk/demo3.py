@@ -1,4 +1,21 @@
 
+# import builtins
+# import inspect
+
+# original_print = print
+
+# def custom_print(*args, **kwargs):
+#     # Get the current frame
+#     frame = inspect.currentframe().f_back
+#     # Get the filename and line number
+#     filename = frame.f_code.co_filename
+#     line_number = frame.f_lineno
+#     # Call the original print function
+#     original_print(f"{filename}:{line_number}:", *args, **kwargs)
+
+# # Replace the built-in print with our custom print
+# builtins.print = custom_print
+
 
 import sys
 import os

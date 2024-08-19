@@ -20,18 +20,20 @@ data_width = 64 #TODO Parameterise
 class TrainedGraph:
     def __init__(self, dataset, feature_count=32, embeddings=[], graph_precision="FLOAT_32", self_connection=False):
 
-        
+        # print('data edges',dataset.edge_index)
         self.dataset = dataset
-        if self.dataset.edge_index is None:
-            num_nodes = self.dataset.x.size(0)  
+        if self.dataset.edge_index is None: #TODO clean up
+            num_nodes = self.dataset.num_nodes  
             self_connections = torch.arange(0, num_nodes)
             self.dataset.edge_index = torch.stack([self_connections, self_connections], dim=0)
-            
+        # print('edge_index',self.dataset.edge_index)
         self.nx_graph = to_networkx(self.dataset)
+        # print('nx_graph edges',self.nx_graph.edges)
+
         self.graph_precision = graph_precision
         # self.model = model #Need model to define the graph stucture e.g interaction net
         # Node offsets in adjacency list
-        node_ids, node_offsets = np.unique(dataset.edge_index[0], return_index=True)
+        node_ids, node_offsets = np.unique(self.dataset.edge_index[0], return_index=True)
 
         if dataset.x is not None:
             self.node_offsets = [0] * len(self.nx_graph.nodes)
@@ -46,6 +48,7 @@ class TrainedGraph:
         #Check if using edge attributes:
         self.init_nx_graph(self_connection=self_connection) #TODO change to or to not accept edges
         #if edges:
+        # print(self.nx_graph.edges(data=True))
         edge = list(self.nx_graph.edges(data=True))[0]
         _,_, attributes = edge
         self.edge_feature_count = len(attributes)
@@ -61,7 +64,7 @@ class TrainedGraph:
 
     def init_nx_graph(self, self_connection=False):
         rx_node_edge_neighbours  = [[] for _ in range(len(self.nx_graph.nodes()))]
-        
+
         if self.dataset.edge_attr is not None:
             # print('EDGE ATTR')
             # print(self.dataset.edge_attr)

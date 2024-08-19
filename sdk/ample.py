@@ -165,67 +165,89 @@ class Ample():
         # edge_index = edge_index - edge_index.min(dim=1, keepdim=True)[0]
 
         mem_ptr = 0 #keep track of memory address
-        print(self.model_trace)
+        # print(self.model_trace)
         # print('External inputs')
+        assert len(external_inputs) == len(inputs[0]) #Change name to features
+
         for sub_module_name,sub_module_dict in self.model_trace.items():
             input_names = sub_module_dict['input_names']
+            module_type = sub_module_dict['module_type']
             # assert module_type in self.model_map, f"Module type {module_type} not supported."
-            if sub_module_dict['module_type'] == 'Sequential':
-                sub_module_dict['module_type']  = 'MLP_Model'
-            if sub_module_dict['module_type'] in self.model_map:
+            if module_type == 'Sequential':
+                module_type  = 'MLP_Model'
+            if module_type in self.model_map:
                 # print(self.model_map[sub_module_dict['module_type']]())
                 print('name', sub_module_name)
                 # print(input_names)
                 # print(output_names)
                 # print(order)
-
+   
                 ###DATA###
                 if any(name in external_inputs for name in input_names):
-                    # dataset = Data()
-                    # dataset.x = inputs[0].pop()
-                    # dataset.num_nodes = len(dataset.x)
+                    dataset = Data()
+                    name, x = list(inputs[0].pop().items())[0]
+                    # print('Features',name, 'mapped to',sub_module_name)
+
+                    dataset.x = x
+                    dataset.num_nodes = len(dataset.x)
 
                      ######Fake Data#####
-                    #TODO replace with out_ptr
-                    dataset = FakeDataset(num_graphs=1, 
-                        avg_num_nodes = 20,
-                        avg_degree=1,
-                        num_channels=32,
-                        edge_dim=32
-                    )[0]
+                    # #TODO replace with out_ptr
+                    # dataset = FakeDataset(num_graphs=1, 
+                    #     avg_num_nodes = 20,
+                    #     avg_degree=1,
+                    #     num_channels=32,
+                    #     edge_dim=32
+                    # )[0]
                     in_message_addr = None
+                    # if dataset.num_nodes != None:
                     sub_module_dict['num_nodes'] = dataset.num_nodes
+                    # else:
 
                 ######Fake Data#####
                 else:
                     # if any(name in external_inputs for name in input_names):
                     # print('input_names')
-                    dataset = FakeDataset(num_graphs=1, 
-                        avg_num_nodes = 20,
-                        avg_degree=1,
-                        num_channels=32,
-                        edge_dim=32
-                    )[0]
-                    dataset.x= None
-                    # print('edge_index',dataset.edge_index)
+                    # dataset = FakeDataset(num_graphs=1, 
+                    #     avg_num_nodes = 20,
+                    #     avg_degree=1,
+                    #     num_channels=32,
+                    #     edge_dim=32
+                    # )[0]
+                    # dataset.x= None
+                    dataset = Data()
+                    dataset.x = None
+                    if module_type == 'InteractionNet': #TODO change to be in class GNNs /not linear
+            
+                        #TODO only do if using edge index
+                        # The popped item is a dictionary, get the key (name) and value
+                        name, edge_index = list(inputs[1].pop().items())[0]
+                        dataset.edge_index = edge_index #Edges set
+                        #TODO add edge attributes
+
+                        dataset.edge_attr = True #TODO change to be in class GNNs /not linear
+                    else:
+                        dataset.edge_attr = None
                     #TODO Find input node
                     input_nodes = []
     
                     for item_name, item_data in self.model_trace.items():
-                        # if 'output_names' in item_data:
-                            # Check if any of the target names are in the output_names list
                         if any(input_id in item_data['output_names'] for input_id in input_names):
                             input_nodes.append(item_name)
                     #TODO pass in edge index
                     #TODO only picking first input, change to both  
                     dataset.num_nodes = self.model_trace[input_nodes[0]]['num_nodes'] 
+                    sub_module_dict['num_nodes'] = dataset.num_nodes #Pass down num nodes to next layer
                     in_message_addr = self.model_trace[input_nodes[0]]['out_addr']
+                    print('input_nodes',input_nodes)
+                    print(self.model_trace[input_nodes[0]])
+                    print('dataset.num_nodes',dataset.num_nodes)
 
                 base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" + sub_module_name
                 if dataset.x is not None:
-                    sub_model = self.model_map[sub_module_dict['module_type']](dataset.x[0].shape[0]) #TODO get tensor input/output feature widths in trace
+                    sub_model = self.model_map[module_type](dataset.x[0].shape[0]) #TODO get tensor input/output feature widths in trace
                 else:
-                    sub_model = self.model_map[sub_module_dict['module_type']]()
+                    sub_model = self.model_map[module_type]()
                     
                 # print(self.model_trace[sub_module_name])
                 # print('edge_index',dataset.edge_index)
