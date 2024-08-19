@@ -165,6 +165,11 @@ def run_pass(
         hidden_dimension = args.hidden_dimension,
         precision = dtype
         )
+    
+
+    
+    base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" #+ str(model.__class__.__name__)
+    
     init_manager = InitManager(graph, model, base_path=base_path)
     bman = BenchmarkingManager(graph=graph, model=model, args=args)
     

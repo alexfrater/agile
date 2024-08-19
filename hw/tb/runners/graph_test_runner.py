@@ -30,12 +30,16 @@ def get_log_level():
 async def graph_test_runner(dut):
 
     tolerance = float(os.environ.get('AMPLE_GRAPH_TB_TOLERANCE', 1))
+    model_name = str(os.environ.get('AMPLE_GRAPH_TB_MODEL_NAME', 1))
+    # model_name = None
+    print(f"Model name: {model_name}")
     log_level = get_log_level()
     dut._log.setLevel(log_level)  # Set to the desired level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
     # nodeslot_count = int(os.environ.get('AMPLE_GRAPH_TB_NODESLOT_COUNT', 32))
     nodeslot_count =32
-    test = BaseTest(dut,nodeslot_count,tolerance,log_level)
+
+    test = BaseTest(dut,nodeslot_count,model_name,log_level,tolerance)
     
     test.log_info(dut, "Starting Graph Test")
 

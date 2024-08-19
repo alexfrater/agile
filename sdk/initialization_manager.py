@@ -368,6 +368,7 @@ class InitManager:
             "edge_count": self.trained_graph.dataset.edge_index.shape[1], #TODO check
         }
 
+        #TODO use case
         if (isinstance(self.model, GraphSAGE_Model)):
             self.set_layer_config_graphsage()
         elif (isinstance(self.model, Edge_Embedding_Model)):
@@ -376,25 +377,18 @@ class InitManager:
             self.set_layer_config_interaction_net()
 
         else :
-            # print(self.model.named_children() and isinstance(self.model.named_children(),list))
-            # if hasattr(self.model, 'named_children') and isinstance(self.model.named_children(),list):
-            #     print('complex model')
-            #     for name, module in self.model.named_children():
-            #         print(f'{name}: {module.__class__.__name__}')
-            #         for idx,layer in enumerate(module):
-            #             layer_config_i = self.get_default_layer_config(layer,idx)
-            #             self.layer_config['layers'].append(layer_config_i)
-            # else:
-            # Default layer configuration
+           
             for idx,layer in enumerate(self.model.layers):
                 layer_config_i = self.get_default_layer_config(layer,idx)
                 self.layer_config['layers'].append(layer_config_i)
 
-    def dump_layer_config (self):
+    def dump_layer_config (self,append_mode=False):
+        mode = 'a' if append_mode else 'w'
+
         self.layer_config = {'global_config': {}, 'layers': []}
         self.set_layer_config()
         
-        with open(self.layer_config_file, 'w') as file:
+        with open(self.layer_config_file, mode) as file:
             json.dump(self.layer_config, file, indent=4)
 
     def get_default_nodeslot(self, node_id):
@@ -543,10 +537,12 @@ class InitManager:
         return nmh,nodeslot_mem_len
 
 
-    def dump_nodeslot_programming(self):
+    def dump_nodeslot_programming(self,append_mode=False):
+        mode = 'a' if append_mode else 'w'
+
         # self.nodeslot_programming = {'nodeslots':[]}
         self.program_nodeslots()
-        with open(self.nodeslot_json_dump_file, 'w') as file:
+        with open(self.nodeslot_json_dump_file, mode) as file:
             json.dump(self.nodeslot_programming, file, indent=4)
 
         nodeslot_memory_pointer = 0
@@ -565,8 +561,8 @@ class InitManager:
 
         dump_byte_list(nodeslot_byte_list, self.nodeslot_mem_dump_file)
 
-    def dump_memory(self):
-        self.memory_mapper.dump_memory()
+    def dump_memory(self,append_mode=False):
+        self.memory_mapper.dump_memory(append_mode)
 
     # Generate feature embedding expectation
     # ===============================================

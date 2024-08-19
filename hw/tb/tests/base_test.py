@@ -39,7 +39,7 @@ from tb.monitors.bm_monitor import BM_Monitor
 
 
 class BaseTest:
-    def __init__(self, dut, nodeslot_count,tolerance, log_level, base_path=None):#TODO change to inherint log level from logger not args
+    def __init__(self, dut, nodeslot_count,model_name = None,tolerance = 0.1, log_level= 'INFO', base_path=None):#TODO change to inherint log level from logger not args
         self.dut = dut
         self.driver = Driver(dut)
         self.nodeslot_count = nodeslot_count
@@ -131,12 +131,18 @@ class BaseTest:
         self.age_regbank = {}
         self.prefetcher_regbank = {}
         self.fte_regbank = {}
-
-        # Paths
+        print('model_name',model_name)
+        # print('type',type(model_name))
+        #model_location = "/hw/sim/layer_config/" + model_name + '/'
+        # # Paths
         self.base_path = base_path if base_path is not None else os.environ.get("WORKAREA")
         self.regbank_path = self.base_path + "/hw/build/regbanks"
         self.nodeslot_programming_file = self.base_path + "/hw/sim/layer_config/nodeslot_programming.json"
         self.layer_config_file = self.base_path + "/hw/sim/layer_config/layer_config.json"
+        #self.nodeslot_programming_file = self.base_path + model_location + "nodeslot_programming.json"
+        #self.layer_config_file = self.base_path + model_location + "layer_config.json"
+        # print('self.nodeslot_programming_file',self.nodeslot_programming_file)
+        # print('self.layer_config_file',self.layer_config_file)
 
     async def initialize(self):
         # Load nodeslot programming and layer config

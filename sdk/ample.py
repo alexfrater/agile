@@ -72,7 +72,8 @@ class Ample():
         self.ample = self.connect_to_device()
         self.variant = Variant(message_channel_count, precision_count, aggregation_buffer_slots)
         self.add_to_device_method()
-        
+        self.mem_append= False
+
 
 
     def add_to_device_method(self):
@@ -124,6 +125,10 @@ class Ample():
     ):
        
         self.model = model
+        self.model_name = self.model.__class__.__name__
+        self.mem_append= False
+
+        print('model name',self.model_name)
         if trace_mode == 'fx':
             self.trace_model_fx(self.model, graph_data)
         else:
@@ -243,7 +248,7 @@ class Ample():
                     print(self.model_trace[input_nodes[0]])
                     print('dataset.num_nodes',dataset.num_nodes)
 
-                base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" + sub_module_name
+                base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" #+'/'  + self.model_name +'/' + sub_module_name
                 if dataset.x is not None:
                     sub_model = self.model_map[module_type](dataset.x[0].shape[0]) #TODO get tensor input/output feature widths in trace
                 else:
@@ -281,13 +286,17 @@ class Ample():
         mem_ptr=0,
         feature_count=32,
         in_messages_addr = None,
-        base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config",
+        # model_name = None,
+        base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/",
         precision = 'FLOAT_32',
         reduce =False,
         random = True,
-        trained = False
+        trained = False,
+        date = True
     ):
-        
+
+        print('base_path',base_path)
+
         d_type = self.get_dtype(precision)
         self.graph = TrainedGraph(dataset,feature_count)
         self.model = model
@@ -300,9 +309,12 @@ class Ample():
 
         #TODO Change to save to intermeiate file
         out_messages_addr =  self.init_manager.map_memory(in_messages_addr) 
-        self.init_manager.dump_memory()
-        self.init_manager.dump_nodeslot_programming()
-        self.init_manager.dump_layer_config()
+        self.init_manager.dump_memory(self.mem_append)
+        self.init_manager.dump_nodeslot_programming(self.mem_append)
+        self.init_manager.dump_layer_config(self.mem_append)
+        if self.mem_append == False: #TODO 
+            print('Writing memory')
+            self.mem_append = True
         return out_messages_addr,0
 
 

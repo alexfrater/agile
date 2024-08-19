@@ -175,13 +175,23 @@ class Memory_Mapper:
     # Dump
     # ===============================================
 
-    def dump_memory(self):
-        with open(self.dump_file, 'w') as file:
+    # def dump_memory(self):
+    #     with open(self.dump_file, 'w') as file:
+    #         for i in range(len(self.memory_hex)//64):
+    #             file.write(''.join(self.memory_hex[i*64:(i+1)*64]))
+    #             file.write('\n')
+    #         file.write(''.join(self.memory_hex[64*(len(self.memory_hex)//64):]))
+    #         file.write('\n')
+
+
+    def dump_memory(self, append_mode=False):
+        mode = 'a' if append_mode else 'w'
+        with open(self.dump_file, mode) as file:
             for i in range(len(self.memory_hex)//64):
                 file.write(''.join(self.memory_hex[i*64:(i+1)*64]))
                 file.write('\n')
-            file.write(''.join(self.memory_hex[64*(len(self.memory_hex)//64):]))
-            file.write('\n')
+            file.write(''.join(self.memory_hex[64*(len(self.memory_hex)//64):])) #TODO ensure no address gaps
+            # file.write('\n')
 
     def pad_list(self,input_list,target_length):
         current_length = len(input_list)
