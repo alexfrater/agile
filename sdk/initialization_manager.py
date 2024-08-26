@@ -27,6 +27,7 @@ class InitManager:
     def __init__(self, 
                     graph, 
                     model, 
+                    memory_ptr=0,
                     base_path="config_files", 
                     nodeslot_json_dump_file="nodeslot_programming.json", 
                     layer_config_file="layer_config.json", 
@@ -37,7 +38,7 @@ class InitManager:
         # Adjacency list, incoming messages and weights are pulled from the TrainedGraph object
         self.trained_graph = graph
         self.model = model
-        
+        self.memory_ptr = memory_ptr
         self.memory_mapper = Memory_Mapper(graph.nx_graph, model, base_path=base_path, dump_file=memory_dump_file)
 
         # Create directory for output files
@@ -110,7 +111,6 @@ class InitManager:
 
     #TODO use other layer_config
     def get_default_layer_config(self, layer,idx):
-        
         inc, outc = self.get_layer_feature_count(layer)
         if isinstance(layer, torch.nn.Linear):
             aggregate_enable = 0
@@ -135,7 +135,7 @@ class InitManager:
             #Will need to modify if writing back edge embeddings as there is likely to be more edges than nodes
             #New out messages pointer = [data_needed_to_store(number of features in [this layer])] * number of nodes in graph
             self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.get_feature_counts(self.model))[idx]) * len(self.trained_graph.nx_graph.nodes[node_id])
-            memory_ptr = self.memory_mapper.out_messages_ptr
+            self.memory_ptr = self.memory_mapper.out_messages_ptr
         return {
             'name' : layer.name,
             'nodeslot_count': len(self.trained_graph.nx_graph.nodes),
@@ -155,7 +155,7 @@ class InitManager:
             'edge_node': edge_node,
             'nodeslot_start_address': 0,
             'concat_width': 1
-        },memory_ptr,out_messages_addr
+        },out_messages_address
         
 
     def get_layer_config(self, layer,in_messages_address,idx,edge=0,linear=0,concat=0,concat_width =1):
@@ -333,8 +333,8 @@ class InitManager:
         l6 = self.get_layer_config(self.model.rx_node_update,in_messages_address = in_messages_address,idx=6,edge=0,linear=1,concat=1,concat_width=2)
         self.layer_config['layers'].append(l6)
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.trained_graph.feature_count) * (len(self.trained_graph.nx_graph.nodes)))
-        memory_ptr = self.memory_mapper.out_messages_ptr
-        return memory_ptr,out_messages_addr
+        self.memory_ptr = self.memory_mapper.out_messages_ptr
+        return out_messages_addr
         # self.memory_mapper.out_messages_ptr = out_message_end  #TODO check
 
 
@@ -378,25 +378,25 @@ class InitManager:
         elif (isinstance(self.model, Edge_Embedding_Model)):
             self.set_layer_config_edge_embedder()
         elif (isinstance(self.model, Interaction_Net_Model)):
-            memory_ptr,out_messages_addr = self.set_layer_config_interaction_net()
+            out_messages_address = self.set_layer_config_interaction_net()
 
         else :
            
             for idx,layer in enumerate(self.model.layers):
-                layer_config_i,memory_ptr,out_messages_addr = self.get_default_layer_config(layer,idx)
+                layer_config_i,out_messages_address = self.get_default_layer_config(layer,idx)
                 self.layer_config['layers'].append(layer_config_i)
 
-        return memory_ptr,out_messages_addr
+        return out_messages_address
 
     def dump_layer_config (self,append_mode=False):
         mode = 'a' if append_mode else 'w'
 
         self.layer_config = {'global_config': {}, 'layers': []}
-        memory_ptr,out_messages_addr = self.set_layer_config()
+        out_messages_address = self.set_layer_config()
         
         with open(self.layer_config_file, mode) as file:
             json.dump(self.layer_config, file, indent=4)
-        return memory_ptr,out_messages_addr
+        return self.memory_ptr,out_messages_address
 
     def get_default_nodeslot(self, node_id):
         return {
@@ -674,5 +674,5 @@ class InitManager:
     def reduce_graph(self):
         self.trained_graph.reduce()
     
-    def map_memory(self,memory_ptr=0,in_messages_addr = None):
-        self.memory_mapper.map_memory(memory_ptr,in_messages_addr)
+    def map_memory(self,in_messages_addr = None):
+        self.memory_mapper.map_memory(self.memory_ptr,in_messages_addr)

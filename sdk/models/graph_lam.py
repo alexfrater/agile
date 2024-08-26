@@ -6,7 +6,7 @@ from torch import nn
 
 from neural_lam.interaction_net import InteractionNet
 
-
+# from sdk.models import Interaction_Net_Model
 from neural_lam import constants
 class GraphLAM_DataProcessor():
     def __init__(self,dataset,graph,device="cpu"):
@@ -68,7 +68,7 @@ class GraphLAM_DataProcessor():
         )
         #Not using batch sizes greater than 1 for ample
         grid_features = grid_features.squeeze(0)
-
+        print('gridfeautes shape',grid_features.shape)
 
         m2m_features = self.graph_ldict["m2m_features"]
         mesh_static_features = self.graph_ldict["mesh_static_features"]
@@ -79,9 +79,10 @@ class GraphLAM_DataProcessor():
         m2m_edge_index = self.graph_ldict["m2m_edge_index"]
         m2g_edge_index = self.graph_ldict["m2g_edge_index"]
         g2m_edge_index = self.graph_ldict["g2m_edge_index"]
+        # print("m2g_edge_index",m2g_edge_index)
 
 
-        if n_nodes != 0:
+        if n_nodes != None:
             return {
                 'features': {
                     'm2m_features': m2m_features[:n_nodes, :],
@@ -91,9 +92,9 @@ class GraphLAM_DataProcessor():
                     'grid_features': grid_features[:n_nodes, :]
                 },
                 'edges': {
-                    'm2m_edge_index': self.remap_and_filter_edges(g2m_edge_index, n_nodes),
-                    'm2g_edge_index': self.remap_and_filter_edges(m2m_edge_index, n_nodes),
-                    'g2m_edge_index': self.remap_and_filter_edges(m2g_edge_index, n_nodes)
+                    'm2m_edge_index': self.remap_and_filter_edges(m2m_edge_index, n_nodes),
+                    'm2g_edge_index': self.remap_and_filter_edges(m2g_edge_index, n_nodes),
+                    'g2m_edge_index': self.remap_and_filter_edges(g2m_edge_index, n_nodes)
                 },
                 'shapes': {
                     'm2m_features_shape': m2m_features[:n_nodes, :].shape,
@@ -113,8 +114,8 @@ class GraphLAM_DataProcessor():
                     'grid_features': grid_features
                 },
                 'edges': {
-                    'm2m_edge_index': m2g_edge_index,
-                    'm2g_edge_index': m2m_edge_index,
+                    'm2m_edge_index': m2m_edge_index,
+                    'm2g_edge_index': m2g_edge_index,
                     'g2m_edge_index': g2m_edge_index,
                 },
                 'shapes': {
@@ -380,7 +381,7 @@ class BufferList(nn.Module):
 
 
 #TODO change edge indices to be runtime variable
-class GraphLam_model(nn.Module):
+class GraphLam_Model(nn.Module):
     def __init__(self,feature_shape_dict,edge_index_dict,hidden_dim=32,hidden_layers=1,mesh_aggr ='sum'):
         super().__init__()
         mesh_static_features_shape = feature_shape_dict["mesh_static_features_shape"]
@@ -392,6 +393,10 @@ class GraphLam_model(nn.Module):
         m2m_edge_index = edge_index_dict["m2m_edge_index"]
         g2m_edge_index = edge_index_dict["g2m_edge_index"]
         m2g_edge_index = edge_index_dict["m2g_edge_index"]
+
+        print("m2m_edge_index",m2m_edge_index)
+        print("g2m_edge_index",g2m_edge_index)
+        print("m2g_edge_index",m2g_edge_index)
 
         grid_output_dim = (
                 constants.GRID_STATE_DIM
@@ -435,8 +440,11 @@ class GraphLam_model(nn.Module):
             [(processor_net, "mesh_rep, mesh_rep, edge_rep -> mesh_rep, edge_rep")]
         )
 
+
+        # self.processor = Interaction_Net_Model(,hidden_dim,hidden_layers=hidden_layers,aggr=mesh_aggr)
+
          # Specify dimensions of data
-        num_mesh_nodes, _ = self.get_num_mesh()
+        num_mesh_nodes = mesh_static_features_shape[0]
         print(
             f"Loaded graph with {num_grid_nodes + num_mesh_nodes} "
             f"nodes ({num_grid_nodes} grid, {num_mesh_nodes} mesh)"
@@ -446,6 +454,13 @@ class GraphLam_model(nn.Module):
         self.g2m_edges, g2m_dim = g2m_features_shape
         self.m2g_edges, m2g_dim = m2g_features_shape
 
+        grid_dim = (
+                    2 * constants.GRID_STATE_DIM
+                    + grid_static_dim
+                    + constants.GRID_FORCING_DIM
+                    + constants.BATCH_STATIC_FEATURE_DIM
+                )
+        grid_dim = grid_features_shape[1]
         # Define sub-models
         # Feature embedders for grid
         mlp_blueprint_end = [hidden_dim] * (hidden_layers + 1)
@@ -453,7 +468,8 @@ class GraphLam_model(nn.Module):
             [grid_dim] + mlp_blueprint_end
         )
 
-
+        # self.embed_mesh_nodes = make_mlp([mesh_dim] + mlp_blueprint_end)    
+        self.mesh_embedder = make_mlp([mesh_dim] + mlp_blueprint_end)
 
         # self.g2m_expander = utils.ExpandToBatch()
         # self.m2g_expander = utils.ExpandToBatch()
@@ -474,7 +490,7 @@ class GraphLam_model(nn.Module):
             update_edges=False,
         )
         self.encoding_grid_mlp = make_mlp(
-            [64] + mlp_blueprint_end
+            [hidden_dim] + mlp_blueprint_end
         )
 
         # decoder
@@ -487,7 +503,7 @@ class GraphLam_model(nn.Module):
 
         # Output mapping (hidden_dim -> output_dim)
         self.output_map = make_mlp(
-            [64] * (hidden_layers + 1)
+            [hidden_dim] * (hidden_layers + 1)
             + [grid_output_dim],
             layer_norm=False,
         )  # No layer norm on 
@@ -515,13 +531,13 @@ class GraphLam_model(nn.Module):
         )  # (B, N_mesh, d_h)
         return mesh_rep
 
-    def forward(self,grid_features,g2m_features,m2g_features):
+    def forward(self,grid_features,mesh_static_features,g2m_features,m2m_features,m2g_features):
         # Embed all features
         grid_emb = self.grid_embedder(grid_features)  # (B, num_grid_nodes, d_h)
 
         g2m_emb = self.g2m_embedder(g2m_features)  # (M_g2m, d_h)
         m2g_emb = self.m2g_embedder(m2g_features)  # (M_m2g, d_h)
-        mesh_emb = self.embedd_mesh_nodes(mesh_static_features)
+        mesh_emb = self.mesh_embedder(mesh_static_features)
 
         # print("grid_emb",grid_emb.shape)
         # print("g2m_emb",g2m_emb.shape)
