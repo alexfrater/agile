@@ -1,12 +1,15 @@
 import os
+import sys
 import numpy as np
 import torch
 import torch_geometric as pyg
 from torch import nn
+import torch_scatter
+
 
 from neural_lam.interaction_net import InteractionNet
+sys.path.insert(0,'/home/aw1223/ip/agile')
 
-# from sdk.models import Interaction_Net_Model
 from neural_lam import constants
 class GraphLAM_DataProcessor():
     def __init__(self,dataset,graph,device="cpu"):
@@ -429,16 +432,15 @@ class GraphLam_Model(nn.Module):
         # processor
 
         # Create a single instance of InteractionNet
-        processor_net = InteractionNet(
-            m2m_edge_index,
+        self.processor = InteractionNet(
             hidden_dim,
             hidden_layers=hidden_layers,
             aggr=mesh_aggr,
         )
-        self.processor = pyg.nn.Sequential(
-            "mesh_rep, edge_rep",
-            [(processor_net, "mesh_rep, mesh_rep, edge_rep -> mesh_rep, edge_rep")]
-        )
+        # self.processor = pyg.nn.Sequential(
+        #     "mesh_rep, edge_rep",
+        #     [(processor_net, "mesh_rep, mesh_rep, edge_rep -> mesh_rep, edge_rep")]
+        # )
 
 
         # self.processor = Interaction_Net_Model(,hidden_dim,hidden_layers=hidden_layers,aggr=mesh_aggr)
@@ -484,7 +486,6 @@ class GraphLam_Model(nn.Module):
         # GNNs
         # encoder
         self.g2m_gnn = InteractionNet(
-            g2m_edge_index,
             hidden_dim,
             hidden_layers=hidden_layers,
             update_edges=False,
@@ -495,7 +496,6 @@ class GraphLam_Model(nn.Module):
 
         # decoder
         self.m2g_gnn = InteractionNet(
-            m2g_edge_index,
             hidden_dim,
             hidden_layers=hidden_layers,
             update_edges=False,
@@ -509,7 +509,7 @@ class GraphLam_Model(nn.Module):
         )  # No layer norm on 
 
     
-    def process_step(self, mesh_rep,m2m_features):
+    def process_step(self, mesh_rep,m2m_edge_index,m2m_features):
         """
         Process step of embedd-process-decode framework
         Processes the representation on the mesh, possible in multiple steps
@@ -526,12 +526,15 @@ class GraphLam_Model(nn.Module):
    
         # mesh_rep= mesh_rep.squeeze(0)
 
-        mesh_rep, _ = self.processor(
-            mesh_rep, m2m_emb
+        mesh_rep = self.processor(
+            mesh_rep,mesh_rep,m2m_edge_index, m2m_emb
         )  # (B, N_mesh, d_h)
+
+
         return mesh_rep
 
-    def forward(self,grid_features,mesh_static_features,g2m_features,m2m_features,m2g_features):
+    # def forward(self,grid_features,mesh_static_features,g2m_features,m2m_features,m2g_features,g2m_edge_index,m2m_edge_index,m2g_edge_index):
+    def forward(self,g2m_features,g2m_edge_index,grid_features,m2g_features,m2g_edge_index,m2m_features,mesh_static_features,m2m_edge_index):
         # Embed all features
         grid_emb = self.grid_embedder(grid_features)  # (B, num_grid_nodes, d_h)
 
@@ -549,21 +552,48 @@ class GraphLam_Model(nn.Module):
         # g2m_emb_expanded = self.g2m_expander(g2m_emb, batch_size)
 
         # This also splits representation into grid and mesh
+        #Temp TODO
+        print('forward g2m_gnn')
+        print('grid_emb',grid_emb.shape)
+        print('mesh_emb',mesh_emb.shape)
+        print('g2m_emb',g2m_emb.shape)
+
+        # g2m_gnn_feature = torch.cat((grid_emb, mesh_emb), dim=0)
+
+        # mesh_rep = self.g2m_gnn(
+        #     g2m_gnn_feature, g2m_edge_index,g2m_emb
+        # )  
+        
         mesh_rep = self.g2m_gnn(
-            grid_emb, mesh_emb, g2m_emb
-        )  # (B, num_mesh_nodes, d_h)
+            grid_emb, mesh_emb, g2m_edge_index,g2m_emb
+        )  
+        
+        
+        # (B, num_mesh_nodes, d_h)
         # Also MLP with residual for grid representation
         grid_rep =  self.encoding_grid_mlp( #grid_emb + //TODO add identiy connection
             grid_emb
         )  # (B, num_grid_nodes, d_h)
 
         # Run processor step
-        mesh_rep = self.process_step(mesh_rep,m2m_features)
+        print('forward m2m_gnn')
+
+        mesh_rep,_ = self.process_step(mesh_rep,m2m_edge_index,m2m_features)
 
         # Map back from mesh to grid
         # m2g_emb = self.m2g_expander(m2g_emb, batch_size)
+
+        print('forward m2g_gnn')
+        # m2g_gnn_input_feature = torch.cat((mesh_rep,grid_rep),dim=0)
+        # grid_rep = self.m2g_gnn(
+        #     m2g_gnn_input_feature,m2g_edge_index, m2g_emb
+        # ) 
+
+
+        print('mesh_rep',mesh_rep)
+        print('grid_rep',grid_rep)
         grid_rep = self.m2g_gnn(
-            mesh_rep, grid_rep, m2g_emb
+            mesh_rep, grid_rep, m2g_edge_index, m2g_emb
         )  # (B, num_grid_nodes, d_h)
 
         # Map to output dimension, only for grid
@@ -607,3 +637,446 @@ def make_mlp(blueprint, layer_norm=True):
         layers.append(nn.LayerNorm(blueprint[-1]))
 
     return nn.Sequential(*layers)
+
+
+
+
+#TEMP whilst cant improt from models
+
+class EdgeGCNLayer(nn.Module):
+    def __init__(self, in_channels=32, out_channels=32):
+        super().__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.update_mlp = nn.Linear(in_channels, out_channels)
+
+    def forward(self, src_embed, rx_embed, edge_embed):
+        # Aggregating the embeddings with learnable weights
+        combined = src_embed + rx_embed + edge_embed
+
+        # Update with a non-linearity and another MLP layer
+        updated_edge_embed = self.update_mlp(combined)
+        
+        return updated_edge_embed
+
+
+torch.fx.wrap('agg_mlp')
+
+def agg_mlp(x1, x2, x3):
+    model = nn.Sequential(
+    nn.Linear(32, 32), 
+    )
+    output = model(x1 + x2 + x3)
+
+    return output
+
+# class Edge_Embedding_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
+#     def __init__(self):
+#         super().__init__()
+
+
+class AGG_MLP_Model(nn.Module):
+    def __init__(self, in_features=32, out_features=32):
+        super().__init__()
+        # self.add = add_tensors()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.lin = nn.Linear(in_features, out_features,bias = False)
+
+    def forward(self, edge_embed, src_embed, rx_embed):
+        # agg = torch.add(edge_embed, src_embed, rx_embed)
+        print('agg_mlp')
+        print('edge_embed',edge_embed.shape)
+        print('src_embed',src_embed.shape)
+        print('rx_embed',rx_embed.shape)
+
+        agg = edge_embed + src_embed + rx_embed
+        out = self.lin(agg)
+        return out
+
+class Edge_Embedding_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
+        super().__init__()
+        self.precision = precision
+        self.layers = nn.ModuleList()
+
+        #########Source Node Edge Embed MLP#########
+        self.src_embedder = nn.Linear(in_channels, out_channels, bias=False) 
+        self.src_embedder.name  = 'linear_src_embedder'
+        self.layers.append(self.src_embedder) #Used to map weights in SDK
+
+
+        #########Edge Node MLP#########
+        #Change to GCN to aggregate itself and last layer edge if not first model
+        self.edge_embedder = nn.Linear(in_channels, hidden_dimension, bias=False)
+        self.edge_embedder.name = 'linear_edge_embedder'
+        self.layers.append(self.edge_embedder)
+
+
+        #########Receive Node Edge Embed MLP#########
+        self.rx_embedder = nn.Linear(in_channels, out_channels, bias=False)
+        self.rx_embedder.name = 'linear_rx_embedder'
+        self.layers.append(self.rx_embedder)
+
+
+        #########Edge Node Update#########
+        self.edge_update = AGG_MLP_Model(in_channels, hidden_dimension)
+        self.edge_update.name = 'gcn_edge_update'
+        self.layers.append(self.edge_update)
+
+
+        for layer in self.layers:
+            layer.to(self.precision)
+
+    def forward(self, x, edge_index,edge_attr):
+        x = x.to(self.precision)  
+        outputs = []
+
+        #TODO change to U and V to match with SDK
+        u = edge_index[0]
+        v = edge_index[1]
+        # print('edege_index')
+        # print(u)
+        # print(v)
+        src_embed = self.src_embedder(x)
+        outputs.append(src_embed)
+
+        #Check edge attributes are mapped correctly
+
+        edge_embed = self.edge_embedder(edge_attr)
+        outputs.append(edge_embed)
+        # print('edge_embed')
+        # print(edge_embed)
+
+        rx_embed = self.rx_embedder(x)
+        outputs.append(rx_embed)
+
+        src_embed = src_embed[u]
+        rx_embed = rx_embed[v]
+        
+        updated_edge = self.edge_update(src_embed,edge_embed,rx_embed)
+
+        outputs.append(updated_edge)
+
+        return outputs
+
+
+
+class AggregateEdges(torch.nn.Module):
+    def __init__(self,in_channels=32,out_channels=32):
+        super().__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.lin = torch.nn.Linear(in_channels, out_channels,bias=False)
+
+    def forward(self, edge_index, edge_attr):
+        # x: Node feature matrix with shape [num_nodes, num_node_features]
+        # edge_index: Graph connectivity (edge indices) with shape [2, num_edges]
+        # edge_attr: Edge feature matrix with shape [num_edges, num_edge_features]
+        # print('edge_index')
+        # print(edge_index)
+        # print('rx')
+        rx  = edge_index[1]
+        # print(rx)
+        output = torch_scatter.scatter_add(edge_attr, rx.unsqueeze(1).expand(-1, edge_attr.size(1)), dim=0)
+        # x = torch_scatter.scatter_add(edge_attr, rx)
+        output = self.lin(output)
+        return output
+        # return self.propagate(edge_index, x=x, edge_attr=edge_attr)
+
+
+# class AggregateEdges(MessagePassing):
+#     def __init__(self,in_channels=32,out_channels=32):
+#         super().__init__()
+
+#         self.in_channels = in_channels
+#         self.out_channels = out_channels
+#         self.lin = torch.nn.Linear(in_channels, out_channels,bias=False)
+
+#     def forward(self, x, edge_index, edge_attr):
+#         # Add self loops to the adjacency matrix if needed
+#         # edge_index, _ = add_self_loops(edge_index, num_nodes=x.size(0))
+
+#         # Start propagating messages
+#         return self.propagate(edge_index, x=x, edge_attr=edge_attr)
+
+#     def message(self, edge_attr):
+#         # Return edge attributes as the message to be passed
+#         return edge_attr
+
+#     def aggregate(self, inputs, index):
+#     #     # Summing up all incoming edge attributes for each node
+#         return torch_scatter.scatter(inputs, index, dim=0, reduce='sum')
+
+#     def update(self, aggr_out):
+#         # Return the aggregated result as the updated node features
+#         transformed = self.lin(aggr_out)
+#         return transformed
+
+
+class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
+        super().__init__()
+        self.precision = precision
+        self.layers = nn.ModuleList()
+
+        #########Source Node Edge Embed MLP#########
+        self.src_embedder = nn.Linear(in_channels, out_channels, bias=False)
+        self.src_embedder.name  = 'linear_src_embedder'
+        self.layers.append(self.src_embedder) #Used to map weights in SDK
+
+
+        #########Edge Node MLP#########
+        #Change to GCN to aggregate itself and last layer edge if not first model
+        self.edge_embedder = nn.Linear(in_channels, hidden_dimension, bias=False)
+        self.edge_embedder.name = 'linear_edge_embedder'
+        self.layers.append(self.edge_embedder)
+
+
+        #########Receive Node Edge Embed MLP#########
+        self.rx_embedder = nn.Linear(in_channels, out_channels, bias=False)
+        self.rx_embedder.name = 'linear_rx_embedder'
+        self.layers.append(self.rx_embedder)
+
+
+        #########Edge Node GCN#########
+        self.edge_update = AGG_MLP_Model(in_channels, hidden_dimension)
+        self.edge_update.name = 'gcn_edge_update'
+        self.layers.append(self.edge_update)
+
+
+        #---------- Node Update --------------
+
+        #########Receive Node Embed #########
+        self.rx_node_embedder = nn.Linear(in_channels, out_channels, bias=False)
+        self.rx_node_embedder.name = 'linear_rx_node_embedder'
+        self.layers.append(self.rx_node_embedder)
+
+        #########Receive Node Aggregate Edges #########
+        self.rx_edge_aggr = AggregateEdges(in_channels, out_channels)
+        self.rx_edge_aggr.name = 'gcn_rx_edge_aggr'
+        self.layers.append(self.rx_edge_aggr)
+
+
+        #########Receive Node Update #########
+        self.rx_node_update = AGG_MLP_Model(in_channels, hidden_dimension)
+        self.rx_node_update.name = 'rx_node_update'
+        self.layers.append(self.rx_node_update)
+
+        for layer in self.layers:
+            layer.to(self.precision)
+
+    def forward(self, x, edge_index,edge_attr):
+        x = x.to(self.precision)  
+        outputs = []
+
+        #TODO change to U and V to match with SDK
+        u = edge_index[0] #Source nodes
+        v = edge_index[1] #Receive nodes
+    
+        src_embed = self.src_embedder(x)
+        outputs.append(src_embed)
+
+
+        edge_embed = self.edge_embedder(edge_attr)
+        outputs.append(edge_embed)
+  
+        rx_embed = self.rx_embedder(x)
+        outputs.append(rx_embed)
+
+
+        src_embed = src_embed[u]
+        rx_embed = rx_embed[v]
+        print('src_embed',src_embed.shape)
+        print('rx_embed',rx_embed.shape)
+
+
+        updated_edge = self.edge_update(src_embed,edge_embed,rx_embed)
+        outputs.append(updated_edge)
+
+        rx_node_embed = self.rx_node_embedder(x[v]) #TODO change to x[v] - more efficient
+        outputs.append(rx_node_embed)
+
+        rx_aggregated_edges = self.rx_edge_aggr(edge_index,updated_edge) #TODO change to x[v] - more efficient
+        outputs.append(rx_aggregated_edges)
+
+        print('rx_aggregated_edges',rx_aggregated_edges.shape)
+        print('rx_node_embed',rx_node_embed.shape)
+
+        updated_node = self.rx_node_update(rx_node_embed,rx_aggregated_edges,0)
+
+        outputs.append(updated_node)
+
+        return outputs
+
+
+# Third-party
+import torch
+import torch_geometric as pyg
+from torch import nn
+
+# First-party
+from neural_lam import utils
+
+
+class InteractionNet(pyg.nn.MessagePassing):
+    """
+    Implementation of a generic Interaction Network,
+    from Battaglia et al. (2016)
+    """
+
+    # pylint: disable=arguments-differ
+    # Disable to override args/kwargs from superclass
+
+    def __init__(
+        self,
+        input_dim,
+        update_edges=True,
+        hidden_layers=1,
+        hidden_dim=None,
+        edge_chunk_sizes=None,
+        aggr_chunk_sizes=None,
+        aggr="sum",
+    ):
+        """
+        Create a new InteractionNet
+
+        edge_index: (2,M), Edges in pyg format
+        input_dim: Dimensionality of input representations,
+            for both nodes and edges
+        update_edges: If new edge representations should be computed
+            and returned
+        hidden_layers: Number of hidden layers in MLPs
+        hidden_dim: Dimensionality of hidden layers, if None then same
+            as input_dim
+        edge_chunk_sizes: List of chunks sizes to split edge representation
+            into and use separate MLPs for (None = no chunking, same MLP)
+        aggr_chunk_sizes: List of chunks sizes to split aggregated node
+            representation into and use separate MLPs for
+            (None = no chunking, same MLP)
+        aggr: Message aggregation method (sum/mean)
+        """
+        assert aggr in ("sum", "mean"), f"Unknown aggregation method: {aggr}"
+        super().__init__(aggr=aggr)
+
+        if hidden_dim is None:
+            # Default to input dim if not explicitly given
+            hidden_dim = input_dim
+
+       
+
+        # Create MLPs
+        edge_mlp_recipe = [3 * input_dim] + [hidden_dim] * (hidden_layers + 1)
+        aggr_mlp_recipe = [2 * input_dim] + [hidden_dim] * (hidden_layers + 1)
+
+        if edge_chunk_sizes is None:
+            self.edge_mlp = utils.make_mlp(edge_mlp_recipe)
+        else:
+            self.edge_mlp = SplitMLPs(
+                [utils.make_mlp(edge_mlp_recipe) for _ in edge_chunk_sizes],
+                edge_chunk_sizes,
+            )
+
+        if aggr_chunk_sizes is None:
+            self.aggr_mlp = utils.make_mlp(aggr_mlp_recipe)
+        else:
+            self.aggr_mlp = SplitMLPs(
+                [utils.make_mlp(aggr_mlp_recipe) for _ in aggr_chunk_sizes],
+                aggr_chunk_sizes,
+            )
+
+        self.update_edges = update_edges
+
+    def forward(self, send_rep, rec_rep, edge_index, edge_rep):
+        """
+        Apply interaction network to update the representations of receiver
+        nodes, and optionally the edge representations.
+
+        send_rep: (N_send, d_h), vector representations of sender nodes
+        rec_rep: (N_rec, d_h), vector representations of receiver nodes
+        edge_rep: (M, d_h), vector representations of edges used
+
+        Returns:
+        rec_rep: (N_rec, d_h), updated vector representations of receiver nodes
+        (optionally) edge_rep: (M, d_h), updated vector representations
+            of edges
+        """
+        # send_rep = send_rep.unsqueeze(0)
+        # rec_rep = rec_rep.unsqueeze(0)
+        # edge_rep = edge_rep.unsqueeze(0)
+        # print("send_rep", send_rep.shape)
+        # print("rec_rep", rec_rep.shape)
+        # print("edge_rep", edge_rep.shape)
+        
+        # Always concatenate to [rec_nodes, send_nodes] for propagation,
+        # but only aggregate to rec_nodes
+         # Make both sender and receiver indices of edge_index start at 0
+        edge_index = edge_index - edge_index.min(dim=1, keepdim=True)[0]
+        # Store number of receiver nodes according to edge_index
+        self.num_rec = edge_index[1].max() + 1
+        edge_index[0] = (
+            edge_index[0] + self.num_rec
+        )  # Make sender indices after rec
+
+        node_reps = torch.cat((rec_rep, send_rep), dim=-2)
+        edge_rep_aggr, edge_diff = self.propagate(
+            edge_index, x=node_reps, edge_attr=edge_rep
+        )
+        rec_diff = self.aggr_mlp(torch.cat((rec_rep, edge_rep_aggr), dim=-1))
+
+        # Residual connections
+        rec_rep = rec_rep + rec_diff
+
+        if self.update_edges:
+            edge_rep = edge_rep + edge_diff
+            return rec_rep, edge_rep
+
+        return rec_rep.squeeze(0)
+
+    def message(self, x_j, x_i, edge_attr):
+        """
+        Compute messages from node j to node i.
+        """
+        return self.edge_mlp(torch.cat((edge_attr, x_j, x_i), dim=-1))
+
+    # pylint: disable-next=signature-differs
+    def aggregate(self, inputs, index, ptr, dim_size):
+        """
+        Overridden aggregation function to:
+        * return both aggregated and original messages,
+        * only aggregate to number of receiver nodes.
+        """
+        aggr = super().aggregate(inputs, index, ptr, self.num_rec)
+        return aggr, inputs
+
+
+class SplitMLPs(nn.Module):
+    """
+    Module that feeds chunks of input through different MLPs.
+    Split up input along dim -2 using given chunk sizes and feeds
+    each chunk through separate MLPs.
+    """
+
+    def __init__(self, mlps, chunk_sizes):
+        super().__init__()
+        assert len(mlps) == len(
+            chunk_sizes
+        ), "Number of MLPs must match the number of chunks"
+
+        self.mlps = nn.ModuleList(mlps)
+        self.chunk_sizes = chunk_sizes
+
+    def forward(self, x):
+        """
+        Chunk up input and feed through MLPs
+
+        x: (..., N, d), where N = sum(chunk_sizes)
+
+        Returns:
+        joined_output: (..., N, d), concatenated results from the MLPs
+        """
+        chunks = torch.split(x, self.chunk_sizes, dim=-2)
+        chunk_outputs = [
+            mlp(chunk_input) for mlp, chunk_input in zip(self.mlps, chunks)
+        ]
+        return torch.cat(chunk_outputs, dim=-2)

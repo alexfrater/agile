@@ -124,16 +124,21 @@ class Ample():
         trace_mode = 'hooks'
     ):
 
+        print('compile data',data)
         self.model = model
         self.model_name = self.model.__class__.__name__
         self.mem_append= False
         # model_inputs = model.preprocess_inputs(data)
+        # features = data[0]
+        # edges = data[1]
+        # model_inputs = features + edges
 
         print('model name',self.model_name)
         if trace_mode == 'fx':
             self.trace_model_fx(self.model, graph_data)
         else:
-            data,input_to_layer_map = self.trace_model_hooks_dataloader_inputs(self.model, model_inputs)
+            #TODO get rid of data name
+            _,input_to_layer_map = self.trace_model_hooks_dataloader_inputs(self.model, data)
             print('input_to_layer_map',input_to_layer_map)
         if plot:
             self.plot_model()
@@ -155,6 +160,9 @@ class Ample():
                 if input_name not in all_outputs:
                     external_inputs.add(input_name)
 
+
+
+
         ############################
         #TODO Temporary - Need to find a way to map input files/edges/nodes to model - may require new programming model
         # for input_data in inputs[0]:
@@ -169,10 +177,58 @@ class Ample():
         # inputs_dict['edge_index1'] = data.edge_index
         # edge_index = edge_index - edge_index.min(dim=1, keepdim=True)[0]
 
+        # inputs = data
         self.memory_ptr = 0 #keep track of memory address
-        # print(self.model_trace)
-        # print('External inputs')
-        assert len(external_inputs) == len(inputs[0]) #Change name to features
+        print('External inputs',external_inputs)
+        print(len(data))
+
+        external_inputs_dict = {element: None for element in external_inputs}
+        print('External inputs',external_inputs_dict)
+        external_inputs_dict = dict(sorted(external_inputs_dict.items()))
+        print('External inputs',external_inputs_dict)
+
+        assert len(external_inputs_dict) == len(data) #Change name to features
+        for key, value in zip(external_inputs_dict.keys(), data):
+            external_inputs_dict[key] = value
+        # external_inputs = {key: value for key, value in zip(external_inputs, data)}
+
+
+        # edge_index_inputs = {}
+
+
+        for key, value in external_inputs_dict.items():
+            print('key',key)
+            print('value',value)
+
+            # model_trace[input_name]['num_nodes'] = dataset.num_nodes
+                            # if tensor.shape[0] == num_nodes:
+                            #     return 'node feature'
+                            # elif tensor.shape[0] == num_edges:
+                            #     return 'edge attribute'
+        #TODO accept external edge attr
+        # edge_attr_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] == num_edges}
+        edge_index_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] == 2}
+        node_feature_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] != 2}  #num_nodes #dont know num of nodes yet
+        for key, value in edge_index_external_inputs_dict.items():
+            print('key',key)
+            print('value',value)
+        for key, value in node_feature_external_inputs_dict.items():
+            print('key',key)
+            print('value',value)
+        # print('edge_index_inputs',edge_index_inputs)
+        # print('node_feature_inputs',node_feature_inputs)
+        # print('external_inputs',external_inputs)
+        # for key,val in external_inputs: 
+        #     print('val',external_input)
+        #     print('type',type(val))
+        #     if len(val.shape) == 2:
+        #     # Check if it's an edge index (typically shape (2, num_edges))
+        #         if val.shape[0] == 2:
+        #             print('edge index')
+        #             edge_index_inputs =  
+        #         else:
+        #             print('node features')
+
 
         for sub_module_name,sub_module_dict in self.model_trace.items():
             input_names = sub_module_dict['input_names']
@@ -181,69 +237,88 @@ class Ample():
             if module_type == 'Sequential':
                 module_type  = 'MLP_Model'
             if module_type in self.model_map:
-                # print(self.model_map[sub_module_dict['module_type']]())
                 print('name', sub_module_name)
-                # print(input_names)
-                # print(output_names)
-                # print(order)
-   
+       
                 ###DATA###
-                if any(name in external_inputs for name in input_names):
+                #Type 0 - External input - may have external edge input
+                if any(name in node_feature_external_inputs_dict for name in input_names):
+                    #external input module
+                    print('sub_module_name',sub_module_name)
+                    # print('external_inputs',external_inputs)
+                    print('input_names',input_names)
                     dataset = Data()
-                    name, x = list(inputs[0].pop().items())[0]
-                    # print('Features',name, 'mapped to',sub_module_name)
+                    # dataset.edge_attr = None
+                    for name in input_names:
+                        if name in node_feature_external_inputs_dict:
+                            # if val.shape[0] == 2:
+                            #     print('edge index')
+                            #     dataset.edge_index = edge_index
+                            #     #Edge attr needs to come from previous layer
+                            #     # dataset.edge_attr = True
+                            # #Check for edge attr
+                            # else:
+                            print('node features')
+                            x = list(node_feature_external_inputs_dict[name])
+                            #Change to acccept to X inputs
+                            dataset.x = x
+                            dataset.num_nodes = len(dataset.x)
+                            in_message_addr = None
+                            sub_module_dict['num_nodes'] = dataset.num_nodes
+                        elif name in edge_index_external_inputs_dict:
+                            dataset.edge_index = edge_index_external_inputs_dict[name]
+                        # elif name in edge_attr:
+                           
+                        #     for item_name, item_data in self.model_trace.items():
+                        #         if (name in item_data['output_names']):
+                        #             input_node = item_name
+                        #             if 'edge_attr' in input_node:
+                        #                 in_edge_index_addr = self.model_trace[input_node]['out_addr']
+                        #             else:
+                        #                 in_message_addr = self.model_trace[input_node
+                #Type 0 - Interal input - may have external edge index
 
-                    dataset.x = x
-                    dataset.num_nodes = len(dataset.x)
-
-                     ######Fake Data#####
-                    # #TODO replace with out_ptr
-                    # dataset = FakeDataset(num_graphs=1, 
-                    #     avg_num_nodes = 20,
-                    #     avg_degree=1,
-                    #     num_channels=32,
-                    #     edge_dim=32
-                    # )[0]
-                    in_message_addr = None
-                    # if dataset.num_nodes != None:
-                    sub_module_dict['num_nodes'] = dataset.num_nodes
-                    # else:
-
-                ######Fake Data#####
                 else:
-                    # if any(name in external_inputs for name in input_names):
-                    # print('input_names')
-                    # dataset = FakeDataset(num_graphs=1, 
-                    #     avg_num_nodes = 20,
-                    #     avg_degree=1,
-                    #     num_channels=32,
-                    #     edge_dim=32
-                    # )[0]
-                    # dataset.x= None
                     dataset = Data()
                     dataset.x = None
-                    if module_type == 'InteractionNet': #TODO change to be in class GNNs /not linear
-            
-                        #TODO only do if using edge index
-                        # The popped item is a dictionary, get the key (name) and value
-                        name, edge_index = list(inputs[1].pop().items())[0]
-                        dataset.edge_index = edge_index #Edges set
-                        #TODO add edge attributes
-
-                        dataset.edge_attr = True #TODO change to be in class GNNs /not linear
-                    else:
-                        dataset.edge_attr = None
-                    #TODO Find input node
+                    #Edge index assingment - Always external
+                    for name in input_names:
+                        if name in edge_index_external_inputs_dict:
+                            dataset.edge_index = edge_index_external_inputs_dict[name]
+                            #Find out number of edges to ddetemrine if subqeeunt tensors are edge or node attributes
+                            #May break if have same number of edges and nodes
+        
+                    #Edge and Node Features assignment
                     input_nodes = []
-    
+                    
                     for item_name, item_data in self.model_trace.items():
+                        print('item_name',item_name)
+                        print('item_data',item_data)
                         if any(input_id in item_data['output_names'] for input_id in input_names):
                             input_nodes.append(item_name)
+                            #TEMP TODO fix
+                            if 'm2g_embedder' in item_name or 'g2m_embedder' in item_name or 'm2m_embedder' in item_name:
+                                print('Edge attribute')
+                                
+                            else:
+                                print('Node attribute')
+                                dataset.num_nodes = self.model_trace[item_name]['num_nodes']
+                                sub_module_dict['num_nodes'] = dataset.num_nodes
+                                in_message_addr = self.model_trace[item_name]['out_addr']
+
+                            #if edge attr
+                            #if node attr
+
+                            # model_trace[input_name]['num_nodes'] = dataset.num_nodes
+                            # if tensor.shape[0] == num_nodes:
+                            #     return 'node feature'
+                            # elif tensor.shape[0] == num_edges:
+                            #     return 'edge attribute'
+                    
                     #TODO pass in edge index
                     #TODO only picking first input, change to both  
-                    dataset.num_nodes = self.model_trace[input_nodes[0]]['num_nodes'] 
-                    sub_module_dict['num_nodes'] = dataset.num_nodes #Pass down num nodes to next layer
-                    in_message_addr = self.model_trace[input_nodes[0]]['out_addr']
+                    # dataset.num_nodes = self.model_trace[input_nodes[0]]['num_nodes'] 
+                    # sub_module_dict['num_nodes'] = dataset.num_nodes #Pass down num nodes to next layer
+                    # in_message_addr = self.model_trace[input_nodes[0]]['out_addr']
                     print('input_nodes',input_nodes)
                     print(self.model_trace[input_nodes[0]])
                     print('dataset.num_nodes',dataset.num_nodes)
@@ -346,7 +421,7 @@ class Ample():
         # Perform a forward pass using the dataloader to trigger the hooks
         model.eval()        
         with torch.no_grad():
-            model.forward(data)  # Trigger forward pass
+            model.forward(*data)  # Trigger forward pass
         
         # Additional step to map input tensors to the corresponding model layers
         input_to_layer_map = {}
