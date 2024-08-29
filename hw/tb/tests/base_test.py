@@ -36,7 +36,7 @@ from tb.monitors.axi_write_master_monitor import AXIWriteMasterMonitor
 from tb.monitors.bm_monitor import BM_Monitor
 
 
-
+#TODO split into test and interface, so that the interface can be used in AMPLE
 
 class BaseTest:
     def __init__(self, dut, nodeslot_count,model_name = None,tolerance = 0.1, log_level= 'INFO', base_path=None):#TODO change to inherint log level from logger not args

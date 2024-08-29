@@ -65,8 +65,9 @@ class TrainedGraph:
     def init_nx_graph(self, self_connection=False):
         rx_node_edge_neighbours  = [[] for _ in range(len(self.nx_graph.nodes()))]
 
+        print('attr check',self.dataset.edge_attr)
         if self.dataset.edge_attr is not None:
-            # print('EDGE ATTR')
+            print('EDGE ATTR')
             # print(self.dataset.edge_attr)
             for index, (src, rx) in enumerate(self.nx_graph.edges()):
                 edge_id = index + len(self.nx_graph.nodes)
@@ -86,6 +87,7 @@ class TrainedGraph:
                         #Temp TODO complete
                         self.calc_axi_addr(self.feature_count) * (src),  #SRC
                         self.calc_axi_addr(self.feature_count) * (edge_id), #Change to self feature count
+                        #Change to location of edge embeddings
                         self.calc_axi_addr(self.feature_count) * (rx + len(self.nx_graph.nodes) + len(self.nx_graph.edges)), #RX (edge_id), #
                     ]
                 }
@@ -244,8 +246,7 @@ class TrainedGraph:
         # Initialize edge attributes if they are not None
 
 
-        ('hhhhh')
-        # priprintnt(self.dataset.edge_attr)
+
         if hasattr(self.dataset, 'edge_attr') and self.dataset.edge_attr is not None:
             self.dataset.edge_attr = torch.zeros((self.dataset.edge_attr.shape[0], self.feature_count))
             # Generate edge attributes

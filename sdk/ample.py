@@ -1,5 +1,8 @@
 import os
 import pandas as pd
+import json
+import numpy as np
+from tqdm import tqdm
 
 import torch
 import torch.nn as nn
@@ -15,10 +18,13 @@ from sdk.models.models import GCN_Model, GAT_Model, GraphSAGE_Model, GIN_Model, 
 # from neural_lam.interaction_net import InteractionNet
 from torch_geometric.datasets import FakeDataset #TODO remove
 from sdk.trained_graph import TrainedGraph
-
+from sdk.pcie_manager import PCIe_Manager
+from sdk.ample_driver import Ample_Driver
 #TODO remove
 from sdk.graphs.random_graph import RandomGraph
 from tb.variant import Variant
+from .utilities import dump_byte_list, binary_to_hex
+import argparse
 
 from functools import wraps
 # import pyg 
@@ -35,18 +41,7 @@ from collections import defaultdict, deque
 # from torch_geometric.nn import Sequential
 # from torch_geometric.nn import Sequential as PyGSequential
 import torch_geometric as pyg
-class CustomTracer(fx.Tracer):
-    def __init__(self, model_map):
-        super().__init__()
-        self.model_map = model_map
-
-
-    def is_leaf_module(self, m, module_qualified_name):
-            # Check if the module is an instance of a class in self.model_map
-        if isinstance(m, tuple(self.model_map.values())):
-            return True
-        return super().is_leaf_module(m, module_qualified_name)
-#Class to configure and communicate with Ample - pass configured model and target graph 
+ 
 
 class Ample():
     def __init__(self, name="ample",
@@ -59,6 +54,7 @@ class Ample():
         self.name = name
         self.model_trace = None
         self.model = None
+        self.variant = Variant()
         self.model_map = {
             'GCN_Model': GCN_Model, #TODO
             'GAT_Model': GAT_Model,
@@ -67,14 +63,20 @@ class Ample():
             'GCN_MLP_Model': GCN_MLP_Model,
             'MLP_Model': MLP_Model,
             'Edge_Embedding_Model': Edge_Embedding_Model,
-            'InteractionNet': Interaction_Net_Model
+            'InteractionNet': Interaction_Net_Model,
+            'Interaction_Net_Model': Interaction_Net_Model
         }
-        self.ample = self.connect_to_device()
-        self.variant = Variant(message_channel_count, precision_count, aggregation_buffer_slots)
+        # self.ample = self.connect_to_device()
         self.add_to_device_method()
         self.mem_append= False
+        self.driver = Ample_Driver(self.variant)
 
+        self.layer_config_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/layer_config.json"
+        self.nodeslot_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/nodeslot_programming.txt"
 
+        self.nodeslot_programming_group_start_address = []
+        self.nodeslot_mem_dump_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/nodeslots.mem"
+        self.sim = False
 
     def add_to_device_method(self):
         ample_instance = self  # Capture the current Ample instance
@@ -84,31 +86,24 @@ class Ample():
         nn.Module.to_device = extended_to_device
 
 
-    def connect_to_device(self):
-        devices  = pypci.lspci()
-        for device in devices:
-            if device.vendor_id ==  0x10EE:
-                print('Xilinx device found:')
-                print(device)
-                #if x :
-                    
-                #    return ample_pcie name  
-        return None
+    
 
     def to_device(self, model, device,data=None):
+        self.model = model
+        self.inputs = data
         if device == 'ample':
             print('Moving model to Ample')
             print('Compiling model')
-            # self.compile(model,data_loader=data_loader,trace_mode='hooks')
             self.compile(model,data=data,trace_mode='hooks')
+            print('Overloading')
+            self.overload_forward()
+            # self.load_nodeslot_file()
+            # self.load_memory_file()
 
-            # self.copy_data_to_device(data)
-            # self.model = model
         else:
             print(f'Moving model to {device}')
             model.to(device) 
 
-    
 
 
     def compile(
@@ -120,24 +115,23 @@ class Ample():
         reduce =False,
         random = True,
         trained = False,
-        plot = True,
+        plot = False,
         trace_mode = 'hooks'
     ):
 
-        print('compile data',data)
         self.model = model
         self.model_name = self.model.__class__.__name__
         self.mem_append= False
-        # model_inputs = model.preprocess_inputs(data)
-        # features = data[0]
-        # edges = data[1]
-        # model_inputs = features + edges
-
+        self.nodeslot_programming = []
         print('model name',self.model_name)
         if trace_mode == 'fx':
             self.trace_model_fx(self.model, graph_data)
         else:
             #TODO get rid of data name
+            if self.sim:
+                self.save_model(self.model,data)
+                self.save_graph(data)
+                print('Model and graph saved')
             _,input_to_layer_map = self.trace_model_hooks_dataloader_inputs(self.model, data)
             print('input_to_layer_map',input_to_layer_map)
         if plot:
@@ -161,36 +155,16 @@ class Ample():
                     external_inputs.add(input_name)
 
 
-
-
-        ############################
-        #TODO Temporary - Need to find a way to map input files/edges/nodes to model - may require new programming model
-        # for input_data in inputs[0]:
-        #     print('-' * 40)
-        #     data =Data()
-        #     data.x = input_data
-        #     data.num_nodes = len(data.x)
-
-        #     print('data',data)
-
-        ############################
-        # inputs_dict['edge_index1'] = data.edge_index
-        # edge_index = edge_index - edge_index.min(dim=1, keepdim=True)[0]
-
-        # inputs = data
         self.memory_ptr = 0 #keep track of memory address
-        print('External inputs',external_inputs)
-        print(len(data))
+      
 
         external_inputs_dict = {element: None for element in external_inputs}
-        print('External inputs',external_inputs_dict)
         external_inputs_dict = dict(sorted(external_inputs_dict.items()))
-        print('External inputs',external_inputs_dict)
+        
 
-        assert len(external_inputs_dict) == len(data) #Change name to features
         for key, value in zip(external_inputs_dict.keys(), data):
             external_inputs_dict[key] = value
-        # external_inputs = {key: value for key, value in zip(external_inputs, data)}
+        print('External inputs',external_inputs_dict)
 
 
         # edge_index_inputs = {}
@@ -198,7 +172,6 @@ class Ample():
 
         for key, value in external_inputs_dict.items():
             print('key',key)
-            print('value',value)
 
             # model_trace[input_name]['num_nodes'] = dataset.num_nodes
                             # if tensor.shape[0] == num_nodes:
@@ -206,15 +179,36 @@ class Ample():
                             # elif tensor.shape[0] == num_edges:
                             #     return 'edge attribute'
         #TODO accept external edge attr
-        # edge_attr_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] == num_edges}
         edge_index_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] == 2}
-        node_feature_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] != 2}  #num_nodes #dont know num of nodes yet
+
+        edge_num_list = []
+        for key, value in edge_index_external_inputs_dict.items():
+            print('edge_num',value.shape[1])
+            edge_num_list.append(value.shape[1])
+
+        edge_attr_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] in edge_num_list}
+        #
+        # node_feature_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] != 2 & not(value.shape[0]in edge_num_list) }  #change to num_nopdes
+        for key, value in external_inputs_dict.items():
+            print('key',key)
+            print('value',value)
+            if isinstance(value, torch.Tensor):
+                print('Tensor')
+            if value.shape[0] != 2:
+                print('not edge index') 
+
+            if key not in edge_attr_external_inputs_dict:
+                print('not in edge attr')
+
+
+        node_feature_external_inputs_dict = {key: value for key, value in external_inputs_dict.items()
+                                             if isinstance(value, torch.Tensor) and value.shape[0] != 2 and key not in edge_attr_external_inputs_dict
+                                             }
+
         for key, value in edge_index_external_inputs_dict.items():
             print('key',key)
-            print('value',value)
         for key, value in node_feature_external_inputs_dict.items():
             print('key',key)
-            print('value',value)
         # print('edge_index_inputs',edge_index_inputs)
         # print('node_feature_inputs',node_feature_inputs)
         # print('external_inputs',external_inputs)
@@ -233,6 +227,7 @@ class Ample():
         for sub_module_name,sub_module_dict in self.model_trace.items():
             input_names = sub_module_dict['input_names']
             module_type = sub_module_dict['module_type']
+            print(module_type)
             # assert module_type in self.model_map, f"Module type {module_type} not supported."
             if module_type == 'Sequential':
                 module_type  = 'MLP_Model'
@@ -241,15 +236,25 @@ class Ample():
        
                 ###DATA###
                 #Type 0 - External input - may have external edge input
-                if any(name in node_feature_external_inputs_dict for name in input_names):
+                print('check --------')
+                print('external_inputs_dict',external_inputs_dict)
+                print('input_names',input_names)
+                if any(name in external_inputs_dict for name in input_names):
+                    print('sub module name external',sub_module_name)
+
                     #external input module
                     print('sub_module_name',sub_module_name)
                     # print('external_inputs',external_inputs)
                     print('input_names',input_names)
                     dataset = Data()
+                    print('edge_attr_external_inputs_dict',edge_attr_external_inputs_dict)
+                    print('edge_index_external_inputs_dict',edge_index_external_inputs_dict)
+                    print('node_feature_external_inputs_dict',node_feature_external_inputs_dict)
                     # dataset.edge_attr = None
                     for name in input_names:
+                        print('name',name)
                         if name in node_feature_external_inputs_dict:
+                            print('node features')
                             # if val.shape[0] == 2:
                             #     print('edge index')
                             #     dataset.edge_index = edge_index
@@ -260,12 +265,22 @@ class Ample():
                             print('node features')
                             x = list(node_feature_external_inputs_dict[name])
                             #Change to acccept to X inputs
-                            dataset.x = x
-                            dataset.num_nodes = len(dataset.x)
+                            if dataset.x is None:
+                                dataset.x = x
+                                dataset.num_nodes = len(dataset.x)
+                            else:
+                                print('dataset.x shape',dataset.x.shape)
+                                dataset.x = [torch.cat((dataset.x, x), dim=1)]
+                                dataset.num_nodes = dataset.num_nodes + len(x)
                             in_message_addr = None
                             sub_module_dict['num_nodes'] = dataset.num_nodes
                         elif name in edge_index_external_inputs_dict:
+                            print('edge index added')
                             dataset.edge_index = edge_index_external_inputs_dict[name]
+
+                        elif name in edge_attr_external_inputs_dict:
+                            print('edge attr added')
+                            dataset.edge_attr = edge_attr_external_inputs_dict[name]
                         # elif name in edge_attr:
                            
                         #     for item_name, item_data in self.model_trace.items():
@@ -280,20 +295,24 @@ class Ample():
                 else:
                     dataset = Data()
                     dataset.x = None
+                    print('sub module name internal',sub_module_name)
+
                     #Edge index assingment - Always external
                     for name in input_names:
                         if name in edge_index_external_inputs_dict:
+                            dataset.edge_attr = True #TODO check if edge attr is present - use model name
                             dataset.edge_index = edge_index_external_inputs_dict[name]
                             #Find out number of edges to ddetemrine if subqeeunt tensors are edge or node attributes
                             #May break if have same number of edges and nodes
         
                     #Edge and Node Features assignment
                     input_nodes = []
-                    
                     for item_name, item_data in self.model_trace.items():
                         print('item_name',item_name)
                         print('item_data',item_data)
                         if any(input_id in item_data['output_names'] for input_id in input_names):
+                            print('#############found')
+
                             input_nodes.append(item_name)
                             #TEMP TODO fix
                             if 'm2g_embedder' in item_name or 'g2m_embedder' in item_name or 'm2m_embedder' in item_name:
@@ -304,7 +323,8 @@ class Ample():
                                 dataset.num_nodes = self.model_trace[item_name]['num_nodes']
                                 sub_module_dict['num_nodes'] = dataset.num_nodes
                                 in_message_addr = self.model_trace[item_name]['out_addr']
-
+                                #
+                                print('#############in message loaded')
                             #if edge attr
                             #if node attr
 
@@ -319,9 +339,9 @@ class Ample():
                     # dataset.num_nodes = self.model_trace[input_nodes[0]]['num_nodes'] 
                     # sub_module_dict['num_nodes'] = dataset.num_nodes #Pass down num nodes to next layer
                     # in_message_addr = self.model_trace[input_nodes[0]]['out_addr']
-                    print('input_nodes',input_nodes)
-                    print(self.model_trace[input_nodes[0]])
-                    print('dataset.num_nodes',dataset.num_nodes)
+                    # print('input_nodes',input_nodes)
+                    # print(self.model_trace[input_nodes[0]])
+                    # print('dataset.num_nodes',dataset.num_nodes)
 
                 base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" #+'/'  + self.model_name +'/' + sub_module_name
                 if dataset.x is not None:
@@ -335,7 +355,7 @@ class Ample():
                 self.model_trace[sub_module_name]['out_addr'] = self.initialize_node_memory(sub_model,
                                                                                             dataset,
                                                                                             feature_count=32,
-                                                                                            in_messages_addr=in_message_addr,
+                                                                                            in_message_addr=in_message_addr,
                                                                                             base_path=base_path
                                                                                             )
                 # print(self.model_trace[sub_module_name])
@@ -345,7 +365,9 @@ class Ample():
                 #TODO change neural lam to remove unspoorted modules which are not relevant to prevent this message from showing incorrectly
                 print('Module type not supported')
                 print(sub_module_name)
-
+        self.dump_nodeslot_programming_mem()
+        self.add_nodeslot_addresses()
+        
 
     def trace_model_hooks_dataloader_inputs(self, model, data):
         self.model_trace = {}
@@ -441,7 +463,7 @@ class Ample():
         model,
         dataset = None,
         feature_count=32,
-        in_messages_addr = None,
+        in_message_addr = None,
         # model_name = None,
         base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/",
         precision = 'FLOAT_32',
@@ -464,9 +486,9 @@ class Ample():
         #init_manager.trained_graph.train_embeddings()
 
         #TODO Change to save to intermeiate file
-        self.init_manager.map_memory(in_messages_addr) 
+        self.init_manager.map_memory(in_message_addr) 
         self.init_manager.dump_memory(self.mem_append)
-        self.init_manager.dump_nodeslot_programming(self.mem_append)
+        self.nodeslot_programming.append(self.init_manager.return_nodeslot_programming())
         self.memory_ptr,out_messages_addr = self.init_manager.dump_layer_config(self.mem_append)
 
         if self.mem_append == False: #TODO 
@@ -475,16 +497,31 @@ class Ample():
         return out_messages_addr
 
 
-    def sim(self,cpu = True, gpu = False):
-        self.init_manager.save_model()
-        self.init_manager.save_graph()
-        bman = BenchmarkingManager(graph=self.graph, model=self.model)
-        if cpu:
-            metrics = bman.benchmark_cpu()
-        if gpu:
-            metrics = bman.benchmark_gpu()
+    def simulate(self,cpu = False, gpu = False):
+        # self.init_manager.save_model()
+        # self.init_manager.save_graph()
 
-        metrics = bman.benchmark_fpga()
+        args = argparse.Namespace(
+            cpu=cpu,
+            gpu=gpu,
+            sim = True,
+            fpga_clk_freq = 250e6,
+            device = 'ample',
+            preload = False,
+            tb_tolerance = 0.01,
+            tb_log_level = 'INFO',
+            build = False,
+            gui = False,
+            metrics = False,
+        )
+
+        bman = BenchmarkingManager(inputs=self.inputs, model=self.model, args=args)
+        # if cpu:
+        #     metrics = bman.benchmark_cpu()
+        # if gpu:
+        #     metrics = bman.benchmark_gpu()
+
+        metrics = bman.benchmark()
         #TODO use bman results table
         rows = []
         for component, values in metrics.items():
@@ -799,45 +836,26 @@ class Ample():
             for batch in dataloader:
                 model.common_step(batch)  # Trigger forward pass
                 break  # Only need one batch to trace
-    # def to_device(self):
-    #     print('Programming Ample device')
-    #     #Need su access
-    #     self.overload_forward()
 
- 
-        # mm = mmap.mmap(f, 0x100, flags=mmap.MAP_SHARED, prot = mmap.PROT_READ,offset=0x0) 
-        # m.seek(0x0)#Set offset to feature programming
-        #m.write(b'0x0')...
-        # m.seek(0x0)#Set offset to nodeslot programming
-        #m.write(b'0x0')...
 
     def overload_forward(self):
         original_forward = self.model.forward
 
         def ample_forward(*args, **kwargs):
-            print("Executing on Ample (sim)")
-            print('Writing config over AXI-L')
-            if True:
-                self.sim() 
+            print("Executing on AMPLE")
+
+            if self.sim:
+                self.simulate() 
             else:
-                print('Executing on Ample')   
-                # await self.start_clocks()
-                # await self.driver.axil_driver.reset_axi_interface()
-                # await self.drive_reset()
+                self.driver.load_layer_config()
+                self.driver.load_regbanks()
+                self.driver.execute()
+
 
             return original_forward(*args, **kwargs)
 
         self.model.forward = ample_forward
-
-
-    def copy_data_to_device(self, data):
-        print("Copying data to Ample")
-        # Logic to copy data to FPGA.
-
-    def execute(self, data):
-        print("Executing on Ample")
-
-
+    
 
     def build_dependency_graph(self,data):
         graph = defaultdict(list)
@@ -873,5 +891,128 @@ class Ample():
         sorted_modules = self.topological_sort(graph, in_degree)
         return {module_name: data[module_name] for module_name in sorted_modules}
 
+    
+    def dump_nodeslot_programming_mem(self,append_mode=False):
+        mode = 'a' if append_mode else 'w'
+
+        # self.nodeslot_programming = {'nodeslots':[]}
+        # self.program_nodeslots()
+        # if append_mode:
+
+        with open(self.nodeslot_file,'w') as file:
+            json.dump(self.nodeslot_programming, file, indent=4)
+
+        nodeslot_memory_pointer = 0
+        nodeslot_byte_list = []
+        for group,nodeslot_group in enumerate(self.nodeslot_programming):
+
+            # print('node group',group)
+            # print(nodeslot_group)
+            self.nodeslot_programming_group_start_address.append(nodeslot_memory_pointer)
+            # Dump nodeslots.mem file
+            group_byte_list,nmh_length = self.generate_nodeslots_mem(nodeslot_group)
+            # print('nhm',nmh_length)
+            nodeslot_byte_list +=group_byte_list
+            nodeslot_memory_pointer += nmh_length
 
 
+        dump_byte_list(nodeslot_byte_list, self.nodeslot_mem_dump_file, append_mode)
+
+
+
+    def generate_nodeslots_mem(self,nodeslot_group):
+        # print('nodeslot_group',nodeslot_group)
+        node_groups = np.array(nodeslot_group)
+        
+        node_groups = np.pad(
+                                node_groups, 
+                                (0, 8 - node_groups.shape[0] % 8), 
+                                "constant", 
+                                constant_values=None
+                            ).reshape(-1, 8)
+        
+        nodeslot_mem_hex = []
+
+        for group_idx,group in tqdm(enumerate(node_groups)):
+            # logging.info(f"Generating nodeslot group {group_idx} memory.")
+
+            assert(len(group) == 8)
+            str_lst = []
+            for nodeslot in group:
+                if (nodeslot is None) or (nodeslot['neighbour_count'] == 0):
+                    str_lst.append("0"*64)
+                    continue
+                str = ""
+                str = f"{nodeslot['neighbour_count']:20b}{nodeslot['node_id']:20b}" + str
+                str = "00" + str
+                str = "1" + "0"*21 + str
+                str = str.replace(" ", "0")
+                str_lst.append(str)
+            
+            str = "".join(str_lst[::-1])
+            hex = binary_to_hex(str).zfill(128)
+            nodeslot_mem_hex += "".join(hex)
+        
+        assert (len(nodeslot_mem_hex) % 2 == 0)
+        nmh = [nodeslot_mem_hex[i] + nodeslot_mem_hex[i+1] for i in range(0, len(nodeslot_mem_hex), 2)]
+
+        nodeslot_mem_len = len(nodeslot_mem_hex)//2 #byte indexed
+        return nmh,nodeslot_mem_len
+
+    def add_nodeslot_addresses(self):
+        with open(self.layer_config_file, 'r') as file:
+            data = json.load(file)
+
+        for i, layer in enumerate(data['layers']):
+            if i < len(self.nodeslot_programming_group_start_address): 
+                if 'nodeslot_start_address' in layer:
+                    layer['nodeslot_start_address'] += self.nodeslot_programming_group_start_address[i]
+                else:
+                    layer['nodeslot_start_address'] = self.nodeslot_programming_group_start_address[i]
+    
+
+
+        with open(self.layer_config_file, 'w') as file:
+            json.dump(data, file, indent=4)
+
+        print("Updated configuration successfully written back to file.")
+
+
+
+
+      #Save JIT model for testbench
+    def save_model(self,model,inputs):
+        model.eval()
+        jit_model = torch.jit.trace(self.model, *inputs)
+
+        torch.jit.save(jit_model, 'model.pt')
+
+        return jit_model
+
+    
+    #Save graph for testbench
+    def save_graph(self,inputs):
+        input_data =inputs
+        # input_data = {
+        #     'x': self.trained_graph.dataset.x,  
+        #     'edge_index': self.trained_graph.dataset.edge_index,
+        #     'edge_attr': self.trained_graph.dataset.edge_attr
+        # }
+
+        torch.save({
+            'input_data': input_data
+        }, 'graph.pth')
+
+class CustomTracer(fx.Tracer):
+    def __init__(self, model_map):
+        super().__init__()
+        self.model_map = model_map
+
+
+    def is_leaf_module(self, m, module_qualified_name):
+            # Check if the module is an instance of a class in self.model_map
+        if isinstance(m, tuple(self.model_map.values())):
+            return True
+        return super().is_leaf_module(m, module_qualified_name)
+    
+#Class to configure and communicate with Ample - pass configured model and target graph

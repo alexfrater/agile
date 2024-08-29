@@ -259,6 +259,8 @@ class InitManager:
 
     def set_layer_config_interaction_net(self):
         self.layer_config["global_config"]["layer_count"] =  2
+        self.layer_config["global_config"]["nodeslot_group_idx"] =  2
+        #Change so in message address is subratced by number of edges*num features as it will be indexed by edge index
         
         #0                1           2               3                 4                       5          6
         #|IIIIIEEEEEEEEEE |SSSSS      | EEEEEEEEEEE(1)| RRRRR(1)        | XXXXXXXEEEEEEEEEE(2)  | RRRR (2) | RRRR (3)
@@ -388,7 +390,7 @@ class InitManager:
 
         return out_messages_address
 
-    def dump_layer_config (self,append_mode=False):
+    def dump_layer_config_old (self,append_mode=False):
         mode = 'a' if append_mode else 'w'
 
         self.layer_config = {'global_config': {}, 'layers': []}
@@ -397,6 +399,42 @@ class InitManager:
         with open(self.layer_config_file, mode) as file:
             json.dump(self.layer_config, file, indent=4)
         return self.memory_ptr,out_messages_address
+
+    def dump_layer_config(self, append_mode=False):
+        # Read the existing content if the file exists and append_mode is True
+        if append_mode and os.path.exists(self.layer_config_file):
+            with open(self.layer_config_file, 'r') as file:
+                try:
+                    existing_data = json.load(file)
+                except json.JSONDecodeError:
+                    existing_data = {}
+        else:
+            existing_data = {}
+
+        # Initialize new data structure
+        new_layer_config = {'global_config': {}, 'layers': []}
+        out_messages_address = self.set_layer_config()
+
+        # Assume self.layer_config is populated with new data here
+        new_layer_config['global_config'] = self.layer_config['global_config']
+        new_layer_config['layers'] = self.layer_config['layers']
+
+        # Merge existing data with the new data
+        if 'global_config' in existing_data:
+            existing_data['global_config'] = new_layer_config['global_config']
+        else:
+            existing_data['global_config'] = new_layer_config['global_config']
+        
+        if 'layers' in existing_data:
+            existing_data['layers'].extend(new_layer_config['layers'])
+        else:
+            existing_data['layers'] = new_layer_config['layers']
+
+        # Write the updated content back to the file
+        with open(self.layer_config_file, 'w') as file:
+            json.dump(existing_data, file, indent=4)
+
+        return self.memory_ptr, out_messages_address
 
     def get_default_nodeslot(self, node_id):
         return {
@@ -543,6 +581,69 @@ class InitManager:
         nodeslot_mem_len = len(nodeslot_mem_hex)//2 #byte indexed
         return nmh,nodeslot_mem_len
 
+    def dump_nodeslot_programming_json_old(self, append_mode=False):
+        # Determine the file mode
+        mode = 'a' if append_mode else 'w'
+
+        # Run the method to populate nodeslot programming
+        self.program_nodeslots()
+
+        # Load existing data if append_mode is True and the file exists
+        if append_mode and os.path.exists(self.nodeslot_json_dump_file):
+            with open(self.nodeslot_json_dump_file, 'r') as file:
+                try:
+                    existing_data = json.load(file)
+                    if not isinstance(existing_data, list):
+                        existing_data = [existing_data]  # Make sure it's a list
+                except json.JSONDecodeError:
+                    existing_data = []
+        else:
+            existing_data = []
+
+        # Append the new nodeslot programming data
+        existing_data.append(self.nodeslot_programming)
+
+        # Write the updated data back to the file
+        with open(self.nodeslot_json_dump_file, 'w') as file:
+            json.dump(existing_data, file, indent=4)
+
+
+    def dump_nodeslot_programming_json(self, append_mode=False):
+        # Determine the file mode
+        mode = 'a' if append_mode else 'w'
+
+        # Run the method to populate nodeslot programming
+        self.program_nodeslots()
+
+        # Load existing data if append_mode is True and the file exists
+        if append_mode and os.path.exists(self.nodeslot_json_dump_file):
+            with open(self.nodeslot_json_dump_file, 'r') as file:
+                try:
+                    existing_data = json.load(file)
+                    if not isinstance(existing_data, list):
+                        existing_data = [existing_data]  # Make sure it's a list
+                except json.JSONDecodeError:
+                    existing_data = []
+        else:
+            existing_data = []
+
+        # Make sure to append the nodeslot programming correctly
+        if isinstance(self.nodeslot_programming, list):
+            existing_data.extend(self.nodeslot_programming)
+        else:
+            existing_data.append(self.nodeslot_programming)
+
+        # Write the updated data back to the file
+        with open(self.nodeslot_json_dump_file, 'w') as file:
+            json.dump(existing_data, file, indent=4)
+
+
+    def return_nodeslot_programming(self):
+        self.program_nodeslots()
+        return self.nodeslot_programming
+
+
+    
 
     def dump_nodeslot_programming(self,append_mode=False):
         mode = 'a' if append_mode else 'w'
@@ -550,20 +651,8 @@ class InitManager:
         # self.nodeslot_programming = {'nodeslots':[]}
         self.program_nodeslots()
         # if append_mode:
-        with open(self.nodeslot_json_dump_file, 'w') as file:
+        with open(self.nodeslot_json_dump_file,'w') as file:
             json.dump(self.nodeslot_programming, file, indent=4)
-        # else:
-        #     with open(self.nodeslot_json_dump_file, 'r+') as file:
-        #             # Load existing data if present
-        #             existing_data = json.load(file)
-        #             # Combine existing data with new data
-        #             if isinstance(existing_data, list) and isinstance(self.nodeslot_programming, list):
-        #                 existing_data.extend(self.nodeslot_programming)
-        #             else:
-        #                 existing_data = existing_data + self.nodeslot_programming
-        #             # Move pointer to the start and write updated data
-        #             file.seek(0)
-        #             json.dump(existing_data, file, indent=4)
 
         nodeslot_memory_pointer = 0
         nodeslot_byte_list = []

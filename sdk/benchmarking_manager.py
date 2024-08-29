@@ -88,18 +88,22 @@ class CPUBenchmarkWrapper():
 
 
 class BenchmarkingManager:
-    def __init__(self, model, graph, args):
+    def __init__(self, model, args = None, inputs= None, graph = None):
         if (torch.cuda.is_available()):
             self.bman = BenchmarkWrapper(model)
         else:
             self.bman = CPUBenchmarkWrapper(model) #Temp
-        self.graph = graph
-        self.cpu = args.cpu
-        self.gpu = args.gpu
-        self.sim = args.sim
-        self.fpga_clk_freq = args.fpga_clk_freq
         self.args = args
-        self.device = args.device
+        self.graph = graph
+        #TODO just use args
+        self.cpu = False if args.cpu is None else args.cpu
+        self.gpu = False if args.gpu is None else args.gpu
+        self.sim = False if args.sim is None else args.sim
+        self.fpga_clk_freq = 200e6 if args.fpga_clk_freq is None else args.fpga_clk_freq
+        self.args = None if args is None else args
+        self.device = None if args.device is None else args
+        self.preload = False if args.preload is None else args.preload
+        # self.metrics = False if args.metrics is None else args.metrics
         self.model = model
 
 
@@ -234,19 +238,23 @@ class BenchmarkingManager:
         with open(f"{path}/sim_time.txt", "r") as f:
             stime = float(f.readline())
 
+        if self.args.metrics:
+            cycles_dict = self.read_cycles_file(f"{path}/sim_cycles.txt")
+            sim_cycle_time = sum(cycles_dict.values()) * (1/self.fpga_clk_freq)
+            throughput = self.graph.dataset.y.shape[0] / float(sim_cycle_time)
+            mean_power = 30.0
 
-        cycles_dict = self.read_cycles_file(f"{path}/sim_cycles.txt")
-        sim_cycle_time = sum(cycles_dict.values()) * (1/self.fpga_clk_freq)
-        throughput = self.graph.dataset.y.shape[0] / float(sim_cycle_time)
-        mean_power = 30.0
-
-        metrics  = {
-            "fpga_latency": stime,
-            "fpga_sim_cycle_time": sim_cycle_time,
-            "fpga_mean_power": mean_power,
-            "fpga_nodes_per_ms": throughput,
-            "fpga_throughput_per_watt": throughput/mean_power
-        }
+            metrics  = {
+                "fpga_latency": stime,
+                "fpga_sim_cycle_time": sim_cycle_time,
+                "fpga_mean_power": mean_power,
+                "fpga_nodes_per_ms": throughput,
+                "fpga_throughput_per_watt": throughput/mean_power
+            }
+        else:
+            metrics = {
+                "fpga_latency": stime
+            }
 
 
 

@@ -21,7 +21,7 @@ class Memory_Mapper:
         out_messages_list = [0]*self.num_layers #Can remove - using ptr
         #Used to change adj list between layers
         adj_list = {'nbrs': 0, 'edge_nbrs': 0, 'self_ptr': 0 } # Change name perhaps to layer offset adj
-        self.offsets = {'adj_list': adj_list, 'scale_factors': 0, 'in_messages':0, 'weights':weights_list, 'out_messages': out_messages_list}
+        self.offsets = {'adj_list': adj_list, 'scale_factors': 0, 'in_messages':0, 'weights':weights_list, 'out_messages': out_messages_list, 'edge_attr_messages':0}
         self.out_messages_ptr = 0
         
         self.dump_file = os.path.join(base_path, dump_file)
@@ -31,13 +31,13 @@ class Memory_Mapper:
         else:
             self.edge_attr = 0
 
-    def map_memory(self,memory_ptr=0,in_messages_addr = None):
+    def map_memory(self,memory_ptr=0,in_messages_addr = None,edge_attr_messages_addr = None):
         self.memory_ptr = memory_ptr
         logging.debug(f"Mapping memory contents.")
         self.memory_hex = []
         self.map_adj_list()
         self.map_scale_factors()
-        self.map_in_messages(in_messages_addr)
+        self.map_in_messages(in_messages_addr,edge_attr_messages_addr)
         self.map_weights()
         self.map_out_messages() #TODO change to map the actual out messages - currently returns start of intermediate data
 
@@ -51,8 +51,10 @@ class Memory_Mapper:
         
 
         if self.edge_attr:
+            
             for (u,v) in self.graph.edges():
                 edge_metadata = self.graph[u][v]['meta']
+                print('edge_metadata',edge_metadata)
                 self.memory_hex += int_list_to_byte_list(edge_metadata['neighbour_message_ptrs'], align=True, alignment=64, pad_side="right")
 
 
@@ -111,7 +113,7 @@ class Memory_Mapper:
         # Set offset for next memory range
 
     #TODO Change to use messages from previous sub_models or do init manager using layer offset
-    def map_in_messages(self,in_messages_addr):
+    def map_in_messages(self,in_messages_addr,edge_attr_messages_addr):
         if in_messages_addr is not None:
             self.offsets['in_messages'] = in_messages_addr 
 
@@ -121,7 +123,11 @@ class Memory_Mapper:
             for node in self.graph.nodes:
                 self.memory_hex += float_list_to_byte_list(self.graph.nodes[node]["meta"]['embedding'], align=True, alignment=64)
 
-            #TODO:include edge attributes
+        #TODO:Change Location of edge attributes
+        if edge_attr_messages_addr is not None:
+            self.offsets['edge_attr_messages'] = edge_attr_messages 
+        else:
+            self.offsets['edge_attr_messages'] = len(self.memory_hex) + self.memory_ptr
 
             if self.edge_attr:
                 for edge in self.graph.edges:

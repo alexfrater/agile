@@ -213,14 +213,14 @@ class MLP_Model(torch.nn.Module):
         for layer in self.layers:
             layer.to(self.precision)
 
-    def forward(self, x, edge_index,):
+    def forward(self, x, edge_index=None):
         # x = x.to(self.precision)  
         outputs = []
         for layer in self.layers:
             x = layer(x)
             outputs.append(x)
 
-        return outputs
+        return outputs, x
 
 
 
@@ -288,6 +288,9 @@ class AGG_MLP_Model(nn.Module):
 
     def forward(self, edge_embed, src_embed, rx_embed):
         # agg = torch.add(edge_embed, src_embed, rx_embed)
+        print('edge_embed',edge_embed.shape)
+        print('src_embed',src_embed.shape)
+        print('rx_embed', rx_embed)
         agg = edge_embed + src_embed + rx_embed
         out = self.lin(agg)
         return out
@@ -464,6 +467,7 @@ class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
             layer.to(self.precision)
 
     def forward(self, x, edge_index,edge_attr):
+        print(x)
         x = x.to(self.precision)  
         outputs = []
 
@@ -474,10 +478,11 @@ class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
         src_embed = self.src_embedder(x)
         outputs.append(src_embed)
 
-
+        print('edge_attr',edge_attr.shape)
+        print(self.edge_embedder)
         edge_embed = self.edge_embedder(edge_attr)
         outputs.append(edge_embed)
-  
+        print('edge_embed',edge_embed.shape)
         rx_embed = self.rx_embedder(x)
         outputs.append(rx_embed)
 
@@ -489,7 +494,6 @@ class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
 
         rx_node_embed = self.rx_node_embedder(x) #TODO change to x[v] - more efficient
         outputs.append(rx_node_embed)
-
         rx_aggregated_edges = self.rx_edge_aggr(edge_index,updated_edge) #TODO change to x[v] - more efficient
         outputs.append(rx_aggregated_edges)
 
@@ -497,5 +501,7 @@ class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
 
         outputs.append(updated_node)
 
-        return outputs
+        return outputs, updated_node
+
+
 
