@@ -136,6 +136,7 @@ class BaseTest:
         #model_location = "/hw/sim/layer_config/" + model_name + '/'
         # # Paths
         self.base_path = base_path if base_path is not None else os.environ.get("WORKAREA")
+        self.config_path = self.base_path + "/hw/sim/layer_config/"
         self.regbank_path = self.base_path + "/hw/build/regbanks"
         self.nodeslot_programming_file = self.base_path + "/hw/sim/layer_config/nodeslot_programming.json"
         self.layer_config_file = self.base_path + "/hw/sim/layer_config/layer_config.json"
@@ -173,7 +174,7 @@ class BaseTest:
 
     def load_layer_test(self,layer_features,layer_idx):
         self.dut._log.debug("Loading expected nodes into monitor")
-        self.axi_monitor.load_layer_features(self.nodeslot_programming,layer_features,self.layers[layer_idx],self.global_config)
+        self.axi_monitor.load_layer_features(self.nodeslot_programming,layer_features,self.layers[layer_idx],self.global_config,layer_idx)
 
     async def start_monitors(self):
         self.axi_monitor.running = True
@@ -236,7 +237,7 @@ class BaseTest:
         self.prefetcher_regbank = {register["name"]: register for register in prefetcher_regmap["registers"]}
         self.age_regbank = {register["name"]: register for register in age_regmap["registers"]}
         self.fte_regbank = {register["name"]: register for register in fte_regmap["registers"]}
-
+        
         self.driver.nsb_regs = {register["name"]: nsb_regmap["baseAddress"] + register["addressOffset"] for register in self.nsb_regbank.values()}
         self.driver.prefetcher_regs = {register["name"]: prefetcher_regmap["baseAddress"] + register["addressOffset"] for register in self.prefetcher_regbank.values()}
         self.driver.age_regs = {register["name"]: age_regmap["baseAddress"] + register["addressOffset"] for register in self.age_regbank.values()}
@@ -358,56 +359,64 @@ class BaseTest:
             
             await delay(self.dut.regbank_clk, 10)
 
-    def load_jit_model(self,model_path = '/home/aw1223/ip/agile/model.pt'):
+    def load_jit_model(self):
+        model_path = self.config_path + 'model.pt'
+        print('loading model from',model_path)
+
         model = torch.jit.load(model_path)
         return model
 
 
-    def load_graph(self,graph_path = '/home/aw1223/ip/agile/graph.pth'):
+    def load_graph(self):
+
+        graph_path = self.config_path + 'graph.pth'
+        print('loading graph from',graph_path)
+
         graph = torch.load(graph_path)
         input_data = graph['input_data']
-        x_loaded = input_data['x']
-        edge_index_loaded = input_data['edge_index']
+        # x_loaded = input_data['x']
+        # edge_index_loaded = input_data['edge_index']
 
-        # Check if edge attributes are present and load them if they are
-        edge_attr_loaded = input_data.get('edge_attr', None)
+        # # Check if edge attributes are present and load them if they are
+        # edge_attr_loaded = input_data.get('edge_attr', None)
         
-        return (x_loaded, edge_index_loaded, edge_attr_loaded)
+        return input_data #(x_loaded, edge_index_loaded, edge_attr_loaded)
         
 
     def get_expected_outputs(self,model,data):
         ####Remove bias from the model, TODO Add biases####
         state_dict = model.state_dict()
         for name, param in state_dict.items():
-            # print(name,param,'name,param')
+            print('model')
+            print(name,param,'name,param')
             if 'bias' in name:
                 # Reset the bias tensor to all zeros
                 state_dict[name] = torch.zeros_like(param)
 
         model.load_state_dict(state_dict)
         
-        x, edge_index, edge_attr = data
+        # x, edge_index, edge_attr = data
         # print('data')
         # print(x, edge_index, edge_attr)
 
         # edge_attr = self.trained_graph.dataset.edge_attr  # Edge attributes tensor
         # data = (x,edge_index,edge_attr) 
 
-        model_input = (x, edge_index)
-        if edge_attr is not None:
-            model_input = model_input + (edge_attr,)  
+        model_input = data
+        # if edge_attr is not None:
+        #     model_input = model_input + (edge_attr,)  
 
         model.eval()
         with torch.no_grad():
             # if edge_attr is not None:
-            output = model(*model_input)
+            outputs,x = model(*model_input)
             # else:
             #     output = model(x, edge_index)
             # output = model(x, edge_index, edge_attr) if edge_attr is not None else model(x, edge_index)
             # a = b
         del model
 
-        return output
+        return outputs
     
     def log_info(self,dut, message, border_char='*', width=60):
         border = border_char * width
@@ -424,28 +433,28 @@ class BaseTest:
         # edge_attr = data.get('edge_attr', None)
         
         #Temp change for when there is no edge_attr
-        x, edge_index, edge_attr = data
+        # x, edge_index, edge_attr = data
 
         self.dut._log.debug("Input Tensors:")
+        # self.dut._log.debug("data",data)
+        # # Log node features (x)
+        # for idx, x_input in enumerate(x):
+        #     self.dut._log.debug(f"Node Feature {idx}:")
+        #     self.dut._log.debug(x_input)
+        #     self.dut._log.debug("\n")
 
-        # Log node features (x)
-        for idx, x_input in enumerate(x):
-            self.dut._log.debug(f"Node Feature {idx}:")
-            self.dut._log.debug(x_input)
-            self.dut._log.debug("\n")
+        # # Log edge index
+        # self.dut._log.debug("Edge Index:")
+        # self.dut._log.debug(edge_index)
+        # self.dut._log.debug("\n")
 
-        # Log edge index
-        self.dut._log.debug("Edge Index:")
-        self.dut._log.debug(edge_index)
-        self.dut._log.debug("\n")
-
-        # Log edge attributes if they are provided
-        if edge_attr is not None:
-            self.dut._log.debug("Edge Attributes:")
-            for idx, attr in enumerate(edge_attr):
-                self.dut._log.debug(f"Edge Attribute {idx}:")
-                self.dut._log.debug(attr)
-                self.dut._log.debug("\n")
+        # # Log edge attributes if they are provided
+        # if edge_attr is not None:
+        #     self.dut._log.debug("Edge Attributes:")
+        #     for idx, attr in enumerate(edge_attr):
+        #         self.dut._log.debug(f"Edge Attribute {idx}:")
+        #         self.dut._log.debug(attr)
+        #         self.dut._log.debug("\n")
 
 
     def get_cycle_count(self):

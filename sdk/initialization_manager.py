@@ -130,12 +130,13 @@ class InitManager:
         # if 'hidden' or 'input' in layer.name:
         #     out_messages_address = self.memory_mapper.out_messages_ptr#Can change this to have intermediate out messages (['out_messages'][idx-1])
         # else:
-        out_messages_address= self.memory_mapper.out_messages_ptr
-        self.memory_mapper.offsets['out_messages'][idx] = out_messages_address
+        out_messages_address= self.memory_mapper.out_messages_ptr #Where next sub module will read from
+
+        self.memory_mapper.offsets['out_messages'][idx] = out_messages_address #Save to layer config for tb
         #Will need to modify if writing back edge embeddings as there is likely to be more edges than nodes
         #New out messages pointer = [data_needed_to_store(number of features in [this layer])] * number of nodes in graph
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.get_feature_counts(self.model))[idx]) * len(self.trained_graph.nx_graph.nodes)
-        self.memory_ptr = self.memory_mapper.out_messages_ptr
+        self.memory_ptr = self.memory_mapper.out_messages_ptr #End of memory so next layer knows where to start writing
         return {
             'name' : layer.name,
             'nodeslot_count': len(self.trained_graph.nx_graph.nodes),
@@ -434,7 +435,12 @@ class InitManager:
         with open(self.layer_config_file, 'w') as file:
             json.dump(existing_data, file, indent=4)
 
+
+        self.pad_out_messages(out_messages_address)
         return self.memory_ptr, out_messages_address
+
+    def pad_out_messages(self,out_messages_address):
+        self.memory_mapper.pad_out_messages(self.memory_ptr,out_messages_address)
 
     def get_default_nodeslot(self, node_id):
         return {
@@ -764,4 +770,6 @@ class InitManager:
         self.trained_graph.reduce()
     
     def map_memory(self,in_messages_addr = None):
+        print('in_messages_addr',in_messages_addr)
+        print('memory_ptr',self.memory_ptr)
         self.memory_mapper.map_memory(self.memory_ptr,in_messages_addr)

@@ -117,7 +117,7 @@ class Ample():
         reduce =False,
         random = True,
         trained = False,
-        plot = False,
+        plot = True,
         trace_mode = 'hooks'
     ):
 
@@ -503,7 +503,7 @@ class Ample():
         #init_manager.trained_graph.train_embeddings()
 
         #TODO Change to save to intermeiate file
-        self.init_manager.map_memory(in_message_addr) 
+        self.init_manager.map_memory(in_messages_addr = in_message_addr) 
         self.init_manager.dump_memory(self.mem_append)
         self.nodeslot_programming.append(self.init_manager.return_nodeslot_programming())
         self.memory_ptr,out_messages_address = self.init_manager.dump_layer_config(self.mem_append)
