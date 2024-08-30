@@ -94,6 +94,7 @@ class BenchmarkingManager:
         else:
             self.bman = CPUBenchmarkWrapper(model) #Temp
         self.args = args
+        
         self.graph = graph
         #TODO just use args
         self.cpu = False if args.cpu is None else args.cpu
@@ -103,6 +104,7 @@ class BenchmarkingManager:
         self.args = None if args is None else args
         self.device = None if args.device is None else args
         self.preload = False if args.preload is None else args.preload
+        self.gui =True
         # self.metrics = False if args.metrics is None else args.metrics
         self.model = model
 

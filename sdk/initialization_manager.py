@@ -127,15 +127,15 @@ class InitManager:
             in_messages_address = self.memory_mapper.out_messages_ptr
 
 
-        if 'hidden' or 'input' in layer.name:
-            out_messages_address = self.memory_mapper.out_messages_ptr#Can change this to have intermediate out messages (['out_messages'][idx-1])
-        else:
-            out_messages_address= self.memory_mapper.out_messages_ptr
-            self.memory_mapper.offsets['out_messages'][idx] = out_messages_address
-            #Will need to modify if writing back edge embeddings as there is likely to be more edges than nodes
-            #New out messages pointer = [data_needed_to_store(number of features in [this layer])] * number of nodes in graph
-            self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.get_feature_counts(self.model))[idx]) * len(self.trained_graph.nx_graph.nodes[node_id])
-            self.memory_ptr = self.memory_mapper.out_messages_ptr
+        # if 'hidden' or 'input' in layer.name:
+        #     out_messages_address = self.memory_mapper.out_messages_ptr#Can change this to have intermediate out messages (['out_messages'][idx-1])
+        # else:
+        out_messages_address= self.memory_mapper.out_messages_ptr
+        self.memory_mapper.offsets['out_messages'][idx] = out_messages_address
+        #Will need to modify if writing back edge embeddings as there is likely to be more edges than nodes
+        #New out messages pointer = [data_needed_to_store(number of features in [this layer])] * number of nodes in graph
+        self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.get_feature_counts(self.model))[idx]) * len(self.trained_graph.nx_graph.nodes)
+        self.memory_ptr = self.memory_mapper.out_messages_ptr
         return {
             'name' : layer.name,
             'nodeslot_count': len(self.trained_graph.nx_graph.nodes),
@@ -531,7 +531,7 @@ class InitManager:
         if (isinstance(self.model, GraphSAGE_Model)):
             self.program_nodeslots_graphsage()
         elif(isinstance(self.model, Edge_Embedding_Model)):
-            self.load_nodeslot_programming_from_graph()
+            self.g()
             self.load_edges_programming_from_graph()
         elif(isinstance(self.model, Interaction_Net_Model)):
             self.load_nodeslot_programming_from_graph()

@@ -35,6 +35,8 @@ class Ample_Driver:
 
 
     def execute(self):
+
+      #Remove biases
       for layer_idx, layer in enumerate(self.layers):
 
         print(f"Executing layer {layer_idx}")

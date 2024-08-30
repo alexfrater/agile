@@ -6,6 +6,7 @@ from tqdm import tqdm
 
 import torch
 import torch.nn as nn
+import pdb
 
 from graphviz import Digraph
 from IPython.display import Image, display
@@ -72,11 +73,12 @@ class Ample():
         self.driver = Ample_Driver(self.variant)
 
         self.layer_config_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/layer_config.json"
-        self.nodeslot_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/nodeslot_programming.txt"
+        self.nodeslot_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/nodeslot_programming.json"
 
         self.nodeslot_programming_group_start_address = []
         self.nodeslot_mem_dump_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/nodeslots.mem"
-        self.sim = False
+        self.sim = True
+        self.sim_model_loc = os.environ.get("WORKAREA") + "/hw/sim/layer_config/"
 
     def add_to_device_method(self):
         ample_instance = self  # Capture the current Ample instance
@@ -128,11 +130,8 @@ class Ample():
             self.trace_model_fx(self.model, graph_data)
         else:
             #TODO get rid of data name
-            if self.sim:
-                self.save_model(self.model,data)
-                self.save_graph(data)
-                print('Model and graph saved')
-            _,input_to_layer_map = self.trace_model_hooks_dataloader_inputs(self.model, data)
+           
+            _,input_to_layer_map = self.trace_model_hooks_dataloader_inputs_weights(self.model, data)
             print('input_to_layer_map',input_to_layer_map)
         if plot:
             self.plot_model()
@@ -345,14 +344,28 @@ class Ample():
 
                 base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" #+'/'  + self.model_name +'/' + sub_module_name
                 if dataset.x is not None:
-                    sub_model = self.model_map[module_type](dataset.x[0].shape[0]) #TODO get tensor input/output feature widths in trace
+                    #
+                    sub_model = sub_module_dict['module']
+                    # sub_model = self.model_map[module_type](dataset.x[0].shape[0]) #TODO get tensor input/output feature widths in trace
                 else:
-                    sub_model = self.model_map[module_type]()
-                    
+                    sub_model = sub_module_dict['module']#self.model_map[module_type]() #This reinitilizes a model with seperate weights 
+                    # print('MAPPED WEIGHTS')
+                    # print(sub_module_dict['weights'])
+                    # weight_tensor = sub_module_dict['weights']
+
+                    # #TODO change so that it works for multile types of model so need to find each linear layer
+                    # target_layer = sub_model.layers[0]  # Adjust this to match your model structure
+
+                    # with torch.no_grad():  # Disable gradient tracking for this operation
+                    #     target_layer.weight.copy_(weight_tensor)
                 # print(self.model_trace[sub_module_name])
                 # print('edge_index',dataset.edge_index)
-
-                self.model_trace[sub_module_name]['out_addr'] = self.initialize_node_memory(sub_model,
+                print('AMPLE suub model',sub_model)
+                #prints each weight in sub model
+                for name, param in sub_model.named_parameters():
+                    print(name, param.shape)
+                    print(param)
+                self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(sub_model,
                                                                                             dataset,
                                                                                             feature_count=32,
                                                                                             in_message_addr=in_message_addr,
@@ -367,7 +380,12 @@ class Ample():
                 print(sub_module_name)
         self.dump_nodeslot_programming_mem()
         self.add_nodeslot_addresses()
-        
+
+        if self.sim:
+            print('saving',self.model)
+            self.save_model(self.model,data)
+            self.save_graph(data)
+            print('Model and graph saved')
 
     def trace_model_hooks_dataloader_inputs(self, model, data):
         self.model_trace = {}
@@ -458,7 +476,7 @@ class Ample():
 
 
     #Initialize memory for node in fx graph
-    def initialize_node_memory(
+    def initialize_sub_model_memory( #TODO change to submodel
         self,
         model,
         dataset = None,
@@ -477,9 +495,8 @@ class Ample():
 
         d_type = self.get_dtype(precision)
         self.graph = TrainedGraph(dataset,feature_count)
-        self.model = model
-
-        self.init_manager = InitManager(self.graph, self.model,self.memory_ptr, base_path=base_path)
+        sub_model = model
+        self.init_manager = InitManager(self.graph, sub_model,self.memory_ptr, base_path=base_path)
         if dataset.x is not None:
             self.init_manager.trained_graph.load_embeddings()
          
@@ -489,12 +506,110 @@ class Ample():
         self.init_manager.map_memory(in_message_addr) 
         self.init_manager.dump_memory(self.mem_append)
         self.nodeslot_programming.append(self.init_manager.return_nodeslot_programming())
-        self.memory_ptr,out_messages_addr = self.init_manager.dump_layer_config(self.mem_append)
+        self.memory_ptr,out_messages_address = self.init_manager.dump_layer_config(self.mem_append)
 
         if self.mem_append == False: #TODO 
             print('Writing memory')
             self.mem_append = True
-        return out_messages_addr
+        return out_messages_address
+    def trace_model_hooks_dataloader_inputs_weights(self, model, data):
+        self.model_trace = {}
+        tensor_id_to_name = {}
+        order_counter = 0
+
+        def register_hooks(module, module_name, leaf=False):
+            def hook(module, inputs, outputs):
+                nonlocal order_counter
+                top_level_module_name = module_name.split('.')[0]
+                
+                # Record the inputs along with their original indices in the forward method
+                input_names = []
+                input_indices = []
+                input_order = []
+                for i, inp in enumerate(inputs):
+                    if isinstance(inp, torch.Tensor):
+                        tensor_id = id(inp)
+                        if tensor_id not in tensor_id_to_name:
+                            tensor_name = f"{top_level_module_name}_input_{i}"
+                            tensor_id_to_name[tensor_id] = tensor_name
+                        else:
+                            tensor_name = tensor_id_to_name[tensor_id]
+                        input_names.append(tensor_name)
+                        input_indices.append(i)  # Store the index of the input
+                        input_order.append(order_counter)
+                        order_counter += 1
+
+                # Record the outputs
+                output_names = []
+                output_order = []
+                if isinstance(outputs, (tuple, list)):
+                    for i, out in enumerate(outputs):
+                        if isinstance(out, torch.Tensor):
+                            tensor_id = id(out)
+                            tensor_name = f"{top_level_module_name}_output_{i}"
+                            tensor_id_to_name[tensor_id] = tensor_name
+                            output_names.append(tensor_name)
+                            output_order.append(order_counter)
+                            order_counter += 1
+                else:
+                    if isinstance(outputs, torch.Tensor):
+                        tensor_id = id(outputs)
+                        tensor_name = f"{top_level_module_name}_output_0"
+                        tensor_id_to_name[tensor_id] = tensor_name
+                        output_names.append(tensor_name)
+                        output_order.append(order_counter)
+                        order_counter += 1
+
+                # Get the weights of the module if available
+                print('weights trace')
+                print(module)
+                weights = None
+                # Access the first Linear layer in the ModuleList
+                linear_layer = module.layers[0]
+
+                # Access the weights of the Linear layer
+                weights = linear_layer.weight.data
+                print('weights',weights)
+                assert weights is not None, 'Weights not found'
+
+                print("----weights---;")
+                # Store the mapping for this module
+                module_type = type(module).__name__
+                self.model_trace[top_level_module_name] = {
+                    'input_names': input_names,
+                    'input_indices': input_indices,  # Add input indices to the trace
+                    'output_names': output_names,
+                    'input_order': input_order,
+                    'output_order': output_order,
+                    'module_type': module_type,
+                    'module': module,
+                    'weights': weights,  # Add weights to the trace dictionary
+                    'num_nodes': None,
+                    'out_addr': None
+                }
+
+            module.register_forward_hook(hook)
+
+            if isinstance(module, torch.nn.Sequential) or module.__module__.startswith("torch_geometric.nn.sequential"):
+                for sub_name, sub_module in module.named_children():
+                    full_name = f"{module_name}.{sub_name}"
+                    register_hooks(sub_module, full_name, leaf=True)
+
+        for name, module in model.named_children():
+            register_hooks(module, name)
+
+        # Perform a forward pass using the dataloader to trigger the hooks
+        model.eval()        
+        with torch.no_grad():
+            model.forward(*data)  # Trigger forward pass
+        
+        # Additional step to map input tensors to the corresponding model layers
+        input_to_layer_map = {}
+        for layer_name, trace_info in self.model_trace.items():
+            for input_name, input_index in zip(trace_info['input_names'], trace_info['input_indices']):
+                input_to_layer_map[(input_name, input_index)] = layer_name
+        
+        return data, input_to_layer_map
 
 
     def simulate(self,cpu = False, gpu = False):
@@ -509,7 +624,7 @@ class Ample():
             device = 'ample',
             preload = False,
             tb_tolerance = 0.01,
-            tb_log_level = 'INFO',
+            tb_log_level = 'DEBUG',
             build = False,
             gui = False,
             metrics = False,
@@ -984,8 +1099,8 @@ class Ample():
     def save_model(self,model,inputs):
         model.eval()
         jit_model = torch.jit.trace(self.model, *inputs)
-
-        torch.jit.save(jit_model, 'model.pt')
+        print('jit model saving to',self.sim_model_loc + 'model.pt')
+        torch.jit.save(jit_model, self.sim_model_loc + 'model.pt')
 
         return jit_model
 
@@ -993,6 +1108,7 @@ class Ample():
     #Save graph for testbench
     def save_graph(self,inputs):
         input_data =inputs
+        print('saved inputs',input_data)
         # input_data = {
         #     'x': self.trained_graph.dataset.x,  
         #     'edge_index': self.trained_graph.dataset.edge_index,
@@ -1001,7 +1117,7 @@ class Ample():
 
         torch.save({
             'input_data': input_data
-        }, 'graph.pth')
+        }, self.sim_model_loc + 'graph.pth')
 
 class CustomTracer(fx.Tracer):
     def __init__(self, model_map):

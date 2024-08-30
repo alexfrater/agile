@@ -193,20 +193,20 @@ class MLP_Model(torch.nn.Module):
         self.precision = precision
         self.layers = nn.ModuleList()
         if layer_count == 1:
-            layer = nn.Linear(in_channels, out_channels, bias=True)
+            layer = nn.Linear(in_channels, out_channels, bias=False)
             layer.name = 'mlp_input_output_layer'  # Assign name directly
             self.layers.append(layer)
 
         else:
-            layer = nn.Linear(in_channels, hidden_dimension, bias=True)
+            layer = nn.Linear(in_channels, hidden_dimension, bias=False)
             layer.name = 'mlp_input_layer'
             self.layers.append(layer)
             for i in range(layer_count-2):
-                layer = nn.Linear(hidden_dimension, hidden_dimension, bias=True)
+                layer = nn.Linear(hidden_dimension, hidden_dimension, bias=False)
                 layer.name = f'hidden_layer_{i}'
                 self.layers.append(layer)
                 
-            layer = nn.Linear(hidden_dimension, out_channels, bias=True)
+            layer = nn.Linear(hidden_dimension, out_channels, bias=False)
             layer.name = 'mlp_output_layer'
             self.layers.append(layer)
 

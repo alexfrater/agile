@@ -149,6 +149,7 @@ class Memory_Mapper:
             elif isinstance(layer, SAGEConv):
                 linear = layer.lin_l
             elif isinstance(layer, Linear):
+                print('linear')
                 linear = layer
             elif isinstance(layer, AGG_MLP_Model):
                 linear = layer.lin
@@ -159,6 +160,8 @@ class Memory_Mapper:
 
             out_feature_count = linear.weight.shape[0]
             for outf in range(out_feature_count):
+                print('memory mapper weight')
+                print('linear weight',linear.weight[outf])
                 self.memory_hex += float_list_to_byte_list(linear.weight[outf], align=True, alignment=64)
             if(idx < self.num_layers-1):
                 self.offsets['weights'][idx+1] = len(self.memory_hex)  + self.memory_ptr
