@@ -196,7 +196,7 @@ class InitManager:
             'transformation_wait_count': 16,
             'aggregate_enable' : aggregate_enable,
             'edge_node': edge, #Change to nodeslot grouping - where is this used?
-            'nodeslot_start_address': self.nodeslot_programming_group_start_address[edge], #Temp TODO change to index that can be specified not jsut edge - or use dict and call it Vg,Eg, Vm,Em etc
+            'nodeslot_start_address': 0, #self.nodeslot_programming_group_start_address[edge], #Temp TODO change to index that can be specified not jsut edge - or use dict and call it Vg,Eg, Vm,Em etc
             'concat_width': concat_width #Temp TODO change to index that can be specified not jsut edge - or use dict and call it Vg,Eg, Vm,Em etc
 
         }
@@ -258,6 +258,11 @@ class InitManager:
 
         self.memory_mapper.out_messages_ptr = out_message_end 
 
+
+
+
+
+
     def set_layer_config_interaction_net(self):
         self.layer_config["global_config"]["layer_count"] =  2
         self.layer_config["global_config"]["nodeslot_group_idx"] =  2
@@ -269,6 +274,11 @@ class InitManager:
 
         #TODO take offsets from trained graph so that only need declare once - use outmessages idx
 
+
+
+        ##Need to modify so that the module can pick up node features and edge features from non contigous locaitons in memory
+
+
         ######Source Embedder######
         in_messages_address = self.memory_mapper.offsets['in_messages'] #0
         self.memory_mapper.out_messages_ptr = self.memory_mapper.offsets['out_messages'][0] 
@@ -276,6 +286,12 @@ class InitManager:
 
         #Out messages start set to 1
         #Read from in messages, write to out_msg[0] 
+        #TODO fix this hacky way of loading edges
+        #Currently subtracting number of nodeslots from address as 
+        #edge index is expected to be stored after the nodes as shown: 
+        #|XXXXXEEEEEEEEEE |
+        in_messages_address = self.memory_mapper.offsets['edge_attr_messages'] - (self.calc_axi_addr(self.trained_graph.feature_count * len(self.trained_graph.nx_graph.nodes)))
+
         l0 = self.get_layer_config(self.model.src_embedder,in_messages_address = in_messages_address,idx=0,edge=0,linear=1)
         self.layer_config['layers'].append(l0)
 
@@ -769,7 +785,7 @@ class InitManager:
     def reduce_graph(self):
         self.trained_graph.reduce()
     
-    def map_memory(self,in_messages_addr = None):
+    def map_memory(self,in_messages_addr = None,edge_attr_messages_addr = None):
         print('in_messages_addr',in_messages_addr)
         print('memory_ptr',self.memory_ptr)
         self.memory_mapper.map_memory(self.memory_ptr,in_messages_addr)

@@ -131,7 +131,7 @@ class Ample():
         else:
             #TODO get rid of data name
            
-            _,input_to_layer_map = self.trace_model_hooks_dataloader_inputs_weights(self.model, data)
+            _,input_to_layer_map = self.trace_model_hooks_dataloader_inputs_weights2(self.model, data)
             print('input_to_layer_map',input_to_layer_map)
         if plot:
             self.plot_model()
@@ -144,8 +144,8 @@ class Ample():
         for sub_module_name, sub_module_dict in self.model_trace.items():
             all_outputs.update(sub_module_dict['output_names'])
 
-        #Ensure the modules are in the correct order to compile (i.e., input addresses calculated before module)
-        self.model_trace = self.reorder_modules(self.model_trace)
+        #Ensure the modules are in the correct order to compile (i.e., input addresses are calculated before module)
+        self.model_trace = self.reorder_modules(self.model_trace) #Removes int net
         # Identify external inputs
         external_inputs = set()
         for sub_module_name,sub_module_dict in self.model_trace.items():
@@ -172,12 +172,7 @@ class Ample():
         for key, value in external_inputs_dict.items():
             print('key',key)
 
-            # model_trace[input_name]['num_nodes'] = dataset.num_nodes
-                            # if tensor.shape[0] == num_nodes:
-                            #     return 'node feature'
-                            # elif tensor.shape[0] == num_edges:
-                            #     return 'edge attribute'
-        #TODO accept external edge attr
+         
         edge_index_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] == 2}
 
         edge_num_list = []
@@ -186,28 +181,26 @@ class Ample():
             edge_num_list.append(value.shape[1])
 
         edge_attr_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] in edge_num_list}
-        #
-        # node_feature_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] != 2 & not(value.shape[0]in edge_num_list) }  #change to num_nopdes
-        for key, value in external_inputs_dict.items():
-            print('key',key)
-            print('value',value)
-            if isinstance(value, torch.Tensor):
-                print('Tensor')
-            if value.shape[0] != 2:
-                print('not edge index') 
 
-            if key not in edge_attr_external_inputs_dict:
-                print('not in edge attr')
 
 
         node_feature_external_inputs_dict = {key: value for key, value in external_inputs_dict.items()
                                              if isinstance(value, torch.Tensor) and value.shape[0] != 2 and key not in edge_attr_external_inputs_dict
                                              }
-
+        print('edge index')
         for key, value in edge_index_external_inputs_dict.items():
             print('key',key)
+            print('value',value)
+
+        print('node feature')
         for key, value in node_feature_external_inputs_dict.items():
             print('key',key)
+            print('value',value)
+
+        print('edge_attr')
+        for key, value in edge_attr_external_inputs_dict.items():
+            print('key',key)
+            print('value',value)
         # print('edge_index_inputs',edge_index_inputs)
         # print('node_feature_inputs',node_feature_inputs)
         # print('external_inputs',external_inputs)
@@ -221,57 +214,46 @@ class Ample():
         #             edge_index_inputs =  
         #         else:
         #             print('node features')
-
+        print('connecting io')
 
         for sub_module_name,sub_module_dict in self.model_trace.items():
             input_names = sub_module_dict['input_names']
             module_type = sub_module_dict['module_type']
             print(module_type)
             # assert module_type in self.model_map, f"Module type {module_type} not supported."
+            #TODO change GraphlAM to use linear and not sequential
             if module_type == 'Sequential':
                 module_type  = 'MLP_Model'
+
+            print('name', sub_module_name)
+            print('----------Module Type----------',module_type)
+            print(self.model_map)
             if module_type in self.model_map:
                 print('name', sub_module_name)
-       
+                edge_attr_messages_addr = None
+                in_message_addr = None
+
                 ###DATA###
                 #Type 0 - External input - may have external edge input
-                print('check --------')
-                print('external_inputs_dict',external_inputs_dict)
-                print('input_names',input_names)
                 if any(name in external_inputs_dict for name in input_names):
-                    print('sub module name external',sub_module_name)
-
-                    #external input module
                     print('sub_module_name',sub_module_name)
-                    # print('external_inputs',external_inputs)
                     print('input_names',input_names)
                     dataset = Data()
                     print('edge_attr_external_inputs_dict',edge_attr_external_inputs_dict)
                     print('edge_index_external_inputs_dict',edge_index_external_inputs_dict)
                     print('node_feature_external_inputs_dict',node_feature_external_inputs_dict)
-                    # dataset.edge_attr = None
+
                     for name in input_names:
                         print('name',name)
-                        if name in node_feature_external_inputs_dict:
-                            print('node features')
-                            # if val.shape[0] == 2:
-                            #     print('edge index')
-                            #     dataset.edge_index = edge_index
-                            #     #Edge attr needs to come from previous layer
-                            #     # dataset.edge_attr = True
-                            # #Check for edge attr
-                            # else:
-                            print('node features')
+                        if name in node_feature_external_inputs_dict:                           
                             x = list(node_feature_external_inputs_dict[name])
-                            #Change to acccept to X inputs
+                            #TODO Change to acccept multpile X inputs e.g grid,mesh features
                             if dataset.x is None:
                                 dataset.x = x
                                 dataset.num_nodes = len(dataset.x)
                             else:
-                                print('dataset.x shape',dataset.x.shape)
                                 dataset.x = [torch.cat((dataset.x, x), dim=1)]
                                 dataset.num_nodes = dataset.num_nodes + len(x)
-                            in_message_addr = None
                             sub_module_dict['num_nodes'] = dataset.num_nodes
                         elif name in edge_index_external_inputs_dict:
                             print('edge index added')
@@ -280,18 +262,11 @@ class Ample():
                         elif name in edge_attr_external_inputs_dict:
                             print('edge attr added')
                             dataset.edge_attr = edge_attr_external_inputs_dict[name]
-                        # elif name in edge_attr:
-                           
-                        #     for item_name, item_data in self.model_trace.items():
-                        #         if (name in item_data['output_names']):
-                        #             input_node = item_name
-                        #             if 'edge_attr' in input_node:
-                        #                 in_edge_index_addr = self.model_trace[input_node]['out_addr']
-                        #             else:
-                        #                 in_message_addr = self.model_trace[input_node
-                #Type 0 - Interal input - may have external edge index
 
+                      
+                #Type 0 - Interal input - may have external edge index
                 else:
+                    print('interal input')
                     dataset = Data()
                     dataset.x = None
                     print('sub module name internal',sub_module_name)
@@ -299,6 +274,7 @@ class Ample():
                     #Edge index assingment - Always external
                     for name in input_names:
                         if name in edge_index_external_inputs_dict:
+                            print('edge index added')
                             dataset.edge_attr = True #TODO check if edge attr is present - use model name
                             dataset.edge_index = edge_index_external_inputs_dict[name]
                             #Find out number of edges to ddetemrine if subqeeunt tensors are edge or node attributes
@@ -306,32 +282,34 @@ class Ample():
         
                     #Edge and Node Features assignment
                     input_nodes = []
+                    print(node_feature_external_inputs_dict,'node_feature_external_inputs_dict')
+                    print('edge_attr_external_inputs_dict',edge_attr_external_inputs_dict)
                     for item_name, item_data in self.model_trace.items():
                         print('item_name',item_name)
                         print('item_data',item_data)
                         if any(input_id in item_data['output_names'] for input_id in input_names):
                             print('#############found')
 
-                            input_nodes.append(item_name)
-                            #TEMP TODO fix
-                            if 'm2g_embedder' in item_name or 'g2m_embedder' in item_name or 'm2m_embedder' in item_name:
-                                print('Edge attribute')
-                                
+
+                            #TODO change to use internal dicts - need to identify edge index, node features, edge attributes
+                            #Requires tracing of edge index and edge attributes
+                            num_items =  self.model_trace[item_name]['num_nodes']
+                            #TODO make edge atttribute test more robust - if num edges is same as num nodes it will fail
+                            #Edge attribute
+                            if num_items in edge_num_list:
+                                print('edge attr added')
+                                edge_attr_messages_addr = self.model_trace[item_name]['out_addr']
                             else:
-                                print('Node attribute')
                                 dataset.num_nodes = self.model_trace[item_name]['num_nodes']
                                 sub_module_dict['num_nodes'] = dataset.num_nodes
                                 in_message_addr = self.model_trace[item_name]['out_addr']
-                                #
-                                print('#############in message loaded')
-                            #if edge attr
-                            #if node attr
 
-                            # model_trace[input_name]['num_nodes'] = dataset.num_nodes
-                            # if tensor.shape[0] == num_nodes:
-                            #     return 'node feature'
-                            # elif tensor.shape[0] == num_edges:
-                            #     return 'edge attribute'
+
+                            input_nodes.append(item_name)
+    
+
+
+
                     
                     #TODO pass in edge index
                     #TODO only picking first input, change to both  
@@ -343,32 +321,15 @@ class Ample():
                     # print('dataset.num_nodes',dataset.num_nodes)
 
                 base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" #+'/'  + self.model_name +'/' + sub_module_name
-                if dataset.x is not None:
-                    #
-                    sub_model = sub_module_dict['module']
-                    # sub_model = self.model_map[module_type](dataset.x[0].shape[0]) #TODO get tensor input/output feature widths in trace
-                else:
-                    sub_model = sub_module_dict['module']#self.model_map[module_type]() #This reinitilizes a model with seperate weights 
-                    # print('MAPPED WEIGHTS')
-                    # print(sub_module_dict['weights'])
-                    # weight_tensor = sub_module_dict['weights']
-
-                    # #TODO change so that it works for multile types of model so need to find each linear layer
-                    # target_layer = sub_model.layers[0]  # Adjust this to match your model structure
-
-                    # with torch.no_grad():  # Disable gradient tracking for this operation
-                    #     target_layer.weight.copy_(weight_tensor)
-                # print(self.model_trace[sub_module_name])
-                # print('edge_index',dataset.edge_index)
-                print('AMPLE suub model',sub_model)
-                #prints each weight in sub model
-                for name, param in sub_model.named_parameters():
-                    print(name, param.shape)
-                    print(param)
+               
+            
+                sub_model = sub_module_dict['module']
+   
                 self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(sub_model,
                                                                                             dataset,
                                                                                             feature_count=32,
                                                                                             in_message_addr=in_message_addr,
+                                                                                            edge_attr_messages_addr = edge_attr_messages_addr,
                                                                                             base_path=base_path
                                                                                             )
                 # print(self.model_trace[sub_module_name])
@@ -482,6 +443,7 @@ class Ample():
         dataset = None,
         feature_count=32,
         in_message_addr = None,
+        edge_attr_messages_addr = None,
         # model_name = None,
         base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/",
         precision = 'FLOAT_32',
@@ -503,7 +465,7 @@ class Ample():
         #init_manager.trained_graph.train_embeddings()
 
         #TODO Change to save to intermeiate file
-        self.init_manager.map_memory(in_messages_addr = in_message_addr) 
+        self.init_manager.map_memory(in_messages_addr = in_message_addr,edge_attr_messages_addr=edge_attr_messages_addr) 
         self.init_manager.dump_memory(self.mem_append)
         self.nodeslot_programming.append(self.init_manager.return_nodeslot_programming())
         self.memory_ptr,out_messages_address = self.init_manager.dump_layer_config(self.mem_append)
@@ -512,6 +474,107 @@ class Ample():
             print('Writing memory')
             self.mem_append = True
         return out_messages_address
+
+
+    def trace_model_hooks_dataloader_inputs_weights2(self, model, data):
+        self.model_trace = {}
+        tensor_id_to_name = {}
+        order_counter = 0
+
+        def register_hooks(module, module_name, leaf=False):
+            def hook(module, inputs, outputs):
+                nonlocal order_counter
+                top_level_module_name = module_name.split('.')[0]
+                
+                # Record the inputs along with their original indices in the forward method
+                input_names = []
+                input_indices = []
+                input_order = []
+                for i, inp in enumerate(inputs):
+                    if isinstance(inp, torch.Tensor):
+                        tensor_id = id(inp)
+                        if tensor_id not in tensor_id_to_name:
+                            tensor_name = f"{top_level_module_name}_input_{i}"
+                            tensor_id_to_name[tensor_id] = tensor_name
+                        else:
+                            tensor_name = tensor_id_to_name[tensor_id]
+                        input_names.append(tensor_name)
+                        input_indices.append(i)  # Store the index of the input
+                        input_order.append(order_counter)
+                        order_counter += 1
+
+                # Record the outputs
+                output_names = []
+                output_order = []
+                if isinstance(outputs, (tuple, list)):
+                    for i, out in enumerate(outputs):
+                        if isinstance(out, torch.Tensor):
+                            tensor_id = id(out)
+                            tensor_name = f"{top_level_module_name}_output_{i}"
+                            tensor_id_to_name[tensor_id] = tensor_name
+                            output_names.append(tensor_name)
+                            output_order.append(order_counter)
+                            order_counter += 1
+                else:
+                    if isinstance(outputs, torch.Tensor):
+                        tensor_id = id(outputs)
+                        tensor_name = f"{top_level_module_name}_output_0"
+                        tensor_id_to_name[tensor_id] = tensor_name
+                        output_names.append(tensor_name)
+                        output_order.append(order_counter)
+                        order_counter += 1
+
+                # Get the weights of the module if available
+                weights = None
+                if hasattr(module, 'weight') and module.weight is not None:
+                    weights = module.weight.data
+                elif hasattr(module, 'layers') and len(module.layers) > 0:
+                    linear_layer = module.layers[0]
+                    if hasattr(linear_layer, 'weight'):
+                        weights = linear_layer.weight.data
+
+                # Store the mapping for this module
+                module_type = type(module).__name__
+                self.model_trace[top_level_module_name] = {
+                    'input_names': input_names,
+                    'input_indices': input_indices,  # Add input indices to the trace
+                    'output_names': output_names,
+                    'input_order': input_order,
+                    'output_order': output_order,
+                    'module_type': module_type,
+                    'module': module,
+                    'weights': weights,  # Add weights to the trace dictionary
+                    'num_nodes': None,
+                    'out_addr': None
+                }
+
+            module.register_forward_hook(hook)
+
+            if isinstance(module, torch.nn.Sequential) or module.__module__.startswith("torch_geometric.nn.sequential"):
+                for sub_name, sub_module in module.named_children():
+                    full_name = f"{module_name}.{sub_name}"
+                    register_hooks(sub_module, full_name, leaf=True)
+
+        # Hook the model itself
+        register_hooks(model, 'model')  # Register the hook on the model itself
+        for name, module in model.named_children():
+
+            register_hooks(module, name)
+
+        # Perform a forward pass using the dataloader to trigger the hooks
+        model.eval()        
+        with torch.no_grad():
+            model.forward(*data)  # Trigger forward pass
+        
+        # Additional step to map input tensors to the corresponding model layers
+        input_to_layer_map = {}
+        for layer_name, trace_info in self.model_trace.items():
+            for input_name, input_index in zip(trace_info['input_names'], trace_info['input_indices']):
+                input_to_layer_map[(input_name, input_index)] = layer_name
+        
+        return data, input_to_layer_map
+
+    #TODO identify edge index, node features, edge attributes and add to dict
     def trace_model_hooks_dataloader_inputs_weights(self, model, data):
         self.model_trace = {}
         tensor_id_to_name = {}
@@ -1002,6 +1065,8 @@ class Ample():
         return sorted_list
 
     def reorder_modules(self,data):
+        if len(data) == 1: #Case where there is only one module no need to reorder
+            return data
         graph, in_degree = self.build_dependency_graph(data)
         sorted_modules = self.topological_sort(graph, in_degree)
         return {module_name: data[module_name] for module_name in sorted_modules}
@@ -1036,7 +1101,7 @@ class Ample():
 
 
     def generate_nodeslots_mem(self,nodeslot_group):
-        # print('nodeslot_group',nodeslot_group)
+        print('nodeslot_group',nodeslot_group)
         node_groups = np.array(nodeslot_group)
         
         node_groups = np.pad(
@@ -1098,7 +1163,8 @@ class Ample():
       #Save JIT model for testbench
     def save_model(self,model,inputs):
         model.eval()
-        jit_model = torch.jit.trace(self.model, *inputs)
+
+        jit_model = torch.jit.trace(self.model, tuple(inputs))
         print('jit model saving to',self.sim_model_loc + 'model.pt')
         torch.jit.save(jit_model, self.sim_model_loc + 'model.pt')
 

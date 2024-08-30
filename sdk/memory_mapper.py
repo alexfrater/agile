@@ -50,20 +50,7 @@ class Memory_Mapper:
     def map_in_messages(self,in_messages_addr,edge_attr_messages_addr):
         if in_messages_addr is not None:
             self.offsets['in_messages'] = in_messages_addr 
-            
-            #Write zeros to spaces bewteen in_messages_addr and self.memory_ptr
-            #which correpsonds to the location that the previous sub_model will write to
-            # #This is required as the dump file function appends to the end of the file
-            # len_mem = len(self.sub_memory_hex)
-            # len_in_msgs = self.memory_ptr-in_messages_addr
-            # while len(self.sub_memory_hex) < (self.memory_ptr-in_messages_addr): 
-            #     self.sub_memory_hex.append('00')
-
-            # self.memory_ptr = in_messages_addr
-
-        # #ADD space for in messages to go?
-        #         self.sub_memory_hex += float_list_to_byte_list(self.graph.nodes[node]["meta"]['embedding'], align=True, alignment=64)
-
+           
         else:
             self.offsets['in_messages'] = len(self.sub_memory_hex) + self.memory_ptr
 
@@ -83,7 +70,6 @@ class Memory_Mapper:
                         # print('edge embedding',edge_data['embedding'])
                         self.sub_memory_hex += float_list_to_byte_list(self.graph.edges[edge]["meta"]['embedding'], align=True, alignment=64)
 
-        # Set offset for next memory range
 
     def map_adj_list(self):
         #TODO change adj list so it can be switched out and only serve a node group instead of all

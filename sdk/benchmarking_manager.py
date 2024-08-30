@@ -226,8 +226,9 @@ class BenchmarkingManager:
         print(f"cd {path}")
         command = ""
         if (self.args.build):
+            print(f"Building")
             command += f"cd {path}; make build"
-
+            command += '&& '
         if (self.args.gui):
             command += f"cd {path}; make run_simgui"
 

@@ -22,13 +22,15 @@ class TrainedGraph:
 
         # print('data edges',dataset.edge_index)
         self.dataset = dataset
+        print('dataset',dataset)
+        print('data edges',dataset.edge_index)
+        print('data x',dataset.x)
+        print('data edge_attr',dataset.edge_attr)
         if self.dataset.edge_index is None: #TODO clean up
             num_nodes = self.dataset.num_nodes  
             self_connections = torch.arange(0, num_nodes)
             self.dataset.edge_index = torch.stack([self_connections, self_connections], dim=0)
-        # print('edge_index',self.dataset.edge_index)
         self.nx_graph = to_networkx(self.dataset)
-        # print('nx_graph edges',self.nx_graph.edges)
 
         self.graph_precision = graph_precision
         # self.model = model #Need model to define the graph stucture e.g interaction net
