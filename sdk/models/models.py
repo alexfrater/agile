@@ -287,10 +287,6 @@ class AGG_MLP_Model(nn.Module):
         self.lin = nn.Linear(in_features, out_features,bias = False)
 
     def forward(self, edge_embed, src_embed, rx_embed):
-        # agg = torch.add(edge_embed, src_embed, rx_embed)
-        print('edge_embed',edge_embed.shape)
-        print('src_embed',src_embed.shape)
-        print('rx_embed', rx_embed)
         agg = edge_embed + src_embed + rx_embed
         out = self.lin(agg)
         return out
@@ -336,9 +332,7 @@ class Edge_Embedding_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
         #TODO change to U and V to match with SDK
         u = edge_index[0]
         v = edge_index[1]
-        # print('edege_index')
-        # print(u)
-        # print(v)
+
         src_embed = self.src_embedder(x)
         outputs.append(src_embed)
 
@@ -346,8 +340,6 @@ class Edge_Embedding_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
 
         edge_embed = self.edge_embedder(edge_attr)
         outputs.append(edge_embed)
-        # print('edge_embed')
-        # print(edge_embed)
 
         rx_embed = self.rx_embedder(x)
         outputs.append(rx_embed)
@@ -374,45 +366,13 @@ class AggregateEdges(torch.nn.Module):
         # x: Node feature matrix with shape [num_nodes, num_node_features]
         # edge_index: Graph connectivity (edge indices) with shape [2, num_edges]
         # edge_attr: Edge feature matrix with shape [num_edges, num_edge_features]
-        # print('edge_index')
-        # print(edge_index)
-        # print('rx')
+
         rx  = edge_index[1]
-        # print(rx)
         output = torch_scatter.scatter_add(edge_attr, rx.unsqueeze(1).expand(-1, edge_attr.size(1)), dim=0)
         # x = torch_scatter.scatter_add(edge_attr, rx)
         output = self.lin(output)
         return output
-        # return self.propagate(edge_index, x=x, edge_attr=edge_attr)
 
-
-# class AggregateEdges(MessagePassing):
-#     def __init__(self,in_channels=32,out_channels=32):
-#         super().__init__()
-
-#         self.in_channels = in_channels
-#         self.out_channels = out_channels
-#         self.lin = torch.nn.Linear(in_channels, out_channels,bias=False)
-
-#     def forward(self, x, edge_index, edge_attr):
-#         # Add self loops to the adjacency matrix if needed
-#         # edge_index, _ = add_self_loops(edge_index, num_nodes=x.size(0))
-
-#         # Start propagating messages
-#         return self.propagate(edge_index, x=x, edge_attr=edge_attr)
-
-#     def message(self, edge_attr):
-#         # Return edge attributes as the message to be passed
-#         return edge_attr
-
-#     def aggregate(self, inputs, index):
-#     #     # Summing up all incoming edge attributes for each node
-#         return torch_scatter.scatter(inputs, index, dim=0, reduce='sum')
-
-#     def update(self, aggr_out):
-#         # Return the aggregated result as the updated node features
-#         transformed = self.lin(aggr_out)
-#         return transformed
 
 class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
     def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
@@ -467,7 +427,6 @@ class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
             layer.to(self.precision)
 
     def forward(self, x, edge_index,edge_attr):
-        print(x)
         x = x.to(self.precision)  
         outputs = []
 
@@ -478,11 +437,10 @@ class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
         src_embed = self.src_embedder(x)
         outputs.append(src_embed)
 
-        print('edge_attr',edge_attr.shape)
-        print(self.edge_embedder)
+
         edge_embed = self.edge_embedder(edge_attr)
         outputs.append(edge_embed)
-        print('edge_embed',edge_embed.shape)
+
         rx_embed = self.rx_embedder(x)
         outputs.append(rx_embed)
 

@@ -131,24 +131,18 @@ class BaseTest:
         self.age_regbank = {}
         self.prefetcher_regbank = {}
         self.fte_regbank = {}
-        print('model_name',model_name)
-        # print('type',type(model_name))
-        #model_location = "/hw/sim/layer_config/" + model_name + '/'
+       
         # # Paths
         self.base_path = base_path if base_path is not None else os.environ.get("WORKAREA")
         self.config_path = self.base_path + "/hw/sim/layer_config/"
         self.regbank_path = self.base_path + "/hw/build/regbanks"
         self.nodeslot_programming_file = self.base_path + "/hw/sim/layer_config/nodeslot_programming.json"
         self.layer_config_file = self.base_path + "/hw/sim/layer_config/layer_config.json"
-        #self.nodeslot_programming_file = self.base_path + model_location + "nodeslot_programming.json"
-        #self.layer_config_file = self.base_path + model_location + "layer_config.json"
-        # print('self.nodeslot_programming_file',self.nodeslot_programming_file)
-        # print('self.layer_config_file',self.layer_config_file)
+
 
     async def initialize(self):
         # Load nodeslot programming and layer config
         self.load_nodeslot_programming()
-        # print(self.load_edge_programming())
         
         self.load_layer_config()
         self.load_regbanks()
@@ -157,8 +151,6 @@ class BaseTest:
         await self.start_clocks()
         await self.driver.axil_driver.reset_axi_interface()
         await self.drive_reset()
-
-
 
         # Start monitors
 
@@ -302,9 +294,7 @@ class BaseTest:
 
         self.dut._log.debug("Starting nodeslot programming.")
         free_mask = "1" * self.nodeslot_count
-        # print('ns_programmingI',self.nodeslot_programming)
         for ns_programming in self.nodeslot_programming:
-            # print('ns_programmingII',ns_programming)
             # Skip nodeslots with no neighbours
             if (ns_programming["neighbour_count"] == 0):
                 continue
@@ -361,25 +351,15 @@ class BaseTest:
 
     def load_jit_model(self):
         model_path = self.config_path + 'model.pt'
-        print('loading model from',model_path)
-
         model = torch.jit.load(model_path)
         return model
 
 
     def load_graph(self):
-
         graph_path = self.config_path + 'graph.pth'
-        print('loading graph from',graph_path)
-
         graph = torch.load(graph_path)
         input_data = graph['input_data']
-        # x_loaded = input_data['x']
-        # edge_index_loaded = input_data['edge_index']
 
-        # # Check if edge attributes are present and load them if they are
-        # edge_attr_loaded = input_data.get('edge_attr', None)
-        
         return input_data #(x_loaded, edge_index_loaded, edge_attr_loaded)
         
 
@@ -387,33 +367,16 @@ class BaseTest:
         ####Remove bias from the model, TODO Add biases####
         state_dict = model.state_dict()
         for name, param in state_dict.items():
-            print('model')
-            print(name,param,'name,param')
             if 'bias' in name:
                 # Reset the bias tensor to all zeros
                 state_dict[name] = torch.zeros_like(param)
 
         model.load_state_dict(state_dict)
-        
-        # x, edge_index, edge_attr = data
-        # print('data')
-        # print(x, edge_index, edge_attr)
-
-        # edge_attr = self.trained_graph.dataset.edge_attr  # Edge attributes tensor
-        # data = (x,edge_index,edge_attr) 
-
-        model_input = data
-        # if edge_attr is not None:
-        #     model_input = model_input + (edge_attr,)  
 
         model.eval()
         with torch.no_grad():
-            # if edge_attr is not None:
-            outputs,x = model(*model_input)
-            # else:
-            #     output = model(x, edge_index)
-            # output = model(x, edge_index, edge_attr) if edge_attr is not None else model(x, edge_index)
-            # a = b
+            outputs,x = model(*data)
+ 
         del model
 
         return outputs

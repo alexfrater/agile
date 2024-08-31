@@ -6,42 +6,28 @@ from tqdm import tqdm
 
 import torch
 import torch.nn as nn
-import pdb
 
 from graphviz import Digraph
 from IPython.display import Image, display
-import pypci
 import torch.fx as fx
 
 from sdk.initialization_manager import InitManager
 from sdk.benchmarking_manager import BenchmarkingManager
 from sdk.models.models import GCN_Model, GAT_Model, GraphSAGE_Model, GIN_Model, GCN_MLP_Model, MLP_Model, Edge_Embedding_Model, Interaction_Net_Model
-# from neural_lam.interaction_net import InteractionNet
-from torch_geometric.datasets import FakeDataset #TODO remove
 from sdk.trained_graph import TrainedGraph
 from sdk.pcie_manager import PCIe_Manager
 from sdk.ample_driver import Ample_Driver
-#TODO remove
-from sdk.graphs.random_graph import RandomGraph
+
 from tb.variant import Variant
 from .utilities import dump_byte_list, binary_to_hex
 import argparse
 
-from functools import wraps
-# import pyg 
-import torch_geometric.nn as pyg_nn
 
 from torch_geometric.data import Data
 from collections import defaultdict, deque
 
 
 
-# import torch_geometric as pyg
-# from torch_geometric.nn import Sequential as pygSequential
-
-# from torch_geometric.nn import Sequential
-# from torch_geometric.nn import Sequential as PyGSequential
-import torch_geometric as pyg
  
 
 class Ample():
@@ -74,15 +60,14 @@ class Ample():
 
         self.layer_config_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/layer_config.json"
         self.nodeslot_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/nodeslot_programming.json"
-
+        self.base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/"
         self.nodeslot_programming_group_start_address = []
         self.nodeslot_mem_dump_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/nodeslots.mem"
         self.sim = True
         self.sim_model_loc = os.environ.get("WORKAREA") + "/hw/sim/layer_config/"
 
     def add_to_device_method(self):
-        ample_instance = self  # Capture the current Ample instance
-
+        ample_instance = self 
         def extended_to_device(model, device, data=None): #Figure out if there is a way to change this
             ample_instance.to_device(model, device,data)
         nn.Module.to_device = extended_to_device
@@ -94,14 +79,8 @@ class Ample():
         self.model = model
         self.inputs = data
         if device == 'ample':
-            print('Moving model to Ample')
-            print('Compiling model')
             self.compile(model,data=data,trace_mode='hooks')
-            print('Overloading')
             self.overload_forward()
-            # self.load_nodeslot_file()
-            # self.load_memory_file()
-
         else:
             print(f'Moving model to {device}')
             model.to(device) 
@@ -125,19 +104,14 @@ class Ample():
         self.model_name = self.model.__class__.__name__
         self.mem_append= False
         self.nodeslot_programming = []
-        print('model name',self.model_name)
         if trace_mode == 'fx':
             self.trace_model_fx(self.model, graph_data)
-        else:
-            #TODO get rid of data name
-           
+        else:           
             _,input_to_layer_map = self.trace_model_hooks_dataloader_inputs_weights2(self.model, data)
-            print('input_to_layer_map',input_to_layer_map)
         if plot:
             self.plot_model()
 
         if self.model_trace is None:
-            print("Model tracing failed. Please ensure the model is traceable.")
             return
 
         all_outputs = set()
@@ -145,7 +119,8 @@ class Ample():
             all_outputs.update(sub_module_dict['output_names'])
 
         #Ensure the modules are in the correct order to compile (i.e., input addresses are calculated before module)
-        self.model_trace = self.reorder_modules(self.model_trace) #Removes int net
+        self.model_trace = self.reorder_modules(self.model_trace) 
+        
         # Identify external inputs
         external_inputs = set()
         for sub_module_name,sub_module_dict in self.model_trace.items():
@@ -153,297 +128,118 @@ class Ample():
                 if input_name not in all_outputs:
                     external_inputs.add(input_name)
 
-
         self.memory_ptr = 0 #keep track of memory address
       
 
         external_inputs_dict = {element: None for element in external_inputs}
         external_inputs_dict = dict(sorted(external_inputs_dict.items()))
         
-
+        #Map external inputs to dict #TODO find a way to do withut providing sorted inputs - pass in inputs arbitraly and then map to names
         for key, value in zip(external_inputs_dict.keys(), data):
             external_inputs_dict[key] = value
-        print('External inputs',external_inputs_dict)
-
-
-        # edge_index_inputs = {}
-
-
-        for key, value in external_inputs_dict.items():
-            print('key',key)
 
          
         edge_index_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] == 2}
 
+
+        #List of number of edges in edge index tensors
         edge_num_list = []
         for key, value in edge_index_external_inputs_dict.items():
-            print('edge_num',value.shape[1])
             edge_num_list.append(value.shape[1])
 
+        #Find edge attrbiutes by checking if number of inputs is same as number of edges - TODO make more robust
         edge_attr_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] in edge_num_list}
 
 
-
+        #Find number of inputs is same as number of nodes
         node_feature_external_inputs_dict = {key: value for key, value in external_inputs_dict.items()
                                              if isinstance(value, torch.Tensor) and value.shape[0] != 2 and key not in edge_attr_external_inputs_dict
                                              }
-        print('edge index')
-        for key, value in edge_index_external_inputs_dict.items():
-            print('key',key)
-            print('value',value)
-
-        print('node feature')
-        for key, value in node_feature_external_inputs_dict.items():
-            print('key',key)
-            print('value',value)
-
-        print('edge_attr')
-        for key, value in edge_attr_external_inputs_dict.items():
-            print('key',key)
-            print('value',value)
-        # print('edge_index_inputs',edge_index_inputs)
-        # print('node_feature_inputs',node_feature_inputs)
-        # print('external_inputs',external_inputs)
-        # for key,val in external_inputs: 
-        #     print('val',external_input)
-        #     print('type',type(val))
-        #     if len(val.shape) == 2:
-        #     # Check if it's an edge index (typically shape (2, num_edges))
-        #         if val.shape[0] == 2:
-        #             print('edge index')
-        #             edge_index_inputs =  
-        #         else:
-        #             print('node features')
-        print('connecting io')
 
         for sub_model_id, (sub_module_name, sub_module_dict) in enumerate(self.model_trace.items()):
             input_names = sub_module_dict['input_names']
             module_type = sub_module_dict['module_type']
-            print(module_type)
-            # assert module_type in self.model_map, f"Module type {module_type} not supported."
-            #TODO change GraphlAM to use linear and not sequential
-            if module_type == 'Sequential':
-                module_type  = 'MLP_Model'
+            assert module_type in self.model_map, f"Module type {module_type} not supported."
+           
+            edge_attr_messages_addr = None
+            in_message_addr = None
 
-            print('name', sub_module_name)
-            print('----------Module Type----------',module_type)
-            print(self.model_map)
-            if module_type in self.model_map:
-                print('name', sub_module_name)
-                edge_attr_messages_addr = None
-                in_message_addr = None
+            ###DATA###
+            #Type 0 - External input - may have external edge input
+            if any(name in external_inputs_dict for name in input_names):
+                dataset = Data()
 
-                ###DATA###
-                #Type 0 - External input - may have external edge input
-                if any(name in external_inputs_dict for name in input_names):
+                for name in input_names:
+                    if name in node_feature_external_inputs_dict:                           
+                        x = list(node_feature_external_inputs_dict[name])
+                        #TODO Change to acccept multpile X inputs e.g grid,mesh features
+                        if dataset.x is None:
+                            dataset.x = x
+                            dataset.num_nodes = len(dataset.x)
+                        else:
+                            dataset.x = [torch.cat((dataset.x, x), dim=1)]
+                            dataset.num_nodes = dataset.num_nodes + len(x)
+                        sub_module_dict['num_nodes'] = dataset.num_nodes
 
-                    dataset = Data()
+                    elif name in edge_index_external_inputs_dict:
+                        dataset.edge_index = edge_index_external_inputs_dict[name]
 
-                    for name in input_names:
-                        print('name',name)
-                        if name in node_feature_external_inputs_dict:                           
-                            x = list(node_feature_external_inputs_dict[name])
-                            #TODO Change to acccept multpile X inputs e.g grid,mesh features
-                            if dataset.x is None:
-                                dataset.x = x
-                                dataset.num_nodes = len(dataset.x)
-                            else:
-                                dataset.x = [torch.cat((dataset.x, x), dim=1)]
-                                dataset.num_nodes = dataset.num_nodes + len(x)
-                            sub_module_dict['num_nodes'] = dataset.num_nodes
-                        elif name in edge_index_external_inputs_dict:
-                            print('edge index added')
-                            dataset.edge_index = edge_index_external_inputs_dict[name]
-
-                        elif name in edge_attr_external_inputs_dict:
-                            print('edge attr added')
-                            dataset.edge_attr = edge_attr_external_inputs_dict[name]
-
-                      
-                #Type 0 - Interal input - may have external edge index
-                else:
-                    print('interal input')
-                    dataset = Data()
-                    dataset.x = None
-                    print('sub module name internal',sub_module_name)
-
-                    #Edge index assingment - Always external
-                    for name in input_names:
-                        if name in edge_index_external_inputs_dict:
-                            print('edge index added')
-                            dataset.edge_attr = True #TODO check if edge attr is present - use model name
-                            dataset.edge_index = edge_index_external_inputs_dict[name]
-                            #Find out number of edges to ddetemrine if subqeeunt tensors are edge or node attributes
-                            #May break if have same number of edges and nodes
-        
-                    #Edge and Node Features assignment
-                    input_nodes = []
-                    print(node_feature_external_inputs_dict,'node_feature_external_inputs_dict')
-                    print('edge_attr_external_inputs_dict',edge_attr_external_inputs_dict)
-                    for item_name, item_data in self.model_trace.items():
-                        print('item_name',item_name)
-                        print('item_data',item_data)
-                        if any(input_id in item_data['output_names'] for input_id in input_names):
-                            print('#############found')
-
-
-                            #TODO change to use internal dicts - need to identify edge index, node features, edge attributes
-                            #Requires tracing of edge index and edge attributes
-                            num_items =  self.model_trace[item_name]['num_nodes']
-                            #TODO make edge atttribute test more robust - if num edges is same as num nodes it will fail
-                            #Edge attribute
-                            if num_items in edge_num_list:
-                                print('edge attr added')
-                                edge_attr_messages_addr = self.model_trace[item_name]['out_addr']
-                            else:
-                                dataset.num_nodes = self.model_trace[item_name]['num_nodes']
-                                sub_module_dict['num_nodes'] = dataset.num_nodes
-                                in_message_addr = self.model_trace[item_name]['out_addr']
-
-
-                            input_nodes.append(item_name)
-    
-
-
+                    elif name in edge_attr_external_inputs_dict:
+                        dataset.edge_attr = edge_attr_external_inputs_dict[name]
 
                     
-                    #TODO pass in edge index
-                    #TODO only picking first input, change to both  
-                    # dataset.num_nodes = self.model_trace[input_nodes[0]]['num_nodes'] 
-                    # sub_module_dict['num_nodes'] = dataset.num_nodes #Pass down num nodes to next layer
-                    # in_message_addr = self.model_trace[input_nodes[0]]['out_addr']
-                    # print('input_nodes',input_nodes)
-                    # print(self.model_trace[input_nodes[0]])
-                    # print('dataset.num_nodes',dataset.num_nodes)
-
-                base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/" #+'/'  + self.model_name +'/' + sub_module_name
-               
-            
-                sub_model = sub_module_dict['module']
-   
-                self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(sub_model,
-                                                                                            dataset,
-                                                                                            feature_count=32,
-                                                                                            sub_model_id = sub_model_id,
-                                                                                            in_message_addr=in_message_addr,
-                                                                                            edge_attr_messages_addr = edge_attr_messages_addr,
-                                                                                            base_path=base_path
-                                                                                            )
-                # print(self.model_trace[sub_module_name])
-
-
+            #Type 0 - Interal input - may have external edge index
             else:
-                #TODO change neural lam to remove unspoorted modules which are not relevant to prevent this message from showing incorrectly
-                print('Module type not supported')
-                print(sub_module_name)
+                dataset = Data()
+                dataset.x = None
+
+                #Edge index assingment - Always external
+                for name in input_names:
+                    if name in edge_index_external_inputs_dict:
+                        dataset.edge_attr = True #TODO check if edge attr is present - use model name? - use edge attr internal dict
+                        dataset.edge_index = edge_index_external_inputs_dict[name]
+    
+                #Edge and Node Features assignment
+                input_nodes = []
+                for item_name, item_data in self.model_trace.items():
+                    if any(input_id in item_data['output_names'] for input_id in input_names):
+
+                        num_items =  self.model_trace[item_name]['num_nodes']
+                        #TODO make edge atttribute test more robust - if num edges is same as num nodes it will fail
+                        #Edge attribute
+                        if num_items in edge_num_list:
+                            edge_attr_messages_addr = self.model_trace[item_name]['out_addr']
+                        else:
+                            dataset.num_nodes = self.model_trace[item_name]['num_nodes']
+                            sub_module_dict['num_nodes'] = dataset.num_nodes
+                            in_message_addr = self.model_trace[item_name]['out_addr']
+
+                        input_nodes.append(item_name)
+            
+            self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(sub_module_dict['module'],
+                                                                                        dataset,
+                                                                                        feature_count=32,
+                                                                                        sub_model_id = sub_model_id,
+                                                                                        in_message_addr=in_message_addr,
+                                                                                        edge_attr_messages_addr = edge_attr_messages_addr,
+                                                                                        )
+        
         self.dump_nodeslot_programming_multi_model()
         self.add_nodeslot_addresses()
 
         if self.sim:
-            print('saving',self.model)
             self.save_model(self.model,data)
             self.save_graph(data)
-            print('Model and graph saved')
 
-    def trace_model_hooks_dataloader_inputs(self, model, data):
-        self.model_trace = {}
-        tensor_id_to_name = {}
-        order_counter = 0
-
-        def register_hooks(module, module_name, leaf=False):
-            def hook(module, inputs, outputs):
-                nonlocal order_counter
-                top_level_module_name = module_name.split('.')[0]
-                
-                # Record the inputs along with their original indices in the forward method
-                input_names = []
-                input_indices = []
-                input_order = []
-                for i, inp in enumerate(inputs):
-                    if isinstance(inp, torch.Tensor):
-                        tensor_id = id(inp)
-                        if tensor_id not in tensor_id_to_name:
-                            tensor_name = f"{top_level_module_name}_input_{i}"
-                            tensor_id_to_name[tensor_id] = tensor_name
-                        else:
-                            tensor_name = tensor_id_to_name[tensor_id]
-                        input_names.append(tensor_name)
-                        input_indices.append(i)  # Store the index of the input
-                        input_order.append(order_counter)
-                        order_counter += 1
-
-                # Record the outputs
-                output_names = []
-                output_order = []
-                if isinstance(outputs, (tuple, list)):
-                    for i, out in enumerate(outputs):
-                        if isinstance(out, torch.Tensor):
-                            tensor_id = id(out)
-                            tensor_name = f"{top_level_module_name}_output_{i}"
-                            tensor_id_to_name[tensor_id] = tensor_name
-                            output_names.append(tensor_name)
-                            output_order.append(order_counter)
-                            order_counter += 1
-                else:
-                    if isinstance(outputs, torch.Tensor):
-                        tensor_id = id(outputs)
-                        tensor_name = f"{top_level_module_name}_output_0"
-                        tensor_id_to_name[tensor_id] = tensor_name
-                        output_names.append(tensor_name)
-                        output_order.append(order_counter)
-                        order_counter += 1
-
-                # Store the mapping for this module
-                module_type = type(module).__name__
-                self.model_trace[top_level_module_name] = {
-                    'input_names': input_names,
-                    'input_indices': input_indices,  # Add input indices to the trace
-                    'output_names': output_names,
-                    'input_order': input_order,
-                    'output_order': output_order,
-                    'module_type': module_type,
-                    'num_nodes': None,
-                    'out_addr': None
-                }
-
-            module.register_forward_hook(hook)
-
-            if isinstance(module, torch.nn.Sequential) or module.__module__.startswith("torch_geometric.nn.sequential"):
-                for sub_name, sub_module in module.named_children():
-                    full_name = f"{module_name}.{sub_name}"
-                    register_hooks(sub_module, full_name, leaf=True)
-
-        for name, module in model.named_children():
-            register_hooks(module, name)
-
-        # Perform a forward pass using the dataloader to trigger the hooks
-        model.eval()        
-        with torch.no_grad():
-            model.forward(*data)  # Trigger forward pass
-        
-        # Additional step to map input tensors to the corresponding model layers
-        input_to_layer_map = {}
-        for layer_name, trace_info in self.model_trace.items():
-            for input_name, input_index in zip(trace_info['input_names'], trace_info['input_indices']):
-                input_to_layer_map[(input_name, input_index)] = layer_name
-        
-        return data, input_to_layer_map
-
-
-
-
-
-    #Initialize memory for node in fx graph
+    #Initialize memory for node in fx graph sub model
     def initialize_sub_model_memory( #TODO change to submodel
         self,
-        model,
+        sub_model=None,
         dataset = None,
         feature_count=32,
         in_message_addr = None,
         edge_attr_messages_addr = None,
         sub_model_id = None,
-        # model_name = None,
-        base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/",
         precision = 'FLOAT_32',
         reduce =False,
         random = True,
@@ -451,25 +247,20 @@ class Ample():
         date = True
     ):
 
-        print('base_path',base_path)
-
         d_type = self.get_dtype(precision)
         self.graph = TrainedGraph(dataset,feature_count)
-        sub_model = model
-        self.init_manager = InitManager(self.graph, sub_model,self.memory_ptr, base_path=base_path,sub_model_id=sub_model_id)
+        self.init_manager = InitManager(self.graph, sub_model,self.memory_ptr, base_path=self.base_path,sub_model_id=sub_model_id)
         if dataset.x is not None:
             self.init_manager.trained_graph.load_embeddings()
          
-        #init_manager.trained_graph.train_embeddings()
-
-        #TODO Change to save to intermeiate file
+        #TODO Change to save to intermediate file
         self.init_manager.map_memory(in_messages_addr = in_message_addr,edge_attr_messages_addr=edge_attr_messages_addr) 
         self.init_manager.dump_memory(self.mem_append)
+        
         self.nodeslot_programming.append(self.init_manager.return_nodeslot_programming())
         self.memory_ptr,out_messages_address = self.init_manager.dump_layer_config(self.mem_append)
 
         if self.mem_append == False: #TODO 
-            print('Writing memory')
             self.mem_append = True
         return out_messages_address
 
@@ -497,11 +288,10 @@ class Ample():
                         else:
                             tensor_name = tensor_id_to_name[tensor_id]
                         input_names.append(tensor_name)
-                        input_indices.append(i)  # Store the index of the input
+                        input_indices.append(i)  
                         input_order.append(order_counter)
                         order_counter += 1
 
-                # Record the outputs
                 output_names = []
                 output_order = []
                 if isinstance(outputs, (tuple, list)):
@@ -522,7 +312,6 @@ class Ample():
                         output_order.append(order_counter)
                         order_counter += 1
 
-                # Get the weights of the module if available
                 weights = None
                 if hasattr(module, 'weight') and module.weight is not None:
                     weights = module.weight.data
@@ -531,17 +320,16 @@ class Ample():
                     if hasattr(linear_layer, 'weight'):
                         weights = linear_layer.weight.data
 
-                # Store the mapping for this module
                 module_type = type(module).__name__
                 self.model_trace[top_level_module_name] = {
                     'input_names': input_names,
-                    'input_indices': input_indices,  # Add input indices to the trace
+                    'input_indices': input_indices,  
                     'output_names': output_names,
                     'input_order': input_order,
                     'output_order': output_order,
                     'module_type': module_type,
                     'module': module,
-                    'weights': weights,  # Add weights to the trace dictionary
+                    'weights': weights,  
                     'num_nodes': None,
                     'out_addr': None
                 }
@@ -553,18 +341,15 @@ class Ample():
                     full_name = f"{module_name}.{sub_name}"
                     register_hooks(sub_module, full_name, leaf=True)
 
-        # Hook the model itself
-        register_hooks(model, 'model')  # Register the hook on the model itself
+        register_hooks(model, 'model')  
         for name, module in model.named_children():
 
             register_hooks(module, name)
 
-        # Perform a forward pass using the dataloader to trigger the hooks
         model.eval()        
         with torch.no_grad():
-            model.forward(*data)  # Trigger forward pass
+            model.forward(*data) 
         
-        # Additional step to map input tensors to the corresponding model layers
         input_to_layer_map = {}
         for layer_name, trace_info in self.model_trace.items():
             for input_name, input_index in zip(trace_info['input_names'], trace_info['input_indices']):
@@ -572,105 +357,7 @@ class Ample():
         
         return data, input_to_layer_map
 
-    #TODO identify edge index, node features, edge attributes and add to dict
-    def trace_model_hooks_dataloader_inputs_weights(self, model, data):
-        self.model_trace = {}
-        tensor_id_to_name = {}
-        order_counter = 0
-
-        def register_hooks(module, module_name, leaf=False):
-            def hook(module, inputs, outputs):
-                nonlocal order_counter
-                top_level_module_name = module_name.split('.')[0]
-                
-                # Record the inputs along with their original indices in the forward method
-                input_names = []
-                input_indices = []
-                input_order = []
-                for i, inp in enumerate(inputs):
-                    if isinstance(inp, torch.Tensor):
-                        tensor_id = id(inp)
-                        if tensor_id not in tensor_id_to_name:
-                            tensor_name = f"{top_level_module_name}_input_{i}"
-                            tensor_id_to_name[tensor_id] = tensor_name
-                        else:
-                            tensor_name = tensor_id_to_name[tensor_id]
-                        input_names.append(tensor_name)
-                        input_indices.append(i)  # Store the index of the input
-                        input_order.append(order_counter)
-                        order_counter += 1
-
-                # Record the outputs
-                output_names = []
-                output_order = []
-                if isinstance(outputs, (tuple, list)):
-                    for i, out in enumerate(outputs):
-                        if isinstance(out, torch.Tensor):
-                            tensor_id = id(out)
-                            tensor_name = f"{top_level_module_name}_output_{i}"
-                            tensor_id_to_name[tensor_id] = tensor_name
-                            output_names.append(tensor_name)
-                            output_order.append(order_counter)
-                            order_counter += 1
-                else:
-                    if isinstance(outputs, torch.Tensor):
-                        tensor_id = id(outputs)
-                        tensor_name = f"{top_level_module_name}_output_0"
-                        tensor_id_to_name[tensor_id] = tensor_name
-                        output_names.append(tensor_name)
-                        output_order.append(order_counter)
-                        order_counter += 1
-
-                # Get the weights of the module if available
-                print('weights trace')
-                print(module)
-                weights = None
-                # Access the first Linear layer in the ModuleList
-                linear_layer = module.layers[0]
-
-                # Access the weights of the Linear layer
-                weights = linear_layer.weight.data
-                print('weights',weights)
-                assert weights is not None, 'Weights not found'
-
-                print("----weights---;")
-                # Store the mapping for this module
-                module_type = type(module).__name__
-                self.model_trace[top_level_module_name] = {
-                    'input_names': input_names,
-                    'input_indices': input_indices,  # Add input indices to the trace
-                    'output_names': output_names,
-                    'input_order': input_order,
-                    'output_order': output_order,
-                    'module_type': module_type,
-                    'module': module,
-                    'weights': weights,  # Add weights to the trace dictionary
-                    'num_nodes': None,
-                    'out_addr': None
-                }
-
-            module.register_forward_hook(hook)
-
-            if isinstance(module, torch.nn.Sequential) or module.__module__.startswith("torch_geometric.nn.sequential"):
-                for sub_name, sub_module in module.named_children():
-                    full_name = f"{module_name}.{sub_name}"
-                    register_hooks(sub_module, full_name, leaf=True)
-
-        for name, module in model.named_children():
-            register_hooks(module, name)
-
-        # Perform a forward pass using the dataloader to trigger the hooks
-        model.eval()        
-        with torch.no_grad():
-            model.forward(*data)  # Trigger forward pass
-        
-        # Additional step to map input tensors to the corresponding model layers
-        input_to_layer_map = {}
-        for layer_name, trace_info in self.model_trace.items():
-            for input_name, input_index in zip(trace_info['input_names'], trace_info['input_indices']):
-                input_to_layer_map[(input_name, input_index)] = layer_name
-        
-        return data, input_to_layer_map
+    
 
 
     def simulate(self,cpu = False, gpu = False):
@@ -785,91 +472,7 @@ class Ample():
                 order_counter += 1
 
    
-    def trace_model_hooks_dataloader(self, model, dataloader):
-        self.model_trace = {}
-        tensor_id_to_name = {}
-        order_counter = 0
-
-        def register_hooks(module, module_name,leaf = False):
-            def hook(module, inputs, outputs):
-                nonlocal order_counter
-                # Capture the top-level module name
-                top_level_module_name = module_name.split('.')[0]
-                # Record the inputs
-                input_names = []
-                input_order = []
-                for i, inp in enumerate(inputs):
-                    if isinstance(inp, torch.Tensor):
-                        tensor_id = id(inp)
-                        if tensor_id not in tensor_id_to_name:
-                            tensor_name = f"{top_level_module_name}_input_{i}"
-                            tensor_id_to_name[tensor_id] = tensor_name
-                        else:
-                            tensor_name = tensor_id_to_name[tensor_id]
-                        input_names.append(tensor_name)
-                        input_order.append(order_counter)
-                        order_counter += 1
-
-                # Record the outputs
-                output_names = []
-                output_order = []
-                if isinstance(outputs, (tuple, list)):
-                    for i, out in enumerate(outputs):
-                        if isinstance(out, torch.Tensor):
-                            tensor_id = id(out)
-                            tensor_name = f"{top_level_module_name}_output_{i}"
-                            tensor_id_to_name[tensor_id] = tensor_name
-                            output_names.append(tensor_name)
-                            output_order.append(order_counter)
-                            order_counter += 1
-                else:
-                    if isinstance(outputs, torch.Tensor):
-                        tensor_id = id(outputs)
-                        tensor_name = f"{top_level_module_name}_output_0"
-                        tensor_id_to_name[tensor_id] = tensor_name
-                        output_names.append(tensor_name)
-                        output_order.append(order_counter)
-                        order_counter += 1
-
-                # Store the mapping for this module
-                module_type = type(module).__name__
-                # self.model_trace[top_level_module_name] = (input_names, output_names, input_order + output_order, module_type)
-                self.model_trace[top_level_module_name] = {
-                    'input_names': input_names,
-                    'output_names': output_names,
-                    'input_order': input_order,
-                    'output_order': output_order,
-                    'module_type': module_type,
-                    'num_nodes': None,
-                    'out_addr': None
-                }
-            module.register_forward_hook(hook)
-            # print(module)
-            # print(type(module))
-            # print('leaf',leaf)
-            # If the module is Sequential, go one level deeper
-            if isinstance(module, torch.nn.Sequential) or module.__module__.startswith("torch_geometric.nn.sequential"):
-                for sub_name, sub_module in module.named_children():
-                    full_name = f"{module_name}.{sub_name}"
-                    register_hooks(sub_module, full_name,leaf=True)
-
-          
-
-       
-           
-        for name, module in model.named_children():
-            register_hooks(module, name)
-
-        # Perform a forward pass using the dataloader to trigger the hooks
-        model.eval()
-        data = None
-        with torch.no_grad():
-            for batch in dataloader:
-                data = batch
-                model.common_step(batch)  # Trigger forward pass
-                break  # Only need one batch to trace
-        return data
-
+  
     def get_node_color(self, module_type):
 
         # Single module logic
@@ -887,13 +490,12 @@ class Ample():
         return 'white'  # Default color
 
     
-    def plot_model(self, format='png', dpi=500):
+    def plot_model(self, format='png', dpi=100, width=4, height=4):
         dot = Digraph(comment='Simplified Model I/O Graph with Order')
-        dot.attr(rankdir='TB', size='10')  # TB for top-bottom layout
-
+        
+        # Set rank direction and size
+        dot.attr(rankdir='TB', size=f"{width},{height}!")  # TB for top-bottom layout
         tensor_seen = set()
-
-        print(self.model_trace)
         
         for sub_module_name, sub_module_dict in self.model_trace.items():
             
@@ -937,8 +539,7 @@ class Ample():
 
         display(Image(dot.pipe(format=format)))
 
-   #TODO use if depth is et to 1
-    def trace_model_hooks_dataloader_sequential(self, model, dataloader):
+    def trace_model_hooks_detailed(self, model, dataloader):
         self.model_trace = {}
         tensor_id_to_name = {}
         order_counter = 0
@@ -1073,24 +674,19 @@ class Ample():
     def dump_nodeslot_programming_multi_model(self,append_mode=False):
         mode = 'a' if append_mode else 'w'
 
-        # self.nodeslot_programming = {'nodeslots':[]}
-        # self.program_nodeslots()
-        # if append_mode:
+
 
         with open(self.nodeslot_file,'w') as file:
             json.dump(self.nodeslot_programming, file, indent=4)
 
         nodeslot_memory_pointer = 0
         nodeslot_byte_list = []
-        print('--------------node config dump-------')
-        print('nodeslot_programming',self.nodeslot_programming)
+
         for group, nodeslot_group in enumerate(self.nodeslot_programming):
-            print('nodeslot_group',nodeslot_group)
             node_ptr = 0
             edge_ptr = 0
 
             node_group = nodeslot_group[0]
-
 
             node_ptr = nodeslot_memory_pointer
             subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(node_group)
@@ -1108,24 +704,13 @@ class Ample():
                 nodeslot_memory_pointer += nmh_length
 
             self.nodeslot_programming_group_start_address.append((node_ptr,edge_ptr))
-            # if isinstance(nodeslot_group, list):
-            #     for subgroup in nodeslot_group:
-            #         self.nodeslot_programming_group_start_address.append(nodeslot_memory_pointer)
-            #         subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(subgroup)
-            #         nodeslot_byte_list += subgroup_byte_list
-            #         nodeslot_memory_pointer += nmh_length
-            # else:
-            #     self.nodeslot_programming_group_start_address.append(nodeslot_memory_pointer)
-            #     group_byte_list, nmh_length = self.generate_nodeslots_mem(nodeslot_group)
-            #     nodeslot_byte_list += group_byte_list
-            #     nodeslot_memory_pointer += nmh_length
+          
 
         dump_byte_list(nodeslot_byte_list, self.nodeslot_mem_dump_file, append_mode)
 
 
 
     def generate_nodeslots_mem(self,nodeslot_group):
-        print('nodeslot_group genereation',nodeslot_group)
 
         node_groups = np.array(nodeslot_group)
         
@@ -1176,28 +761,13 @@ class Ample():
             else:
                 layer['nodeslot_start_address'] = sub_module_nodeslot_grp[0]
 
-            # if i < len(self.nodeslot_programming_group_start_address): 
-                # if 'nodeslot_start_address' in layer:
-                #     layer['nodeslot_start_address'] += self.nodeslot_programming_group_start_address[i]
-                # else:
-                #     layer['nodeslot_start_address'] = self.nodeslot_programming_group_start_address[i]
-    
-
-
         with open(self.layer_config_file, 'w') as file:
             json.dump(data, file, indent=4)
 
-        print("Updated configuration successfully written back to file.")
-
-
-
-
-      #Save JIT model for testbench
+    #Save JIT model for testbench
     def save_model(self,model,inputs):
         model.eval()
-
         jit_model = torch.jit.trace(self.model, tuple(inputs))
-        print('jit model saving to',self.sim_model_loc + 'model.pt')
         torch.jit.save(jit_model, self.sim_model_loc + 'model.pt')
 
         return jit_model
@@ -1206,12 +776,6 @@ class Ample():
     #Save graph for testbench
     def save_graph(self,inputs):
         input_data =inputs
-        print('saved inputs',input_data)
-        # input_data = {
-        #     'x': self.trained_graph.dataset.x,  
-        #     'edge_index': self.trained_graph.dataset.edge_index,
-        #     'edge_attr': self.trained_graph.dataset.edge_attr
-        # }
 
         torch.save({
             'input_data': input_data
@@ -1224,9 +788,7 @@ class CustomTracer(fx.Tracer):
 
 
     def is_leaf_module(self, m, module_qualified_name):
-            # Check if the module is an instance of a class in self.model_map
         if isinstance(m, tuple(self.model_map.values())):
             return True
         return super().is_leaf_module(m, module_qualified_name)
     
-#Class to configure and communicate with Ample - pass configured model and target graph

@@ -20,12 +20,8 @@ data_width = 64 #TODO Parameterise
 class TrainedGraph:
     def __init__(self, dataset, feature_count=32, embeddings=[], graph_precision="FLOAT_32", self_connection=False):
 
-        # print('data edges',dataset.edge_index)
         self.dataset = dataset
-        print('dataset',dataset)
-        print('data edges',dataset.edge_index)
-        print('data x',dataset.x)
-        print('data edge_attr',dataset.edge_attr)
+
         if self.dataset.edge_index is None: #TODO clean up
             num_nodes = self.dataset.num_nodes  
             self_connections = torch.arange(0, num_nodes)
@@ -33,7 +29,7 @@ class TrainedGraph:
         self.nx_graph = to_networkx(self.dataset)
 
         self.graph_precision = graph_precision
-        # self.model = model #Need model to define the graph stucture e.g interaction net
+
         # Node offsets in adjacency list
         node_ids, node_offsets = np.unique(self.dataset.edge_index[0], return_index=True)
 
@@ -49,8 +45,7 @@ class TrainedGraph:
   
         #Check if using edge attributes:
         self.init_nx_graph(self_connection=self_connection) #TODO change to or to not accept edges
-        #if edges:
-        # print(self.nx_graph.edges(data=True))
+
         edge = list(self.nx_graph.edges(data=True))[0]
         _,_, attributes = edge
         self.edge_feature_count = len(attributes)
@@ -58,7 +53,6 @@ class TrainedGraph:
         # Local copy of embeddings stored in node objects
         self.embeddings = embeddings #node embeddings
 
-        # print(f"Embeddings: {self.embeddings}")
         # TO DO: read dequantization parameter from QAT
         self.dequantization_parameter = 1
 
@@ -67,10 +61,7 @@ class TrainedGraph:
     def init_nx_graph(self, self_connection=False):
         rx_node_edge_neighbours  = [[] for _ in range(len(self.nx_graph.nodes()))]
 
-        print('attr check',self.dataset.edge_attr)
         if self.dataset.edge_attr is not None:
-            print('EDGE ATTR')
-            # print(self.dataset.edge_attr)
             for index, (src, rx) in enumerate(self.nx_graph.edges()):
                 edge_id = index + len(self.nx_graph.nodes)
 
@@ -100,9 +91,6 @@ class TrainedGraph:
         else:
             node_neighbours = [list(self.nx_graph.neighbors(node)) for node in self.nx_graph.nodes()]
 
-            # print('node_neighbours')
-            # print(node_neighbours)
-        # print(self.nx_graph.edgeindex)
         for node in self.nx_graph.nodes:
             neighbours = node_neighbours[node]
             # edge_neighbours =rx_node_edge_neighbours[node] #self.nx_graph.nodes[rx]["meta"]['neighbours']
@@ -166,7 +154,7 @@ class TrainedGraph:
     def reduce(self):
         logging.info("Reducing graph.")
 
-        print(f"dataset has type {type(self.dataset)}")
+        print(f"Dataset has type {type(self.dataset)}")
 
         logging.info("STATS BEORE REDUCE")
         logging.info(f"node_count: {self.dataset.num_nodes}, edge_count: {self.dataset.num_edges}")
@@ -185,7 +173,6 @@ class TrainedGraph:
             # embd = self.embeddings[node]
             embd = self.dataset.x[node].numpy()  # Convert to numpy array if necessary
             precision = self.nx_graph.nodes[node]["meta"].get('precision', "FLOAT_32")
-            # print('embd',embd)
             if precision == "FLOAT_32":
                 embd = embd.astype(np.float32)  # Cast to 32-bit floating point
             elif precision == "FIXED_16":
@@ -199,7 +186,6 @@ class TrainedGraph:
             self.nx_graph.nodes[node]["meta"]['embedding'] = embd
             self.dataset.x[node] = torch.tensor(embd, dtype=torch.float)
 
-        # print('precision',precision)
 
         if hasattr(self.dataset, 'edge_attr') and self.dataset.edge_attr is not None:
             for idx, edge in enumerate(self.nx_graph.edges):

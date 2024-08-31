@@ -55,30 +55,9 @@ class InitManager:
         self.sim_model_loc = os.path.join(base_path)
         # Layer configuration
         self.layer_config = {'global_config': {}, 'layers': []}
-        # self.model_layer_max_features = max([self.get_feature_counts(self.model)])
         # Nodeslot programming
         self.nodeslot_programming = []
         self.nodeslot_programming_group_start_address = []
-
-        # self.traced_model = GraphTracer(model)
-
-        # # Print the input and output layers
-        # self.traced_model.print_input_output_layers()
-
-    
-
-    # def get_model_hierarchy(self):
-    #     model_hierarchy = []
-    #     if hasattr(self.model, 'named_children') and len(list(self.model.children()))>1:
-    #         for name, module in self.model.named_children():
-    #             print(f'{name}: {module.__class__.__name__}')
-    #             model_hierarchy.append(self.get_feature_counts(module))
-    #     else:
-    #         model_hierarchy.append(self.get_feature_counts(self.model))
-    #         print('Simple hierarchy')
-    #     return model_hierarchy
-
-
 
 
     # Nodeslot programming and layer configuration
@@ -121,6 +100,8 @@ class InitManager:
             adj_list_addr= self.memory_mapper.offsets['adj_list']['nbrs']
             aggregate_enable = 1
         edge_node = 0
+
+        #TODO remove -either use kernels or dataflow graph
         #Multi-layer support - out messages become in messages for next layer
         if 'input' in layer.name:
             in_messages_address = self.memory_mapper.offsets['in_messages']
@@ -128,16 +109,14 @@ class InitManager:
             in_messages_address = self.memory_mapper.out_messages_ptr
 
 
-        # if 'hidden' or 'input' in layer.name:
-        #     out_messages_address = self.memory_mapper.out_messages_ptr#Can change this to have intermediate out messages (['out_messages'][idx-1])
-        # else:
-        out_messages_address= self.memory_mapper.out_messages_ptr #Where next sub module will read from
+        #Where next sub module will read from
+        out_messages_address= self.memory_mapper.out_messages_ptr 
 
-        self.memory_mapper.offsets['out_messages'][idx] = out_messages_address #Save to layer config for tb
-        #Will need to modify if writing back edge embeddings as there is likely to be more edges than nodes
-        #New out messages pointer = [data_needed_to_store(number of features in [this layer])] * number of nodes in graph
+        #Save to layer config for tb
+        self.memory_mapper.offsets['out_messages'][idx] = out_messages_address 
+        
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.get_feature_counts(self.model))[idx]) * len(self.trained_graph.nx_graph.nodes)
-        self.memory_ptr = self.memory_mapper.out_messages_ptr #End of memory so next layer knows where to start writing
+        self.memory_ptr = self.memory_mapper.out_messages_ptr 
         return {
             'name' : layer.name,
             'nodeslot_count': len(self.trained_graph.nx_graph.nodes),
@@ -175,9 +154,7 @@ class InitManager:
             else:
                 adjacency_list_address = self.memory_mapper.offsets['adj_list']['self_ptr']
         else:
-            # if edge: 
-            #     adjacency_list_address = self.memory_mapper.offsets['adj_list']['edge_nbrs'] #Only use if node is using edges
-            # else:
+
             adjacency_list_address = self.memory_mapper.offsets['adj_list']['nbrs']
             aggregate_enable = 1
 
@@ -227,8 +204,6 @@ class InitManager:
         l1 = self.get_layer_config(self.model.src_embedder,in_messages_address = in_messages_address,idx=0,edge=0,linear=1)
         self.layer_config['layers'].append(l1)
 
-        # print('node num:')
-        # print(len(self.trained_graph.nx_graph.nodes))
         
         #Edge already indexed to start after nodes
         # self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.model.src_embedder.out_features) * len(self.trained_graph.nx_graph.nodes))
@@ -239,8 +214,7 @@ class InitManager:
         l2 = self.get_layer_config(self.model.edge_embedder,in_messages_address = in_messages_address,idx=1,edge=1,linear=1)
         self.layer_config['layers'].append(l2)
 
-        # print('edge num:')
-        # print(len(self.trained_graph.nx_graph.edges))
+
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.trained_graph.feature_count) * (len(self.trained_graph.nx_graph.edges)+len(self.trained_graph.nx_graph.nodes)))
 
         #Receive Embedder
@@ -308,9 +282,7 @@ class InitManager:
         l1 = self.get_layer_config(self.model.edge_embedder,in_messages_address = in_messages_address,idx=1,edge=1,linear=1)
         self.layer_config['layers'].append(l1)
 
-        # print('edge num:')
-        # print(len(self.trained_graph.nx_graph.edges))
-
+ 
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.trained_graph.feature_count) * (len(self.trained_graph.nx_graph.edges)+len(self.trained_graph.nx_graph.nodes)))
         #out messages - 3
 
@@ -484,7 +456,6 @@ class InitManager:
 
     def get_default_edge(self, edge):
         edge_meta = edge[2]['meta']
-        # print('edge_meta',edge_meta)
         return {
             'node_id' : edge_meta['edge_id'],  #Refactor name
             'neighbour_count':3, #Self, rx, src
@@ -549,7 +520,6 @@ class InitManager:
         for edge in self.trained_graph.nx_graph.edges(data=True):
             edge = self.get_default_edge(edge)     
             nodeslot_group.append(edge)
-            # Print all the features (attributes) of the edge
         self.nodeslot_programming.append(nodeslot_group)
 
             
@@ -573,7 +543,6 @@ class InitManager:
 
 
     def generate_nodeslots_mem(self,nodeslot_group):
-        # print('nodeslot_group',nodeslot_group)
         node_groups = np.array(nodeslot_group)
         
         node_groups = np.pad(
@@ -688,12 +657,10 @@ class InitManager:
         nodeslot_byte_list = []
         for group,nodeslot_group in enumerate(self.nodeslot_programming):
 
-            # print('node group',group)
-            # print(nodeslot_group)
+
             self.nodeslot_programming_group_start_address.append(nodeslot_memory_pointer)
             # Dump nodeslots.mem file
             group_byte_list,nmh_length = self.generate_nodeslots_mem(nodeslot_group)
-            # print('nhm',nmh_length)
             nodeslot_byte_list +=group_byte_list
             nodeslot_memory_pointer += nmh_length
 
@@ -749,7 +716,6 @@ class InitManager:
         # Append edge_attr if it's not None
         if edge_attr is not None:
             data.append(edge_attr)
-            # print('edge_attr',edge_attr)
 
         jit_model = torch.jit.trace(self.model, data)
         #Non-traced model
@@ -772,32 +738,7 @@ class InitManager:
             'input_data': input_data
         }, self.sim_model_loc + 'graph.pth')
 
-    # def save_model(self,model,inputs):
-    #     model.eval()
-
-    #     jit_model = torch.jit.trace(self.model, tuple(inputs))
-    #     print('jit model saving to',self.sim_model_loc + 'model.pt')
-    #     torch.jit.save(jit_model, self.sim_model_loc + 'model.pt')
-
-    #     return jit_model
-
-
     
-    # #Save graph for testbench
-    # def save_graph(self,inputs):
-    #     input_data =inputs
-    #     print('saved inputs',input_data)
-    #     # input_data = {
-    #     #     'x': self.trained_graph.dataset.x,  
-    #     #     'edge_index': self.trained_graph.dataset.edge_index,
-    #     #     'edge_attr': self.trained_graph.dataset.edge_attr
-    #     # }
-
-    #     torch.save({
-    #         'input_data': input_data
-    #     }, self.sim_model_loc + 'graph.pth')
-
-
     def calc_axi_addr(self,feature_count):
         #ceil(num_bytes/num_bytes_in_data_slot)*num_bytes_in_data_slot
         return math.ceil(4*feature_count / data_width) * data_width
@@ -821,6 +762,4 @@ class InitManager:
         self.trained_graph.reduce()
     
     def map_memory(self,in_messages_addr = None,edge_attr_messages_addr = None):
-        print('in_messages_addr',in_messages_addr)
-        print('memory_ptr',self.memory_ptr)
         self.memory_mapper.map_memory(self.memory_ptr,in_messages_addr)

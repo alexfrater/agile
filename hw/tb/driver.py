@@ -15,6 +15,7 @@ class Driver():
         self.fte_regs = {}
 
     async def program_layer_config(self, layer):
+        print('nsb_regs',self.nsb_regs)
         
         self.dut._log.debug("Ready to program layer configuration")
 

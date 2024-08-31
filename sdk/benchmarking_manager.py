@@ -282,8 +282,6 @@ class BenchmarkingManager:
     def benchmark(self):
         metrics = {}
         if (self.cpu):
-            print('1')
-
             metrics["cpu"] = self.cpu_benchmark()
         if (self.gpu):
            metrics["gpu"] = self.gpu_benchmark()

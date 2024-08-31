@@ -62,17 +62,14 @@ class AXIWriteMasterMonitor:
 
             # Data
             if self.data_valid.value and self.pop.value and current_transaction:
-                print('sampling axi data')
                 data_chunk = hex(self.data.value)
                 current_transaction['data'].append(self.hex_to_floats(data_chunk))
-                print('sampling axi data2',data_chunk )
 
 
             # Response
             if self.resp_valid.value and self.resp_ready.value and current_transaction: #Rmeove current_transaction and fix RTL to be high for single clock cycle - check if different clock e.g 100Mhz - 2 cycles at 200MHz
                 assert len(current_transaction['data']) == current_transaction['expected_length'], f"Transaction data length mismatch at address {current_transaction['start_address']}"
 
-                print('axi4 ')
  
                 self.dut._log.debug("Getting node")
                 expected_node = self.get_node_by_address(current_transaction['start_address'])
@@ -80,45 +77,35 @@ class AXIWriteMasterMonitor:
                     self.dut._log.debug("--------------------")
                     self.dut._log.debug("")
                     self.dut._log.debug(f"Node found: {expected_node['node_id']}, Address: {expected_node['address']}")
-                    print('axi5 ')
 
 
                     # Check
                     self.dut._log.debug(f"Data expected {expected_node['data']}")
-                    print('axi6 ')
                     current_transaction['data'] = tensor([item for sublist in current_transaction['data'] for item in sublist[::-1]])
                     self.dut._log.debug(f"Data gotten {current_transaction['data']}")
                     assert current_transaction['data'].shape == expected_node['data'].shape, f"Data size mismatch for address {current_transaction['start_address']}"
 
-                    print('axi7 ')
-
-                    print('toelrancer ',self.tolerance)
 
                     #TODO reinstate this when edge aggregation is working
                     assert torch.allclose(current_transaction['data'], expected_node['data'], atol=self.tolerance), \
                         f"Data mismatch for node {expected_node['node_id']} address {current_transaction['start_address']}"
-                    print('axi8 ')
+
                     self.dut._log.debug(f"Data and address correctly matched for node: {expected_node['node_id']}")
                     self.dut._log.debug(" ")
                     self.dut._log.debug("--------------------")
                 else:
                     self.dut._log.warning(f"No node found with address {current_transaction['start_address']}")
                 
-                print('axi9 ')
-
                     
                 if current_transaction:
                     del current_transaction['start_address']
                     current_transaction = None
 
-                print('axi7 ')
 
     def load_layer_features(self, nodeslot_programming,layer_features,layer_config,global_config,layer_idx):
         self.dut._log.debug("Loading Layer Features")
         #Single model models - TODO 
-        print('####LAYER####')
-        print(layer_config)
-        print(layer_features)
+
         if len(nodeslot_programming) ==1:
             nodeslot_group_programming = nodeslot_programming[0]
         else:
@@ -127,17 +114,13 @@ class AXIWriteMasterMonitor:
             nodeslot_group = layer_config['sub_model_id']
 
             #Use new nodelsot group for each layer? TODO change for edge node groups
-
-            print('nodeslot_programming',nodeslot_programming)
             nodeslot_group_programming = nodeslot_programming[nodeslot_group]
-            print('nodeslot_group_programming',nodeslot_programming)
 
 
         if layer_config['edge_node']:
             nodeslots = nodeslot_group_programming[1]
             edge_offset = global_config['node_count'] #TODO Fix
         else:
-            # print('node_layer')
             edge_offset = 0
             nodeslots = nodeslot_group_programming[0]
 
@@ -147,23 +130,13 @@ class AXIWriteMasterMonitor:
 
 
 
-        print('nodeslots',nodeslots)
         for nodeslot in nodeslots:
-            # print(data)
             node_id = nodeslot['node_id']
-            # print(node_id,'node_id')
-            # print('offset_id',node_id-(edge_offset))
-            print('node_id',node_id)
-            
+
             data = layer_features[node_id-(edge_offset)] #Remove edge count offset to look at results
-            # print(data,'data')
-            # print(nodeslot,'nodeslot')
-            # print(layer_out_message_offset,'layer_out_message_offset')
-           
-            #check this matches
+
             out_messages_address_lsb = nodeslot['out_messages_address_lsb'] + layer_out_message_offset
             axi_write_master_address =int(out_messages_address_lsb)
-            # print(axi_write_master_address,'axi_write_master_address')
             node_dict = {
                 'node_id': node_id,
                 'address': axi_write_master_address, 
