@@ -236,12 +236,8 @@ class Ample():
                 ###DATA###
                 #Type 0 - External input - may have external edge input
                 if any(name in external_inputs_dict for name in input_names):
-                    print('sub_module_name',sub_module_name)
-                    print('input_names',input_names)
+
                     dataset = Data()
-                    print('edge_attr_external_inputs_dict',edge_attr_external_inputs_dict)
-                    print('edge_index_external_inputs_dict',edge_index_external_inputs_dict)
-                    print('node_feature_external_inputs_dict',node_feature_external_inputs_dict)
 
                     for name in input_names:
                         print('name',name)
@@ -1092,18 +1088,24 @@ class Ample():
             print('nodeslot_group',nodeslot_group)
             node_ptr = 0
             edge_ptr = 0
+
             node_group = nodeslot_group[0]
-            edge_group = nodeslot_group[1]
+
 
             node_ptr = nodeslot_memory_pointer
             subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(node_group)
             nodeslot_byte_list += subgroup_byte_list
             nodeslot_memory_pointer += nmh_length
-            
-            edge_ptr = nodeslot_memory_pointer
-            subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(edge_group)
-            nodeslot_byte_list += subgroup_byte_list
-            nodeslot_memory_pointer += nmh_length
+
+
+            if len(nodeslot_group)>1:
+                # self.nodeslot_programming_group_start_address.append((node_ptr,0))
+                
+                edge_group = nodeslot_group[1]
+                edge_ptr = nodeslot_memory_pointer
+                subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(edge_group)
+                nodeslot_byte_list += subgroup_byte_list
+                nodeslot_memory_pointer += nmh_length
 
             self.nodeslot_programming_group_start_address.append((node_ptr,edge_ptr))
             # if isinstance(nodeslot_group, list):
