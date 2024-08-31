@@ -1,16 +1,44 @@
 import os
 import pypci
 
-class PCIe_Manager:
+class PCIeManager:
   def __init__(self):
     # self.pcie_device = self.connect_to_device()
-    self.pcie_device = "/dev/xdma0_user"
+    self.regs_write = fw = os.open('/dev/xdma0_user',os.O_WRONLY)
+    self.regs_read = fw = os.open('/dev/xdma0_user',os.O_RDONLY)
 
+    self.mem_write = os.open('/dev/xdma0_h2c_0',os.O_WRONLY)
+
+    self.mem_read = os.open('/dev/xdma0_c2h_0',os.O_RDONLY)
+
+    xdma_files = {
+        'regs_write': self.regs_write,
+        'regs_read': self.regs_read,
+        'mem_write': self.mem_write,
+        'mem_read': self.mem_read,
+
+    }
+
+
+    def __del__(self):
+        for name, fd in xdma_files.items():
+            if fd is not None: 
+                try:
+                    os.close(fd)
+                    print(f"File descriptor '{name}' closed successfully.")
+                except OSError as e:
+                    print(f"Error closing file descriptor '{name}': {e}")
+                finally:
+                    file_descriptors[name] = None  
+
+
+    
   def connect_to_device(self):
     devices  = pypci.lspci()
     for device in devices:
-        # print('device',device)
+
         if device.vendor_id ==  0x10EE:
+            print('device',device)
             print('Xilinx device found:')
             xilinx_device = device
             break
@@ -28,34 +56,32 @@ class PCIe_Manager:
           print(f"An error occurred while rescanning the PCI bus: {e}")
 
 
-  def read_from_memory(self, address):
-    size = 32 #TODO set in init
-    """Read data from the specified address in memory."""
-    with open(device, 'rb') as f:
-        f.seek(address)
-        data = f.read(size)
-        print(f"Data read from address {hex(address)}: {data.hex()}")
-        return data
+  
+  def write_to_memory(self,address, datab):
+    os.pwrite(self.mem_write,datab,address)
+  
+  def read_from_memory(self,address, num_bytes):
+    return os.pread(self.mem_read,num_bytes,address)
 
 
-  def write_to_memory(self,address, data):
-      with open(self.pcie_device, 'r+b') as f:
-          f.seek(address)
-          f.write(data)
-          print(f"Data written to address {hex(address)}")
+    #Add offsets
+  def write_to_reg(self,address, datab):
+    os.pwrite(self.regs_write,datab,address)
 
-  def read_memory_file(self,filepath):
+  
+  def read_from_reg(self,address): #32bit reg
+    return os.pread(self.regs_read,4,address)
+
+  def read_host_memory_file(self,filepath):
       with open(filepath, 'r') as file:
           hex_string = file.read().strip().replace("\n", "")
       
-      # Convert hex string to bytes
       data_bytes = bytes.fromhex(hex_string)
       return data_bytes
 
   def write_file(self,filepath,address):
-    # Load the memory data from the file
-    memory_data = self.read_memory_file(filepath)
-    # Write the entire memory data to the specified address
+    memory_data = self.read_host_memory_file(filepath)
     self.write_to_memory(address, memory_data)
+    print('Written to memory', len(memory_data), 'bytes from file:', filepath)
 
 
