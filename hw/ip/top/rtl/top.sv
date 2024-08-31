@@ -9,6 +9,10 @@ module top
 
     input  logic                          regbank_clk,
     input  logic                          regbank_resetn,
+
+
+
+
     
     // AXI-L interface to Host
     input  logic [0 : 0]                  host_axil_awvalid,
@@ -112,7 +116,42 @@ module top
     input  logic [1:0]                   nodeslot_fetch_axi_rresp,
     input  logic                         nodeslot_fetch_axi_rlast,
     input  logic                         nodeslot_fetch_axi_rvalid,
-    output logic                         nodeslot_fetch_axi_rready
+    output logic                         nodeslot_fetch_axi_rready,
+
+
+
+
+//////////////////////////DEBUG -ILA//////////////////////////////////
+    // NSB -> Aggregation Engine Interface
+    output logic                                                debug_nsb_age_req_valid,
+    output logic                                                debug_nsb_age_req_ready,
+    // output logic [($clog2(MAX_NODESLOT_COUNT) + NODE_ID_WIDTH + $clog2(MESSAGE_CHANNEL_COUNT) + NODE_PRECISION_e_WIDTH + AGGREGATION_FUNCTION_e_WIDTH) - 1:0] debug_nsb_age_req,
+
+    output logic                                                debug_nsb_age_resp_valid, // valid only for now
+    // output logic [($clog2(MAX_NODESLOT_COUNT)) - 1:0] debug_nsb_age_resp,
+
+
+    // NSB -> Transformation Engine Interface
+    output logic                                                debug_nsb_fte_req_valid,
+    output logic                                                debug_nsb_fte_req_ready,
+    // output logic [(MAX_NODESLOT_COUNT + NODE_PRECISION_e_WIDTH + AGGREGATION_BUFFER_SLOTS) - 1:0] debug_nsb_fte_req,
+
+    output logic                                                debug_nsb_fte_resp_valid, // valid only for now
+    // output logic [(MAX_NODESLOT_COUNT + NODE_PRECISION_e_WIDTH) - 1:0] debug_nsb_fte_resp,
+
+
+    // NSB -> Prefetcher Interface
+    output logic                                                debug_nsb_prefetcher_req_valid,
+    output logic                                                debug_nsb_prefetcher_req_ready,
+    // output logic [3 + AXI_ADDRESS_WIDTH + ($clog2(MAX_FEATURE_COUNT) + 1) + ($clog2(MAX_FEATURE_COUNT) + 1) + $clog2(MAX_NODESLOT_COUNT) + NODE_PRECISION_e_WIDTH + $clog2(MAX_NEIGHBOURS) :0]   debug_nsb_prefetcher_req,
+    output logic                                                debug_nsb_prefetcher_resp_valid // valid only for now
+    // output [$clog2(MAX_NODESLOT_COUNT) + 3 + $clog2(MESSAGE_CHANNEL_COUNT):0]   debug_nsb_prefetcher_resp
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+
 
    
 );
@@ -297,6 +336,45 @@ logic                                                nsb_prefetcher_req_ready;
 NSB_PREF_REQ_t                                       nsb_prefetcher_req;
 logic                                                nsb_prefetcher_resp_valid; // valid only for now
 NSB_PREF_RESP_t                                      nsb_prefetcher_resp;
+
+
+
+
+assign debug_nsb_age_req_valid = nsb_age_req_valid;
+assign debug_nsb_age_req_ready = nsb_age_req_ready;
+assign debug_nsb_age_req = {nsb_age_req.nodeslot, nsb_age_req.node_id, nsb_age_req.fetch_tag, nsb_age_req.node_precision, nsb_age_req.aggregation_function};
+assign debug_nsb_age_resp_valid = nsb_age_resp_valid;
+assign debug_nsb_age_resp = nsb_age_resp.nodeslot;
+
+assign debug_nsb_fte_req_valid = nsb_fte_req_valid;
+assign debug_nsb_fte_req_ready = nsb_fte_req_ready;
+assign debug_nsb_fte_req = {nsb_fte_req.nodeslots, nsb_fte_req.precision, nsb_fte_req.slots};
+assign debug_nsb_fte_resp_valid = nsb_fte_resp_valid;
+assign debug_nsb_fte_resp = {nsb_fte_resp.nodeslots, nsb_fte_resp.precision};
+
+assign debug_nsb_prefetcher_req_valid = nsb_prefetcher_req_valid;
+assign debug_nsb_prefetcher_req_ready = nsb_prefetcher_req_ready;
+assign debug_nsb_prefetcher_req = {
+    nsb_prefetcher_req.req_opcode,
+    nsb_prefetcher_req.start_address,
+    nsb_prefetcher_req.in_features,
+    nsb_prefetcher_req.out_features,
+    nsb_prefetcher_req.nodeslot,
+    nsb_prefetcher_req.nodeslot_precision,
+    nsb_prefetcher_req.neighbour_count,
+    nsb_prefetcher_req.aggregate
+};
+assign debug_nsb_prefetcher_resp_valid = nsb_prefetcher_resp_valid;
+assign debug_nsb_prefetcher_resp      = nsb_prefetcher_resp;
+assign debug_nsb_prefetcher_resp = {
+    nsb_prefetcher_resp.nodeslot,
+    nsb_prefetcher_resp.response_type,
+    nsb_prefetcher_resp.allocated_fetch_tag,
+    nsb_prefetcher_resp.partial
+};
+// ====================================================================================
+
+
 
 // Message Channels: AGE -> Prefetcher
 logic [MESSAGE_CHANNEL_COUNT-1:0]                  message_channel_req_valid;
