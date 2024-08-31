@@ -13,8 +13,8 @@ if {[file exists $project_name.xpr]} {
 } else {
     # Project doesn't exist, create a new project
     puts "Creating build project."
-    create_project $project_name -part xcu280-fsvh2892-2L-e -force
-    set_property board_part xilinx.com:au280:part0:1.1 [current_project]
+    create_project $project_name -part xcu250-figd2104-2L-e -force
+    set_property board_part xilinx.com:au250:part0:1.3 [current_project]
 }
 
 # Update IP files
