@@ -216,7 +216,7 @@ class Ample():
         #             print('node features')
         print('connecting io')
 
-        for sub_module_name,sub_module_dict in self.model_trace.items():
+        for sub_model_id, (sub_module_name, sub_module_dict) in enumerate(self.model_trace.items()):
             input_names = sub_module_dict['input_names']
             module_type = sub_module_dict['module_type']
             print(module_type)
@@ -328,6 +328,7 @@ class Ample():
                 self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(sub_model,
                                                                                             dataset,
                                                                                             feature_count=32,
+                                                                                            sub_model_id = sub_model_id,
                                                                                             in_message_addr=in_message_addr,
                                                                                             edge_attr_messages_addr = edge_attr_messages_addr,
                                                                                             base_path=base_path
@@ -339,7 +340,7 @@ class Ample():
                 #TODO change neural lam to remove unspoorted modules which are not relevant to prevent this message from showing incorrectly
                 print('Module type not supported')
                 print(sub_module_name)
-        self.dump_nodeslot_programming_mem()
+        self.dump_nodeslot_programming_multi_model()
         self.add_nodeslot_addresses()
 
         if self.sim:
@@ -444,6 +445,7 @@ class Ample():
         feature_count=32,
         in_message_addr = None,
         edge_attr_messages_addr = None,
+        sub_model_id = None,
         # model_name = None,
         base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config/",
         precision = 'FLOAT_32',
@@ -458,7 +460,7 @@ class Ample():
         d_type = self.get_dtype(precision)
         self.graph = TrainedGraph(dataset,feature_count)
         sub_model = model
-        self.init_manager = InitManager(self.graph, sub_model,self.memory_ptr, base_path=base_path)
+        self.init_manager = InitManager(self.graph, sub_model,self.memory_ptr, base_path=base_path,sub_model_id=sub_model_id)
         if dataset.x is not None:
             self.init_manager.trained_graph.load_embeddings()
          
@@ -1072,7 +1074,7 @@ class Ample():
         return {module_name: data[module_name] for module_name in sorted_modules}
 
     
-    def dump_nodeslot_programming_mem(self,append_mode=False):
+    def dump_nodeslot_programming_multi_model(self,append_mode=False):
         mode = 'a' if append_mode else 'w'
 
         # self.nodeslot_programming = {'nodeslots':[]}
@@ -1084,24 +1086,45 @@ class Ample():
 
         nodeslot_memory_pointer = 0
         nodeslot_byte_list = []
-        for group,nodeslot_group in enumerate(self.nodeslot_programming):
+        print('--------------node config dump-------')
+        print('nodeslot_programming',self.nodeslot_programming)
+        for group, nodeslot_group in enumerate(self.nodeslot_programming):
+            print('nodeslot_group',nodeslot_group)
+            node_ptr = 0
+            edge_ptr = 0
+            node_group = nodeslot_group[0]
+            edge_group = nodeslot_group[1]
 
-            # print('node group',group)
-            # print(nodeslot_group)
-            self.nodeslot_programming_group_start_address.append(nodeslot_memory_pointer)
-            # Dump nodeslots.mem file
-            group_byte_list,nmh_length = self.generate_nodeslots_mem(nodeslot_group)
-            # print('nhm',nmh_length)
-            nodeslot_byte_list +=group_byte_list
+            node_ptr = nodeslot_memory_pointer
+            subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(node_group)
+            nodeslot_byte_list += subgroup_byte_list
+            nodeslot_memory_pointer += nmh_length
+            
+            edge_ptr = nodeslot_memory_pointer
+            subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(edge_group)
+            nodeslot_byte_list += subgroup_byte_list
             nodeslot_memory_pointer += nmh_length
 
+            self.nodeslot_programming_group_start_address.append((node_ptr,edge_ptr))
+            # if isinstance(nodeslot_group, list):
+            #     for subgroup in nodeslot_group:
+            #         self.nodeslot_programming_group_start_address.append(nodeslot_memory_pointer)
+            #         subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(subgroup)
+            #         nodeslot_byte_list += subgroup_byte_list
+            #         nodeslot_memory_pointer += nmh_length
+            # else:
+            #     self.nodeslot_programming_group_start_address.append(nodeslot_memory_pointer)
+            #     group_byte_list, nmh_length = self.generate_nodeslots_mem(nodeslot_group)
+            #     nodeslot_byte_list += group_byte_list
+            #     nodeslot_memory_pointer += nmh_length
 
         dump_byte_list(nodeslot_byte_list, self.nodeslot_mem_dump_file, append_mode)
 
 
 
     def generate_nodeslots_mem(self,nodeslot_group):
-        print('nodeslot_group',nodeslot_group)
+        print('nodeslot_group genereation',nodeslot_group)
+
         node_groups = np.array(nodeslot_group)
         
         node_groups = np.pad(
@@ -1144,11 +1167,18 @@ class Ample():
             data = json.load(file)
 
         for i, layer in enumerate(data['layers']):
-            if i < len(self.nodeslot_programming_group_start_address): 
-                if 'nodeslot_start_address' in layer:
-                    layer['nodeslot_start_address'] += self.nodeslot_programming_group_start_address[i]
-                else:
-                    layer['nodeslot_start_address'] = self.nodeslot_programming_group_start_address[i]
+
+            sub_module_nodeslot_grp = self.nodeslot_programming_group_start_address[layer['sub_model_id']]
+            if layer['edge_node']:
+                layer['nodeslot_start_address'] = sub_module_nodeslot_grp[1]
+            else:
+                layer['nodeslot_start_address'] = sub_module_nodeslot_grp[0]
+
+            # if i < len(self.nodeslot_programming_group_start_address): 
+                # if 'nodeslot_start_address' in layer:
+                #     layer['nodeslot_start_address'] += self.nodeslot_programming_group_start_address[i]
+                # else:
+                #     layer['nodeslot_start_address'] = self.nodeslot_programming_group_start_address[i]
     
 
 

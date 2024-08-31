@@ -33,14 +33,15 @@ class InitManager:
                     layer_config_file="layer_config.json", 
                     nodeslot_mem_dump_file="nodeslots.mem", 
                     memory_dump_file="memory.mem", 
-                    debug_dump_file="graph_dump.txt"
+                    debug_dump_file="graph_dump.txt",
+                    sub_model_id = None
                 ):
         # Adjacency list, incoming messages and weights are pulled from the TrainedGraph object
         self.trained_graph = graph
         self.model = model
         self.memory_ptr = memory_ptr
         self.memory_mapper = Memory_Mapper(graph.nx_graph, model, base_path=base_path, dump_file=memory_dump_file)
-
+        self.sub_model_id = sub_model_id
         # Create directory for output files
         os.makedirs(base_path, exist_ok=True)
 
@@ -51,7 +52,7 @@ class InitManager:
         self.nodeslot_mem_dump_file = os.path.join(base_path, nodeslot_mem_dump_file)
         self.debug_dump_file = os.path.join(base_path, debug_dump_file)
         self.updated_embeddings_file = os.path.join(base_path, 'updated_embeddings.csv')
-
+        self.sim_model_loc = os.path.join(base_path)
         # Layer configuration
         self.layer_config = {'global_config': {}, 'layers': []}
         # self.model_layer_max_features = max([self.get_feature_counts(self.model)])
@@ -155,7 +156,8 @@ class InitManager:
             'aggregate_enable' : aggregate_enable,
             'edge_node': edge_node,
             'nodeslot_start_address': 0,
-            'concat_width': 1
+            'concat_width': 1,
+            'sub_model_id' : self.sub_model_id
         },out_messages_address
         
 
@@ -197,7 +199,8 @@ class InitManager:
             'aggregate_enable' : aggregate_enable,
             'edge_node': edge, #Change to nodeslot grouping - where is this used?
             'nodeslot_start_address': 0, #self.nodeslot_programming_group_start_address[edge], #Temp TODO change to index that can be specified not jsut edge - or use dict and call it Vg,Eg, Vm,Em etc
-            'concat_width': concat_width #Temp TODO change to index that can be specified not jsut edge - or use dict and call it Vg,Eg, Vm,Em etc
+            'concat_width': concat_width, #Temp TODO change to index that can be specified not jsut edge - or use dict and call it Vg,Eg, Vm,Em etc
+            'sub_model_id' : self.sub_model_id
 
         }
 
@@ -286,18 +289,22 @@ class InitManager:
 
         #Out messages start set to 1
         #Read from in messages, write to out_msg[0] 
+      
+
+        l0 = self.get_layer_config(self.model.src_embedder,in_messages_address = in_messages_address,idx=0,edge=0,linear=1)
+        self.layer_config['layers'].append(l0)
+
+        ######Edge Embedder######
+        #  - do second so that index starts at end of last nodeslot
+        #Read from in messages (indexed), write to out_msg[0] + #nodes (included in index)
+
+
         #TODO fix this hacky way of loading edges
         #Currently subtracting number of nodeslots from address as 
         #edge index is expected to be stored after the nodes as shown: 
         #|XXXXXEEEEEEEEEE |
         in_messages_address = self.memory_mapper.offsets['edge_attr_messages'] - (self.calc_axi_addr(self.trained_graph.feature_count * len(self.trained_graph.nx_graph.nodes)))
-
-        l0 = self.get_layer_config(self.model.src_embedder,in_messages_address = in_messages_address,idx=0,edge=0,linear=1)
-        self.layer_config['layers'].append(l0)
-
-        ######Edge Embedder###### - do second so that index starts at end of last nodeslot
-        #Read from in messages (indexed), write to out_msg[0] + #nodes (included in index)
-
+        
         l1 = self.get_layer_config(self.model.edge_embedder,in_messages_address = in_messages_address,idx=1,edge=1,linear=1)
         self.layer_config['layers'].append(l1)
 
@@ -309,6 +316,7 @@ class InitManager:
 
         #Receive Embedder
         #Read from in messages, write to out_msg[0] +#nodes +#edges (not included in index)
+        in_messages_address = self.memory_mapper.offsets['in_messages'] #0
 
         l2 = self.get_layer_config(self.model.rx_embedder,in_messages_address = in_messages_address,idx=2,edge=0,linear=1)
         self.layer_config['layers'].append(l2)
@@ -674,7 +682,7 @@ class InitManager:
         self.program_nodeslots()
         # if append_mode:
         with open(self.nodeslot_json_dump_file,'w') as file:
-            json.dump(self.nodeslot_programming, file, indent=4)
+            json.dump([self.nodeslot_programming], file, indent=4)
 
         nodeslot_memory_pointer = 0
         nodeslot_byte_list = []
@@ -709,7 +717,7 @@ class InitManager:
                 output = self.model(self.trained_graph.dataset.x, self.trained_graph.dataset.edge_index)
         np.savetxt(self.updated_embeddings_file, (output[-1]).numpy(), delimiter=',')
 
-    #Save JIT model for testbench
+    # Save JIT model for testbench
     def save_model(self):
         self.model.eval()
 
@@ -746,22 +754,49 @@ class InitManager:
         jit_model = torch.jit.trace(self.model, data)
         #Non-traced model
         # jit_model = torch.jit.script(self.model).to('cpu')
-        torch.jit.save(jit_model, 'model.pt')
+
+        torch.jit.save(jit_model, self.sim_model_loc + 'model.pt')
 
         return jit_model
 
     
     #Save graph for testbench
     def save_graph(self):
-        input_data = {
-            'x': self.trained_graph.dataset.x,  
-            'edge_index': self.trained_graph.dataset.edge_index,
-            'edge_attr': self.trained_graph.dataset.edge_attr
-        }
-
+        # input_data = {
+        #     'x': self.trained_graph.dataset.x,  
+        #     'edge_index': self.trained_graph.dataset.edge_index,
+        #     'edge_attr': self.trained_graph.dataset.edge_attr
+        # }
+        input_data = ( self.trained_graph.dataset.x, self.trained_graph.dataset.edge_index, self.trained_graph.dataset.edge_attr)
         torch.save({
             'input_data': input_data
-        }, 'graph.pth')
+        }, self.sim_model_loc + 'graph.pth')
+
+    # def save_model(self,model,inputs):
+    #     model.eval()
+
+    #     jit_model = torch.jit.trace(self.model, tuple(inputs))
+    #     print('jit model saving to',self.sim_model_loc + 'model.pt')
+    #     torch.jit.save(jit_model, self.sim_model_loc + 'model.pt')
+
+    #     return jit_model
+
+
+    
+    # #Save graph for testbench
+    # def save_graph(self,inputs):
+    #     input_data =inputs
+    #     print('saved inputs',input_data)
+    #     # input_data = {
+    #     #     'x': self.trained_graph.dataset.x,  
+    #     #     'edge_index': self.trained_graph.dataset.edge_index,
+    #     #     'edge_attr': self.trained_graph.dataset.edge_attr
+    #     # }
+
+    #     torch.save({
+    #         'input_data': input_data
+    #     }, self.sim_model_loc + 'graph.pth')
+
 
     def calc_axi_addr(self,feature_count):
         #ceil(num_bytes/num_bytes_in_data_slot)*num_bytes_in_data_slot

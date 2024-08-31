@@ -202,6 +202,8 @@ def run_pass(
     if (payloads):
         init_manager.map_memory() #Has to be done first
         init_manager.dump_memory()
+        #TODO fix hack - makes it work with multi model compiler
+        # init_manager.nodeslot_programming = [init_manager.nodeslot_programming]
         init_manager.dump_nodeslot_programming()
         init_manager.dump_layer_config()
         # init_manager.embedding_expectation()
