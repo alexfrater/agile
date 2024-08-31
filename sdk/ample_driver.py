@@ -2,7 +2,7 @@ import os
 
 from tb.utils.common import NodePrecision, AggregationFunction
 from tb.variant import Variant
-from sdk.pcie_manager import PCIe_Manager
+from sdk.pcie_manager import PCIeManager
 
 class Ample_Driver:
     def __init__(self,variant,sim= False):
@@ -11,8 +11,8 @@ class Ample_Driver:
       self.layer_config_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/layer_config.json"
       self.regbank_path = os.environ.get("WORKAREA") + "/hw/build/regbanks"
 
-
-      self.device_manager = PCIe_Manager()
+      if not sim:
+        self.device_manager = PCIeManager()
 
       self.nodeslot_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/nodeslot_programming.txt"
       self.memory_file = os.environ.get("WORKAREA") + "/hw/sim/layer_config/memory.mem"

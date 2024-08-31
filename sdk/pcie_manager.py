@@ -4,11 +4,13 @@ import pypci
 class PCIeManager:
   def __init__(self):
     # self.pcie_device = self.connect_to_device()
+    
+    #Regs
     self.regs_write = fw = os.open('/dev/xdma0_user',os.O_WRONLY)
     self.regs_read = fw = os.open('/dev/xdma0_user',os.O_RDONLY)
 
+    #DDR memory
     self.mem_write = os.open('/dev/xdma0_h2c_0',os.O_WRONLY)
-
     self.mem_read = os.open('/dev/xdma0_c2h_0',os.O_RDONLY)
 
     xdma_files = {
