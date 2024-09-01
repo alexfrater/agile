@@ -30,7 +30,7 @@ class AmpleCompiler():
     self.nodeslot_programming_group_start_address = []
     self.nodeslot_mem_dump_file = self.base_path  + "nodeslots.mem"
 
-
+  #TODO make it so that inputs can be passed in aribtary order
   def compile(
         self,
         model,
@@ -48,7 +48,9 @@ class AmpleCompiler():
         self.nodeslot_programming = []
 
         self.model_trace = self.model_tracer.trace_model(model, data)
-
+        print('model_trace',self.model_trace)
+        if plot:
+            self.model_tracer.plot_model()
 
         all_outputs = set()
         for sub_module_name, sub_module_dict in self.model_trace.items():
@@ -65,7 +67,6 @@ class AmpleCompiler():
                     external_inputs.add(input_name)
 
         self.memory_ptr = 0 #keep track of memory address
-      
 
         external_inputs_dict = {element: None for element in external_inputs}
         external_inputs_dict = dict(sorted(external_inputs_dict.items()))
@@ -82,16 +83,16 @@ class AmpleCompiler():
         edge_num_list = []
         for key, value in edge_index_external_inputs_dict.items():
             edge_num_list.append(value.shape[1])
-
+        print('edfe_num_list',edge_num_list)
         #Find edge attrbiutes by checking if number of inputs is same as number of edges - TODO make more robust
         edge_attr_external_inputs_dict = {key: value for key, value in external_inputs_dict.items() if isinstance(value, torch.Tensor) and value.shape[0] in edge_num_list}
 
-
+        print('edge_attr_external_inputs_dict',edge_attr_external_inputs_dict)
         #Find number of inputs is same as number of nodes
         node_feature_external_inputs_dict = {key: value for key, value in external_inputs_dict.items()
                                              if isinstance(value, torch.Tensor) and value.shape[0] != 2 and key not in edge_attr_external_inputs_dict
                                              }
-
+        print('node_feature_external_inputs_dict',node_feature_external_inputs_dict)
         for sub_model_id, (sub_module_name, sub_module_dict) in enumerate(self.model_trace.items()):
             input_names = sub_module_dict['input_names']
             module_type = sub_module_dict['module_type']
@@ -102,11 +103,15 @@ class AmpleCompiler():
 
             ###DATA###
             #Type 0 - External input - may have external edge input
-            if any(name in external_inputs_dict for name in input_names):
+            if any(name in node_feature_external_inputs_dict or name in edge_attr_external_inputs_dict for name in input_names):
+                print('External input')
+
                 dataset = Data()
 
                 for name in input_names:
-                    if name in node_feature_external_inputs_dict:                           
+                    print('name external input',name)
+                    if name in node_feature_external_inputs_dict:       
+                        print('Node input',name)                    
                         x = list(node_feature_external_inputs_dict[name])
                         #TODO Change to acccept multpile X inputs e.g grid,mesh features
                         if dataset.x is None:
@@ -118,14 +123,26 @@ class AmpleCompiler():
                         sub_module_dict['num_nodes'] = dataset.num_nodes
 
                     elif name in edge_index_external_inputs_dict:
+                        print('edge index',name)                    
+
                         dataset.edge_index = edge_index_external_inputs_dict[name]
 
                     elif name in edge_attr_external_inputs_dict:
+                        print('edge attr added',name)
                         dataset.edge_attr = edge_attr_external_inputs_dict[name]
+                        # sub_module_dict['num_nodes'] = len(dataset.edge_attr)
 
-                    
+                #TODO replace this
+                if dataset.edge_index is  None and dataset.x is None: #check if edge attr embedder #TODO make more robust
+                    dataset.num_nodes = len(dataset.edge_attr)
+                    dataset.x = dataset.edge_attr #Make x input the edge attr as it is treating them as nodes to embed
+                    dataset.edge_attr = None 
+                    sub_module_dict['num_nodes'] = dataset.num_nodes
+                    print('edge attr layer mapping')
+                print('dataset num nodes',dataset.num_nodes)
             #Type 0 - Interal input - may have external edge index
             else:
+                print('Internal input')
                 dataset = Data()
                 dataset.x = None
 
@@ -139,21 +156,26 @@ class AmpleCompiler():
                 input_nodes = []
                 for item_name, item_data in self.model_trace.items():
                     if any(input_id in item_data['output_names'] for input_id in input_names):
-
+                        print('^^^^^found input',item_name)
                         num_items =  self.model_trace[item_name]['num_nodes']
                         #TODO make edge atttribute test more robust - if num edges is same as num nodes it will fail
                         #Edge attribute
-                        if num_items in edge_num_list:
+                        print('num_items',num_items)
+                        if num_items in edge_num_list: #Edge attribute
+                            print('added edge attr addr',item_name)
                             edge_attr_messages_addr = self.model_trace[item_name]['out_addr']
                         else:
+                            print('added in message addr',item_name)
                             dataset.num_nodes = self.model_trace[item_name]['num_nodes']
                             sub_module_dict['num_nodes'] = dataset.num_nodes
                             in_message_addr = self.model_trace[item_name]['out_addr']
 
                         input_nodes.append(item_name)
             
-            self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(sub_module_dict['module'],
-                                                                                        dataset,
+            # print('sub_model',sub_module_dict['module'])
+            self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(
+                                                                                        sub_model = sub_module_dict['module'],
+                                                                                        dataset = dataset,
                                                                                         feature_count=32,
                                                                                         sub_model_id = sub_model_id,
                                                                                         in_message_addr=in_message_addr,
@@ -189,6 +211,7 @@ class AmpleCompiler():
             self.init_manager.trained_graph.load_embeddings()
          
         #TODO Change to save to intermediate file
+        print('edge_attr_messages_addr',edge_attr_messages_addr)
         self.init_manager.map_memory(in_messages_addr = in_message_addr,edge_attr_messages_addr=edge_attr_messages_addr) 
         self.init_manager.dump_memory(self.mem_append)
         

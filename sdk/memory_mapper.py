@@ -2,13 +2,13 @@
 import numpy as np
 import logging
 import os
-from .utilities import int_list_to_byte_list, float_list_to_byte_list
 
 import torch
-from torch_geometric.nn import GCNConv, GINConv, SAGEConv
 from torch.nn import Linear
+from torch_geometric.nn import GCNConv, GINConv, SAGEConv
 
 from .models.models import GraphSAGE_Model, Edge_Embedding_Model, AGG_MLP_Model, AggregateEdges, Interaction_Net_Model
+from .utilities import int_list_to_byte_list, float_list_to_byte_list
 
 class Memory_Mapper:
 
@@ -48,6 +48,7 @@ class Memory_Mapper:
 
     #TODO Change to use messages from previous sub_models or do init manager using layer offset
     def map_in_messages(self,in_messages_addr,edge_attr_messages_addr):
+        print('in_messages_addr',in_messages_addr)
         if in_messages_addr is not None:
             self.offsets['in_messages'] = in_messages_addr 
            
@@ -59,7 +60,7 @@ class Memory_Mapper:
 
         #TODO:Change Location of edge attributes
         if edge_attr_messages_addr is not None:
-            self.offsets['edge_attr_messages'] = edge_attr_messages 
+            self.offsets['edge_attr_messages'] = edge_attr_messages_addr 
         else:
             self.offsets['edge_attr_messages'] = len(self.sub_memory_hex) + self.memory_ptr
 

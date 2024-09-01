@@ -1,26 +1,20 @@
-import numpy as np
-
 import json
 import os
-import torch
-from .utilities import dump_byte_list, binary_to_hex
-
-from sdk.memory_mapper import Memory_Mapper
-from sdk.graph_tracer import GraphTracer
-
+import math
+import numpy as np
 import logging
-
 from tqdm import tqdm
-from copy import deepcopy
 
+import torch
 from torch.nn import Linear
 from torch_geometric.nn import GCNConv, GINConv, SAGEConv
 
-from .models.models import GraphSAGE_Model, Edge_Embedding_Model,Interaction_Net_Model, EdgeGCNLayer, AGG_MLP_Model, AggregateEdges#AGG_MLP_Model - temp
 
-import math
+from sdk.memory_mapper import Memory_Mapper
+from .models.models import GraphSAGE_Model,GCN_Model, Edge_Embedding_Model,Interaction_Net_Model, EdgeGCNLayer, AGG_MLP_Model, AggregateEdges#AGG_MLP_Model - temp
+from .utilities import dump_byte_list, binary_to_hex
 
-data_width = 64
+
 
 class InitManager:
 
@@ -44,6 +38,7 @@ class InitManager:
         self.sub_model_id = sub_model_id
         # Create directory for output files
         os.makedirs(base_path, exist_ok=True)
+        self.data_width = 64
 
         # Paths
         self.memory_dump_file = os.path.join(base_path, memory_dump_file)
@@ -65,6 +60,9 @@ class InitManager:
     #TODO change this
     def get_layer_feature_count(self, layer):
         if isinstance(layer, GCNConv):
+            inc = layer.in_channels
+            outc = layer.out_channels
+        elif isinstance(layer, GCN_Model): #TODO decompose into simpler layers
             inc = layer.in_channels
             outc = layer.out_channels
         elif isinstance(layer, GINConv):
@@ -114,7 +112,7 @@ class InitManager:
 
         #Save to layer config for tb
         self.memory_mapper.offsets['out_messages'][idx] = out_messages_address 
-        
+
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.get_feature_counts(self.model))[idx]) * len(self.trained_graph.nx_graph.nodes)
         self.memory_ptr = self.memory_mapper.out_messages_ptr 
         return {
@@ -361,7 +359,6 @@ class InitManager:
     def set_layer_config(self):
         logging.info(f"Generating layer configuration.")
 
-
         #Can add precision here?
         self.layer_config['global_config'] = {
             "layer_count": len(self.model.layers),
@@ -387,15 +384,6 @@ class InitManager:
 
         return out_messages_address
 
-    def dump_layer_config_old (self,append_mode=False):
-        mode = 'a' if append_mode else 'w'
-
-        self.layer_config = {'global_config': {}, 'layers': []}
-        out_messages_address = self.set_layer_config()
-        
-        with open(self.layer_config_file, mode) as file:
-            json.dump(self.layer_config, file, indent=4)
-        return self.memory_ptr,out_messages_address
 
     def dump_layer_config(self, append_mode=False):
         # Read the existing content if the file exists and append_mode is True
@@ -741,15 +729,19 @@ class InitManager:
     
     def calc_axi_addr(self,feature_count):
         #ceil(num_bytes/num_bytes_in_data_slot)*num_bytes_in_data_slot
-        return math.ceil(4*feature_count / data_width) * data_width
+        return math.ceil(4*feature_count / self.data_width) * self.data_width
     
     # Function to get feature count of each layer
     def get_feature_counts(self,model):
         ##Add function to include in features size
         #Change to self.model
+        
         feature_counts = []
+
         for layer in model.modules():
-            if isinstance(layer, torch.nn.Conv2d):
+            if isinstance(layer, GCN_Model): #TODO make a better system
+                feature_counts.append(layer.out_channels)
+            elif isinstance(layer, torch.nn.Conv2d):
                 feature_counts.append(layer.out_channels)
             elif isinstance(layer, torch.nn.Linear):
                 feature_counts.append(layer.out_features)
@@ -762,4 +754,4 @@ class InitManager:
         self.trained_graph.reduce()
     
     def map_memory(self,in_messages_addr = None,edge_attr_messages_addr = None):
-        self.memory_mapper.map_memory(self.memory_ptr,in_messages_addr)
+        self.memory_mapper.map_memory(self.memory_ptr,in_messages_addr=in_messages_addr,edge_attr_messages_addr= edge_attr_messages_addr)

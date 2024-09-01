@@ -2,7 +2,6 @@ import argparse
 import pandas as pd
 import torch.nn as nn
 
-
 from sdk.ample_driver import Ample_Driver
 from sdk.ample_compiler import AmpleCompiler
 from sdk.benchmarking_manager import BenchmarkingManager
@@ -17,6 +16,8 @@ class Ample():
         precision_count = 1,
         aggregation_buffer_slots = 4
     ):
+        
+        
         self.name = name
         self.model = None
         self.sim = sim
@@ -32,6 +33,7 @@ class Ample():
         nn.Module.to_device = extended_to_device
 
     def to_device(self, model, device,data=None):
+
         self.model = model
         self.inputs = data
         if device == 'ample':

@@ -1,3 +1,4 @@
+import os
 import torch.fx as fx
 import torch
 from collections import defaultdict, deque
@@ -207,7 +208,7 @@ class ModelTracer():
         return 'white'  # Default color
 
     
-    def plot_model(self, format='png', dpi=100, width=4, height=4):
+    def plot_model(self, format='png', dpi=200, width=4, height=4):
         dot = Digraph(comment='Simplified Model I/O Graph with Order')
         
         # Set rank direction and size
@@ -335,7 +336,7 @@ class ModelTracer():
     def build_dependency_graph(self,data):
       graph = defaultdict(list)
       in_degree = defaultdict(int)
-      print(data)
+    #   print(data)
       for module_name, module_data in data.items():
           output_names = set(module_data.get('output_names', []))
           for other_module, other_data in data.items():

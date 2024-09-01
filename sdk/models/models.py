@@ -16,10 +16,12 @@ Graph Convolutional Network
 '''
 
 class GCN_Model(torch.nn.Module):
-    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=64, precision = torch.float32):
+    def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
         super().__init__()
         self.precision = precision
         self.layers = nn.ModuleList()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
         if layer_count == 1:
             layer  = GCNConv(in_channels, out_channels,normalize =False)
             layer.name = 'gcn_layer_input_output0'
@@ -47,7 +49,7 @@ class GCN_Model(torch.nn.Module):
             x = layer(x, edge_index)
             outputs.append(x)
 
-        return outputs
+        return outputs,x
 
 
 
@@ -181,7 +183,7 @@ class GCN_MLP_Model(nn.Module):
             else:
                 x = layer(x, edge_index)
             outputs.append(x)
-        return outputs
+        return outputs,x
 
 '''
 MLP
