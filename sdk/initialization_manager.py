@@ -108,8 +108,8 @@ class InitManager:
 
 
         #Where next sub module will read from
-        out_messages_address= self.memory_mapper.out_messages_ptr 
-
+        out_messages_address = self.memory_mapper.out_messages_ptr 
+        end_memory = self.memory_mapper.out_messages_ptr
         #Save to layer config for tb
         self.memory_mapper.offsets['out_messages'][idx] = out_messages_address 
 
@@ -135,7 +135,7 @@ class InitManager:
             'nodeslot_start_address': 0,
             'concat_width': 1,
             'sub_model_id' : self.sub_model_id
-        },out_messages_address
+        },out_messages_address,end_memory
         
 
     def get_layer_config(self, layer,in_messages_address,idx,edge=0,linear=0,concat=0,concat_width =1):
@@ -253,11 +253,10 @@ class InitManager:
 
         ##Need to modify so that the module can pick up node features and edge features from non contigous locaitons in memory
 
-
         ######Source Embedder######
         in_messages_address = self.memory_mapper.offsets['in_messages'] #0
         self.memory_mapper.out_messages_ptr = self.memory_mapper.offsets['out_messages'][0] 
-
+        end_memory = self.memory_mapper.out_messages_ptr
 
         #Out messages start set to 1
         #Read from in messages, write to out_msg[0] 
@@ -316,7 +315,6 @@ class InitManager:
 
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.trained_graph.feature_count) * (len(self.trained_graph.nx_graph.nodes)))
         #6
-        out_messages_addr = self.memory_mapper.out_messages_ptr
 
         #######RX Edge Aggregate ######## 
         # Aggregate edge neighbours
@@ -325,13 +323,23 @@ class InitManager:
         l5 = self.get_layer_config(self.model.rx_edge_aggr,in_messages_address = in_messages_address,idx=5,edge=0,linear=0)
         self.layer_config['layers'].append(l5)
 
+        out_messages_addr = self.memory_mapper.out_messages_ptr
+
         #######Rx Node Update ######## 
         in_messages_address = rx_node_embed_address
         l6 = self.get_layer_config(self.model.rx_node_update,in_messages_address = in_messages_address,idx=6,edge=0,linear=1,concat=1,concat_width=2)
         self.layer_config['layers'].append(l6)
+        # self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.trained_graph.feature_count) * (len(self.trained_graph.nx_graph.nodes)))
+        # self.memory_ptr = self.memory_mapper.out_messages_ptr
+
+
         self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.trained_graph.feature_count) * (len(self.trained_graph.nx_graph.nodes)))
-        self.memory_ptr = self.memory_mapper.out_messages_ptr
-        return out_messages_addr
+
+        # self.memory_mapper.out_messages_ptr += self.calc_axi_addr((self.get_feature_counts(self.model))[idx]) * len(self.trained_graph.nx_graph.nodes)
+        self.memory_ptr = self.memory_mapper.out_messages_ptr 
+
+
+        return out_messages_addr,end_memory
         # self.memory_mapper.out_messages_ptr = out_message_end  #TODO check
 
 
@@ -374,15 +382,15 @@ class InitManager:
         elif (isinstance(self.model, Edge_Embedding_Model)):
             self.set_layer_config_edge_embedder()
         elif (isinstance(self.model, Interaction_Net_Model)):
-            out_messages_address = self.set_layer_config_interaction_net()
+            out_messages_address,end_memory = self.set_layer_config_interaction_net()
 
         else :
            
             for idx,layer in enumerate(self.model.layers):
-                layer_config_i,out_messages_address = self.get_default_layer_config(layer,idx)
+                layer_config_i,out_messages_address,end_memory = self.get_default_layer_config(layer,idx)
                 self.layer_config['layers'].append(layer_config_i)
 
-        return out_messages_address
+        return out_messages_address,end_memory
 
 
     def dump_layer_config(self, append_mode=False):
@@ -398,7 +406,7 @@ class InitManager:
 
         # Initialize new data structure
         new_layer_config = {'global_config': {}, 'layers': []}
-        out_messages_address = self.set_layer_config()
+        out_messages_address,end_memory = self.set_layer_config()
 
         # Assume self.layer_config is populated with new data here
         new_layer_config['global_config'] = self.layer_config['global_config']
@@ -419,12 +427,14 @@ class InitManager:
         with open(self.layer_config_file, 'w') as file:
             json.dump(existing_data, file, indent=4)
 
-
-        self.pad_out_messages(out_messages_address)
+        print(f"Memory ptr: {self.memory_ptr}")
+        print(f"Out messages addr: {out_messages_address}")
+        print(f"Width: {self.memory_ptr-out_messages_address}")
+        self.pad_out_messages(end_memory)
         return self.memory_ptr, out_messages_address
 
-    def pad_out_messages(self,out_messages_address):
-        self.memory_mapper.pad_out_messages(self.memory_ptr,out_messages_address)
+    def pad_out_messages(self,end_memory):
+        self.memory_mapper.pad_out_messages(self.memory_ptr,end_memory)
 
     def get_default_nodeslot(self, node_id):
         return {
@@ -742,6 +752,8 @@ class InitManager:
             if isinstance(layer, GCN_Model): #TODO make a better system
                 feature_counts.append(layer.out_channels)
             elif isinstance(layer, torch.nn.Conv2d):
+                feature_counts.append(layer.out_channels)
+            elif isinstance(layer, Interaction_Net_Model):
                 feature_counts.append(layer.out_channels)
             elif isinstance(layer, torch.nn.Linear):
                 feature_counts.append(layer.out_features)

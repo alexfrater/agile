@@ -48,7 +48,6 @@ class Memory_Mapper:
 
     #TODO Change to use messages from previous sub_models or do init manager using layer offset
     def map_in_messages(self,in_messages_addr,edge_attr_messages_addr):
-        print('in_messages_addr',in_messages_addr)
         if in_messages_addr is not None:
             self.offsets['in_messages'] = in_messages_addr 
            
@@ -126,7 +125,7 @@ class Memory_Mapper:
     def map_weights(self):
         self.offsets['weights'][0] = len(self.sub_memory_hex)  + self.memory_ptr
         for idx,layer in enumerate(self.model.layers):
-            # print('-----layer---j',idx,layer.name)
+            print('-----layer---j',idx,layer.name)
             if isinstance(layer, GCNConv):
                 linear = layer.lin
             elif isinstance(layer, GINConv):
@@ -141,7 +140,7 @@ class Memory_Mapper:
                 linear = layer.lin
             else:
                 raise RuntimeError(f"Unrecognized layer {layer}")
-
+            print('weights',linear.weight)
             self.out_feature_count = linear.weight.shape[0]
             for outf in range(self.out_feature_count):
 

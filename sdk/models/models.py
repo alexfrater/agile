@@ -380,6 +380,7 @@ class Interaction_Net_Model(torch.nn.Module): #NodeRx_Src_Embedding_Model
     def __init__(self, in_channels=32, out_channels=32, layer_count=1, hidden_dimension=32, precision = torch.float32):
         super().__init__()
         self.precision = precision
+        self.out_channels = out_channels
         self.layers = nn.ModuleList()
 
         #########Source Node Edge Embed MLP#########
