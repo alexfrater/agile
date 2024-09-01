@@ -49,7 +49,7 @@ class AmpleCompiler():
 
         self.model_trace = self.model_tracer.trace_model(model, data)
         if plot:
-            print(self.model_trace)
+            # print(self.model_trace)
             self.model_tracer.plot_model()
 
         all_outputs = set()

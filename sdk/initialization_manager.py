@@ -427,9 +427,7 @@ class InitManager:
         with open(self.layer_config_file, 'w') as file:
             json.dump(existing_data, file, indent=4)
 
-        print(f"Memory ptr: {self.memory_ptr}")
-        print(f"Out messages addr: {out_messages_address}")
-        print(f"Width: {self.memory_ptr-out_messages_address}")
+      
         self.pad_out_messages(end_memory)
         return self.memory_ptr, out_messages_address
 
