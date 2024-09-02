@@ -130,28 +130,28 @@ module top_wrapper(
 
     //////////////////////////DEBUG -ILA//////////////////////////////////
     // NSB -> Aggregation Engine Interface
-    output logic                                                debug_nsb_age_req_valid,
-    output logic                                                debug_nsb_age_req_ready,
-    // output logic [($clog2(MAX_NODESLOT_COUNT) + NODE_ID_WIDTH + $clog2(MESSAGE_CHANNEL_COUNT) + NODE_PRECISION_e_WIDTH + AGGREGATION_FUNCTION_e_WIDTH) - 1:0] debug_nsb_age_req,
+    output wire                                                debug_nsb_age_req_valid,
+    output wire                                                debug_nsb_age_req_ready,
+    // output wire [($clog2(MAX_NODESLOT_COUNT) + NODE_ID_WIDTH + $clog2(MESSAGE_CHANNEL_COUNT) + NODE_PRECISION_e_WIDTH + AGGREGATION_FUNCTION_e_WIDTH) - 1:0] debug_nsb_age_req,
 
-    output logic                                                debug_nsb_age_resp_valid, // valid only for now
-    // output logic [($clog2(MAX_NODESLOT_COUNT)) - 1:0] debug_nsb_age_resp,
+    output wire                                                debug_nsb_age_resp_valid, // valid only for now
+    // output wire [($clog2(MAX_NODESLOT_COUNT)) - 1:0] debug_nsb_age_resp,
 
 
     // NSB -> Transformation Engine Interface
-    output logic                                                debug_nsb_fte_req_valid,
-    output logic                                                debug_nsb_fte_req_ready,
-    // output logic [(MAX_NODESLOT_COUNT + NODE_PRECISION_e_WIDTH + AGGREGATION_BUFFER_SLOTS) - 1:0] debug_nsb_fte_req,
+    output wire                                                debug_nsb_fte_req_valid,
+    output wire                                                debug_nsb_fte_req_ready,
+    // output wire [(MAX_NODESLOT_COUNT + NODE_PRECISION_e_WIDTH + AGGREGATION_BUFFER_SLOTS) - 1:0] debug_nsb_fte_req,
 
-    output logic                                                debug_nsb_fte_resp_valid, // valid only for now
-    // output logic [(MAX_NODESLOT_COUNT + NODE_PRECISION_e_WIDTH) - 1:0] debug_nsb_fte_resp,
+    output wire                                                debug_nsb_fte_resp_valid, // valid only for now
+    // output wire [(MAX_NODESLOT_COUNT + NODE_PRECISION_e_WIDTH) - 1:0] debug_nsb_fte_resp,
 
 
     // NSB -> Prefetcher Interface
-    output logic                                                debug_nsb_prefetcher_req_valid,
-    output logic                                                debug_nsb_prefetcher_req_ready,
-    // output logic [3 + AXI_ADDRESS_WIDTH + ($clog2(MAX_FEATURE_COUNT) + 1) + ($clog2(MAX_FEATURE_COUNT) + 1) + $clog2(MAX_NODESLOT_COUNT) + NODE_PRECISION_e_WIDTH + $clog2(MAX_NEIGHBOURS) :0]   debug_nsb_prefetcher_req,
-    output logic                                                debug_nsb_prefetcher_resp_valid // valid only for now
+    output wire                                                debug_nsb_prefetcher_req_valid,
+    output wire                                                debug_nsb_prefetcher_req_ready,
+    // output wire [3 + AXI_ADDRESS_WIDTH + ($clog2(MAX_FEATURE_COUNT) + 1) + ($clog2(MAX_FEATURE_COUNT) + 1) + $clog2(MAX_NODESLOT_COUNT) + NODE_PRECISION_e_WIDTH + $clog2(MAX_NEIGHBOURS) :0]   debug_nsb_prefetcher_req,
+    output wire                                                debug_nsb_prefetcher_resp_valid // valid only for now
     // output [$clog2(MAX_NODESLOT_COUNT) + 3 + $clog2(MESSAGE_CHANNEL_COUNT):0]   debug_nsb_prefetcher_resp
 
 
