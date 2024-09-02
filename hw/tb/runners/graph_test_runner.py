@@ -35,8 +35,7 @@ async def graph_test_runner(dut):
     tolerance = float(os.environ.get('AMPLE_GRAPH_TB_TOLERANCE', 1))#TODO fix
 
 
-    nodeslot_count = int(os.environ.get('AMPLE_GRAPH_TB_NODESLOT_COUNT', 32))
-    nodeslot_count =32
+    nodeslot_count = int(os.environ.get('AMPLE_GRAPH_TB_NODESLOT_COUNT', 256))
 
     log_level = get_log_level()
     dut._log.setLevel(log_level)  

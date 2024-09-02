@@ -1,5 +1,6 @@
 
-
+# %load_ext autoreload
+# %autoreload 2
 import sys
 import os
 workarea = os.environ.get("WORKAREA")
@@ -89,8 +90,6 @@ dataset = create_custom_graph_dataset(
     num_channels=32,  # Node feature dimension
     edge_dim=32  # Edge feature dimension
 )
-
-
 
 
 import torch
@@ -215,7 +214,7 @@ inputs = [
 
 dataset = FakeDataset(
                         num_graphs=1, 
-                        avg_num_nodes = 50,
+                        avg_num_nodes = 32,
                         avg_degree=3,
                         num_channels=32,
                         edge_dim=32
@@ -307,7 +306,6 @@ inputs = [dataset.edge_attr,
 outputs_model, grid_mesh_emb = model(*inputs)
 
 
-
 from sdk.ample import Ample
 
 ample = Ample(sim=True,cpu_sim=True)
@@ -315,4 +313,3 @@ ample = Ample(sim=True,cpu_sim=True)
 model.to_device('ample',data=inputs)
 
 out = model(*inputs)
-

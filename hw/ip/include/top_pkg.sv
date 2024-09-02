@@ -15,12 +15,12 @@ package top_pkg;
 parameter MESH_MULTIPLIER = 4;
 
 parameter AGGREGATION_CHANNELS = 4; // per mesh
-parameter TRANSFORMATION_CHANNELS = 8;
+parameter TRANSFORMATION_CHANNELS = 64;
 
 // Graph parameters
 parameter MAX_NODES = 1024*1024; // 1M
-parameter MAX_NODESLOT_COUNT = 32;
-parameter MAX_NEIGHBOURS = 256;
+parameter MAX_NODESLOT_COUNT = 64;
+parameter MAX_NEIGHBOURS = 64;
 parameter MAX_FEATURE_COUNT = 1024;
 parameter FEATURE_COUNT = 64;
 

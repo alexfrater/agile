@@ -113,7 +113,7 @@ if (PRECISION == top_pkg::FLOAT_32) begin
     assign bias_out_valid_comb = bias_valid;
 
 
-// `endif
+`endif
 
     always_ff @(posedge core_clk or negedge resetn) begin
         if (!resetn) begin

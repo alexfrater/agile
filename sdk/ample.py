@@ -15,11 +15,10 @@ class Ample():
         hw = False,
         name="ample",
         index=None,
-        node_slots = 32,
+        node_slots = 256,
         message_channel_count = 16,
         precision_count = 1,
         aggregation_buffer_slots = 4
-        
     ):
         
         

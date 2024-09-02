@@ -103,3 +103,12 @@ hw/pcie_1
 vivado_*
 vivado_projects_19_1
 vivado_projects_23_1
+graph_output.png
+multilayer_mpnn_computation_graph.png
+hw/sim/stacked_plot.png
+hw/sim/layer_config/nodeslot_programming.txt
+imports/neural-lam
+imports/example_data.zip
+hw/sim/stacked_plot.png
+hw/sim/stacked_plot.png
+benchmark_metrics.md
