@@ -158,7 +158,7 @@ class BenchmarkingManager:
 
         return {
             "cpu_latency_mean": avg_time,
-            "cpu_latency_std_dev": std_dev
+            # "cpu_latency_std_dev": std_dev
             # "cpu_nodes_per_ms": throughput
 
         }
@@ -261,8 +261,10 @@ class BenchmarkingManager:
                 "fpga_throughput_per_watt": throughput/mean_power
             }
         else:
+            cycles_dict = self.read_cycles_file(f"{path}/sim_cycles.txt")
+            sim_cycle_time = sum(cycles_dict.values()) * (1/self.fpga_clk_freq)
             metrics = {
-                "fpga_latency": stime
+                "fpga_latency": sim_cycle_time
             }
 
 
