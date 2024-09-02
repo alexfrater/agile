@@ -2,6 +2,7 @@ import argparse
 import pandas as pd
 import torch.nn as nn
 
+
 from sdk.ample_driver import Ample_Driver
 from sdk.ample_compiler import AmpleCompiler
 from sdk.benchmarking_manager import BenchmarkingManager
@@ -92,7 +93,6 @@ class Ample():
         bman.print_metrics(metrics)
 
 
-   
 
 
   
