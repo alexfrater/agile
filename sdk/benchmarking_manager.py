@@ -16,6 +16,7 @@ def read_power_file(filename):
 
 def read_timing_file(filename):
     lst = []
+    print('filename',filename)
     with open(filename, "r") as file:
         for line in file:
             lst = [float(a) for a in line.split(",")]
@@ -27,11 +28,8 @@ class BenchmarkWrapper():
         self.starter, self.ender = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
         self.loss_criterion = torch.nn.CrossEntropyLoss(reduction="sum")
 
-    def forward(self, x, edge_index, edge_attr):
-        model_input = (x, edge_index)
-        if edge_attr is not None:
-            model_input = model_input + (edge_attr,)  
-        out = self.model.host_forward(*(model_input))
+    def forward(self, inputs): 
+        out = self.model.host_forward(*inputs)
         return out
 
     def predict(self, inputs):
@@ -41,7 +39,7 @@ class BenchmarkWrapper():
         torch.cuda._sleep(1_000_000)
         self.starter.record()
         
-        _ = self.forward(*inputs)
+        _ = self.forward(inputs)
         torch.cuda.synchronize()
         self.ender.record()
         torch.cuda.synchronize()
@@ -89,44 +87,43 @@ class CPUBenchmarkWrapper():
 
 class BenchmarkingManager:
     def __init__(self, model, args = None, inputs= None, graph = None):
-        # if (torch.cuda.is_available()):
-        #     self.bman = BenchmarkWrapper(model)
-        # else:
-        self.bman = CPUBenchmarkWrapper(model) #Temp
+        if (torch.cuda.is_available()):
+            self.gpu_bman = BenchmarkWrapper(model)
+
+        self.cpu_bman = CPUBenchmarkWrapper(model) #Temp
         self.args = args
         self.inputs = inputs
         self.graph = graph
         #TODO just use args
 
-        self.cpu = False if args.cpu is None else args.cpu
-        self.gpu = False if args.gpu is None else args.gpu
-        self.sim = False if args.sim is None else args.sim
-        self.fpga_clk_freq = 200e6 if args.fpga_clk_freq is None else args.fpga_clk_freq
-        self.args = None if args is None else args
-        self.device = None if args.device is None else args
-        self.preload = False if args.preload is None else args.preload
-        self.gui =True
-        self.base_path = os.environ.get("WORKAREA") 
+        # self.cpu = False if args.cpu is None else args.cpu
+        # self.gpu = False if args.gpu is None else args.gpu
+        # self.sim = False if args.sim is None else args.sim
+        # self.fpga_clk_freq = 200e6 if args.fpga_clk_freq is None else args.fpga_clk_freq
+        # self.args = None if args is None else args
+        # self.device = 0 if args.device is None else args.device
+        # self.preload = False if args.preload is None else args.preload
+        # self.gui =True
+
         # self.metrics = False if args.metrics is None else args.metrics
         self.model = model
-
+        self.base_path = os.environ.get("WORKAREA")  + "/"
+        print(f"base path {self.base_path}")
 
     def gpu_run_inference(self):
-        print(f"device {self.device}")
-        self.bman.model.to(torch.device(f"cuda:{self.device}"))
-        data = self.graph.dataset
-        data.x = data.x.to(torch.device(f"cuda:{self.device}"))
-        data.edge_index = data.edge_index.to(torch.device(f"cuda:{self.device}"))
-        data.edge_attr = data.edge_attr.to(torch.device(f"cuda:{self.device}"))
+        print(f"device {self.args.device}")
+        self.gpu_bman.model.to(torch.device(f"cuda:{self.args.device}"))
+        # self.inputs.to(torch.device(f"cuda:{self.args.device}"))
+        self.inputs = [input_tensor.to(torch.device(f"cuda:{self.args.device}")) for input_tensor in self.inputs]
 
         times = []
         for i in range(1000):
-            time_taken = self.bman.predict(batch=(data.x, data.edge_index, data.edge_attr))
+            time_taken = self.gpu_bman.predict(self.inputs)
             times.append(time_taken)
 
         avg_time = np.mean(times)
         std_dev = np.std(times)
-        with open("timing_tmp.txt", "w") as f:
+        with open(self.base_path+ "timing_tmp.txt", "w") as f:
             f.write(f"{avg_time}, {std_dev}")
         return avg_time
 
@@ -146,13 +143,13 @@ class BenchmarkingManager:
                 print(f"finishing")
     
     def cpu_benchmark(self):
-        self.bman.model.to(torch.device("cpu"))
+        self.cpu_bman.model.to(torch.device("cpu"))
         # data = self.graph.dataset
         # data.x = data.x.to(torch.device("cpu"))
         # data.edge_index = data.edge_index.to(torch.device("cpu"))
         times = []
         for i in range(100):
-            time_taken = self.bman.predict(self.inputs)
+            time_taken = self.cpu_bman.predict(self.inputs)
             times.append(time_taken)
 
         avg_time = np.mean(times)
@@ -175,7 +172,7 @@ class BenchmarkingManager:
 
         try:
             inference_job.join()  # Wait for inference_job process to finish
-            lst = read_timing_file("timing_tmp.txt")
+            lst = read_timing_file(self.base_path + "timing_tmp.txt")
             print(f"Inference job completed in {lst}ms. Terminating power job...")
             power_job.terminate()  # Terminate power_job process
 
@@ -184,17 +181,25 @@ class BenchmarkingManager:
             inference_job.terminate()
             power_job.terminate()
 
-        power = np.mean(read_power_file("powers.txt"))
-        print(f"mean power {power}")
-        
-        throughput = self.graph.dataset.y.shape[0] / lst[0]
-        return {
+
+
+        if self.args.metrics:
+
+            power = np.mean(read_power_file("powers.txt"))
+            print(f"mean power {power}")
+            
+            throughput = self.graph.dataset.y.shape[0] / lst[0]
+            return {
+                    "gpu_latency_mean": lst[0],
+                    "gpu_latency_std_dev": lst[1],
+                    "gpu_mean_power": power,
+                    "gpu_nodes_per_ms": throughput,
+                    "gpu_throughput_per_watt": throughput/power
+                    }
+        else:
+            return {
                 "gpu_latency_mean": lst[0],
-                "gpu_latency_std_dev": lst[1],
-                "gpu_mean_power": power,
-                "gpu_nodes_per_ms": throughput,
-                "gpu_throughput_per_watt": throughput/power
-                }
+            }
 
     def fpga_benchmark(self):
 
@@ -284,11 +289,11 @@ class BenchmarkingManager:
 
     def benchmark(self):
         metrics = {}
-        if (self.cpu):
+        if (self.args.cpu):
             metrics["cpu"] = self.cpu_benchmark()
-        if (self.gpu):
+        if (self.args.gpu):
            metrics["gpu"] = self.gpu_benchmark()
-        if (self.sim):
+        if (self.args.sim):
             metrics["fpga"] = self.fpga_benchmark()
         return metrics
 

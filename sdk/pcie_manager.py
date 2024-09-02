@@ -1,5 +1,5 @@
 import os
-import pypci
+# import pypci
 
 class PCIeManager:
   def __init__(self):
