@@ -103,3 +103,6 @@ hw/pcie_1
 vivado_*
 vivado_projects_19_1
 vivado_projects_23_1
+powers.txt
+timing_tmp.txt
+sdk/models/powers.txt
