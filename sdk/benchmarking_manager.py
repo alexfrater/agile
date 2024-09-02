@@ -31,17 +31,17 @@ class BenchmarkWrapper():
         model_input = (x, edge_index)
         if edge_attr is not None:
             model_input = model_input + (edge_attr,)  
-        out = self.model(*(model_input))
+        out = self.model.host_forward(*(model_input))
         return out
 
-    def predict(self, batch):
-        x, edge_index,edge_attr = batch[0], batch[1], batch[2]
+    def predict(self, inputs):
+        # x, edge_index,edge_attr = batch[0], batch[1], batch[2]
         
         torch.cuda.empty_cache()
         torch.cuda._sleep(1_000_000)
         self.starter.record()
         
-        _ = self.forward(x, edge_index,edge_attr)
+        _ = self.forward(*inputs)
         torch.cuda.synchronize()
         self.ender.record()
         torch.cuda.synchronize()
@@ -67,19 +67,19 @@ class CPUBenchmarkWrapper():
     #     return out
 
 
-    def forward(self, x, edge_index, edge_attr):
-        model_input = (x, edge_index)
-        if edge_attr is not None:
-            model_input = model_input + (edge_attr,)  
-        out = self.model(*(model_input))
+    def forward(self, inputs):
+        # model_input = (x, edge_index)
+        # if edge_attr is not None:
+            # model_input = model_input + (edge_attr,)  
+        out = self.model.host_forward(*inputs)
         return out
 
 
-    def predict(self, batch):
-        x, edge_index,edge_attr = batch[0], batch[1], batch[2]
+    def predict(self,inputs):
+        # x, edge_index,edge_attr = batch[0], batch[1], batch[2]
         start_time = time.time()
         with torch.no_grad():  # Disable gradient calculation
-            _ = self.forward(x, edge_index,edge_attr)
+            _ = self.forward(inputs)
         end_time = time.time()
         inference_time = end_time - start_time
         return inference_time
@@ -89,14 +89,15 @@ class CPUBenchmarkWrapper():
 
 class BenchmarkingManager:
     def __init__(self, model, args = None, inputs= None, graph = None):
-        if (torch.cuda.is_available()):
-            self.bman = BenchmarkWrapper(model)
-        else:
-            self.bman = CPUBenchmarkWrapper(model) #Temp
+        # if (torch.cuda.is_available()):
+        #     self.bman = BenchmarkWrapper(model)
+        # else:
+        self.bman = CPUBenchmarkWrapper(model) #Temp
         self.args = args
-        
+        self.inputs = inputs
         self.graph = graph
         #TODO just use args
+
         self.cpu = False if args.cpu is None else args.cpu
         self.gpu = False if args.gpu is None else args.gpu
         self.sim = False if args.sim is None else args.sim
@@ -145,23 +146,22 @@ class BenchmarkingManager:
     
     def cpu_benchmark(self):
         self.bman.model.to(torch.device("cpu"))
-        data = self.graph.dataset
-        data.x = data.x.to(torch.device("cpu"))
-        data.edge_index = data.edge_index.to(torch.device("cpu"))
-        
+        # data = self.graph.dataset
+        # data.x = data.x.to(torch.device("cpu"))
+        # data.edge_index = data.edge_index.to(torch.device("cpu"))
         times = []
         for i in range(100):
-            time_taken = self.bman.predict(batch=(data.x, data.edge_index,data.edge_attr))
+            time_taken = self.bman.predict(self.inputs)
             times.append(time_taken)
 
         avg_time = np.mean(times)
         std_dev = np.std(times)
-        throughput = self.graph.dataset.y.shape[0] / avg_time
+        # throughput = self.graph.dataset.y.shape[0] / avg_time
 
         return {
             "cpu_latency_mean": avg_time,
-            "cpu_latency_std_dev": std_dev,
-            "cpu_nodes_per_ms": throughput
+            "cpu_latency_std_dev": std_dev
+            # "cpu_nodes_per_ms": throughput
 
         }
 
@@ -289,7 +289,7 @@ class BenchmarkingManager:
             metrics["fpga"] = self.fpga_benchmark()
         return metrics
 
-    def print_results(self, metrics):
+    def print_metrics(self, metrics):
         rows = []
         for component, values in metrics.items():
             for metric, value in values.items():
