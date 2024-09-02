@@ -1,7 +1,7 @@
 import os
 
-from tb.utils.common import NodePrecision, AggregationFunction
-from tb.variant import Variant
+from hw.tb.utils.common import NodePrecision, AggregationFunction
+from hw.tb.variant import Variant
 from sdk.pcie_manager import PCIeManager
 
 class Ample_Driver:
