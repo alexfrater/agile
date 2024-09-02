@@ -77,7 +77,7 @@ class AXIWriteMasterMonitor:
                     self.dut._log.debug("--------------------")
                     self.dut._log.debug("")
                     self.dut._log.debug(f"Node found: {expected_node['node_id']}, Address: {expected_node['address']}")
-
+                    # self.dut._log.debug(f"Actual Address: {current_transaction['start_address']}")
 
                     # Check
                     self.dut._log.debug(f"Data expected {expected_node['data']}")
@@ -105,7 +105,7 @@ class AXIWriteMasterMonitor:
     def load_layer_features(self, nodeslot_programming,layer_features,layer_config,global_config,layer_idx):
         self.dut._log.debug("Loading Layer Features")
         #Single model models - TODO 
-
+        self.dut._log.debug(f"{layer_config['name']}")
         if len(nodeslot_programming) ==1:
             nodeslot_group_programming = nodeslot_programming[0]
         else:

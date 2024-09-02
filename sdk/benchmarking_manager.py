@@ -5,7 +5,7 @@ import os
 import subprocess
 import shutil
 import pandas as pd
-
+from datetime import datetime
 def read_power_file(filename):
     powers = []
     with open(filename, "r") as file:
@@ -249,7 +249,7 @@ class BenchmarkingManager:
 
         if self.args.metrics:
             cycles_dict = self.read_cycles_file(f"{path}/sim_cycles.txt")
-            sim_cycle_time = sum(cycles_dict.values()) * (1/self.fpga_clk_freq)
+            sim_cycle_time = sum(cycles_dict.values()) * (1/self.args.fpga_clk_freq)
             throughput = self.graph.dataset.y.shape[0] / float(sim_cycle_time)
             mean_power = 30.0
 
@@ -262,7 +262,7 @@ class BenchmarkingManager:
             }
         else:
             cycles_dict = self.read_cycles_file(f"{path}/sim_cycles.txt")
-            sim_cycle_time = sum(cycles_dict.values()) * (1/self.fpga_clk_freq)
+            sim_cycle_time = sum(cycles_dict.values()) * (1/self.args.fpga_clk_freq)
             metrics = {
                 "fpga_latency": sim_cycle_time
             }
@@ -308,4 +308,22 @@ class BenchmarkingManager:
         # Create a DataFrame and print it
         df = pd.DataFrame(rows, columns=["Component", "Metric", "Value"])
         print(df.to_markdown(index=False))
+        return df
+
+    def store_metrics(self, metrics):
+        metrics_string = metrics.to_markdown(index=False)
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        
+        metrics_file = os.path.join(self.base_path, 'benchmark_metrics.md')  # Using .md for markdown format
+    
+        # Open the file in append mode
+        with open(metrics_file, 'a') as f:
+            # Write the date and time
+            f.write(f"\n\n# Metrics recorded at {current_time}\n\n")
+            # Append the formatted metrics to the file
+            f.write(metrics_string)
+            f.write("\n")  # Add a newline at the end
+
+        print(f"Metrics appended to {metrics_file}")
     

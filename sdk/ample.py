@@ -2,6 +2,7 @@ import argparse
 import pandas as pd
 import torch.nn as nn
 
+
 from sdk.ample_driver import Ample_Driver
 from sdk.ample_compiler import AmpleCompiler
 from sdk.benchmarking_manager import BenchmarkingManager
@@ -29,6 +30,8 @@ class Ample():
         self.cpu_sim = cpu_sim
         self.add_to_device_method()
         self.compiler = AmpleCompiler(sim = sim)
+        # self.base_path = os.getenv('WORKAREA')
+
         # self.device = Ample_Driver(sim = sim)
 
         # if not self.sim:
@@ -88,20 +91,10 @@ class Ample():
 
         metrics = bman.benchmark()
 
-        bman.print_metrics(metrics)
-        # #TODO use bman results table
-        # rows = []
-        # for component, values in metrics.items():
-        #     for metric, value in values.items():
-        #         formatted_metric = metric.replace("_", " ").replace("-", " ").title()
-        #         formatted_value = f"{value:.6f}" if isinstance(value, float) else f"{value:.6f}"
-        #         rows.append([component, formatted_metric, formatted_value])
+        metrics_df = bman.print_metrics(metrics)
 
-        # # Create a DataFrame and print it
-        # df = pd.DataFrame(rows, columns=["Component", "Metric", "Value"])
-        # print(df.to_markdown(index=False))
+        bman.store_metrics(metrics_df)
 
-   
 
 
   
