@@ -11,6 +11,7 @@ class Ample():
         sim =False,
         gpu_sim = False,
         cpu_sim = False,
+        hw = False,
         name="ample",
         index=None,
         node_slots = 32,
@@ -54,12 +55,13 @@ class Ample():
         original_forward = self.model.forward
 
         def ample_forward(*args, **kwargs):
-            if self.sim:
-                self.simulate() 
-            else:
-                self.driver.load_layer_config()
-                self.driver.load_regbanks()
-                self.driver.execute()
+            # if self.sim:
+            
+            self.simulate()  #Change name
+            # else:
+            #     self.driver.load_layer_config()
+            #     self.driver.load_regbanks()
+            #     self.driver.execute()
 
 
             return original_forward(*args, **kwargs)
@@ -71,9 +73,9 @@ class Ample():
         args = argparse.Namespace(
             cpu=self.cpu_sim,
             gpu=self.gpu_sim,
-            sim = True,
-            fpga_clk_freq = 250e6,
-            device = 'ample',
+            sim = self.sim,
+            fpga_clk_freq = 200e6,
+            device = 0,
             preload = False,
             tb_tolerance = 0.01,
             tb_log_level = 'INFO',
@@ -81,7 +83,7 @@ class Ample():
             gui = False,
             metrics = False,
         )
-
+        print('args',args)
         bman = BenchmarkingManager(inputs=self.inputs, model=self.model, args=args)
 
         metrics = bman.benchmark()

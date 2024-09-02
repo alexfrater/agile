@@ -7,7 +7,7 @@ import torch
 from torch_geometric.data import Data
 
 
-from tb.variant import Variant
+from hw.tb.variant import Variant
 from sdk.model_tracer import ModelTracer
 from sdk.initialization_manager import InitManager
 from sdk.trained_graph import TrainedGraph
