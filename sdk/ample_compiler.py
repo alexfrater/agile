@@ -160,7 +160,7 @@ class AmpleCompiler():
                             in_message_addr = self.model_trace[item_name]['out_addr']
 
                         input_nodes.append(item_name)
-            print(f"Sub model {sub_module_name} has inputs from {input_names}")
+            # print(f"Sub model {sub_module_name} has inputs from {input_names}")
             self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(
                                                                                         sub_model = sub_module_dict['module'],
                                                                                         dataset = dataset,

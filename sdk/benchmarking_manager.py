@@ -108,10 +108,10 @@ class BenchmarkingManager:
         # self.metrics = False if args.metrics is None else args.metrics
         self.model = model
         self.base_path = os.environ.get("WORKAREA")  + "/"
-        print(f"base path {self.base_path}")
+        # print(f"base path {self.base_path}")
 
     def gpu_run_inference(self):
-        print(f"device {self.args.device}")
+        # print(f"device {self.args.device}")
         self.gpu_bman.model.to(torch.device(f"cuda:{self.args.device}"))
         # self.inputs.to(torch.device(f"cuda:{self.args.device}"))
         self.inputs = [input_tensor.to(torch.device(f"cuda:{self.args.device}")) for input_tensor in self.inputs]
