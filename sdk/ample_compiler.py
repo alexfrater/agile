@@ -37,7 +37,7 @@ class AmpleCompiler():
         data,
         base_path = os.environ.get("WORKAREA") + "/hw/sim/layer_config",
         precision = 'FLOAT_32',
-        reduce =False,
+        reduce = False,
         random = True,
         trained = False,
         plot = True,
@@ -160,7 +160,7 @@ class AmpleCompiler():
                             in_message_addr = self.model_trace[item_name]['out_addr']
 
                         input_nodes.append(item_name)
-            
+            print(f"Sub model {sub_module_name} has inputs from {input_names}")
             self.model_trace[sub_module_name]['out_addr'] = self.initialize_sub_model_memory(
                                                                                         sub_model = sub_module_dict['module'],
                                                                                         dataset = dataset,
@@ -198,7 +198,6 @@ class AmpleCompiler():
         if dataset.x is not None:
             self.init_manager.trained_graph.load_embeddings()
          
-        #TODO Change to save to intermediate file
         self.init_manager.map_memory(in_messages_addr = in_message_addr,edge_attr_messages_addr=edge_attr_messages_addr) 
         self.init_manager.dump_memory(self.mem_append)
         
@@ -224,8 +223,6 @@ class AmpleCompiler():
     return dtype
 
 
-
-    
   def dump_nodeslot_programming_multi_model(self,append_mode=False):
     mode = 'a' if append_mode else 'w'
 
@@ -246,10 +243,7 @@ class AmpleCompiler():
         nodeslot_byte_list += subgroup_byte_list
         nodeslot_memory_pointer += nmh_length
 
-
-        if len(nodeslot_group)>1:
-            # self.nodeslot_programming_group_start_address.append((node_ptr,0))
-            
+        if len(nodeslot_group)>1:            
             edge_group = nodeslot_group[1]
             edge_ptr = nodeslot_memory_pointer
             subgroup_byte_list, nmh_length = self.generate_nodeslots_mem(edge_group)
@@ -260,7 +254,6 @@ class AmpleCompiler():
       
 
     dump_byte_list(nodeslot_byte_list, self.nodeslot_mem_dump_file, append_mode)
-
 
 
   def generate_nodeslots_mem(self,nodeslot_group):
