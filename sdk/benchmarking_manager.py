@@ -16,6 +16,7 @@ def read_power_file(filename):
 
 def read_timing_file(filename):
     lst = []
+    print('filename',filename)
     with open(filename, "r") as file:
         for line in file:
             lst = [float(a) for a in line.split(",")]
@@ -106,8 +107,10 @@ class BenchmarkingManager:
         self.device = None if args.device is None else args
         self.preload = False if args.preload is None else args.preload
         self.gui =True
+        self.basepath = os.environ.get()
         # self.metrics = False if args.metrics is None else args.metrics
         self.model = model
+        self.base_path = os.environ.get("WORKAREA") 
 
 
     def gpu_run_inference(self):
@@ -125,7 +128,7 @@ class BenchmarkingManager:
 
         avg_time = np.mean(times)
         std_dev = np.std(times)
-        with open("timing_tmp.txt", "w") as f:
+        with open(self.base_path+ "timing_tmp.txt", "w") as f:
             f.write(f"{avg_time}, {std_dev}")
         return avg_time
 
@@ -174,7 +177,7 @@ class BenchmarkingManager:
 
         try:
             inference_job.join()  # Wait for inference_job process to finish
-            lst = read_timing_file("timing_tmp.txt")
+            lst = read_timing_file(self.base_path + "timing_tmp.txt")
             print(f"Inference job completed in {lst}ms. Terminating power job...")
             power_job.terminate()  # Terminate power_job process
 
