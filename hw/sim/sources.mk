@@ -118,8 +118,8 @@ VERILOG_SOURCES += \
 	$(WORKAREA)/hw/build/ip/node_scoreboard/rtl/nodeslot_prefetcher.sv \
 	$(WORKAREA)/hw/build/ip/node_scoreboard/rtl/node_scoreboard.sv \
 	$(WORKAREA)/hw/build/ip/top/rtl/top.sv \
-	$(WORKAREA)/hw/build/ip/top/rtl/top_wrapper_tb.sv \
-	$(WORKAREA)/hw/build/ip/top/rtl/top_wrapper.sv
+	$(WORKAREA)/hw/build/ip/top/rtl/top_hbm.sv \
+	$(WORKAREA)/hw/build/ip/top/rtl/top_wrapper_tb.sv 
 
 VSIM_LIBS = \
 	axi_infrastructure_v1_1_0 \

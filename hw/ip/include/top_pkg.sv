@@ -12,9 +12,9 @@ package top_pkg;
 // ----------------------------------------------------
 
 // New arrangement
-parameter MESH_MULTIPLIER = 4;
+parameter MESH_MULTIPLIER = 8;
 
-parameter AGGREGATION_CHANNELS = 4; // per mesh
+parameter AGGREGATION_CHANNELS = 8; // per mesh
 parameter TRANSFORMATION_CHANNELS = 64;
 
 // Graph parameters
@@ -81,7 +81,7 @@ parameter SCALE_FACTOR_QUEUE_READ_WIDTH = 32;
 parameter SCALE_FACTOR_QUEUE_READ_DEPTH = 1024;
 
 // HBM
-parameter HBM_BANKS = 1;
+parameter HBM_BANKS = 2;
 
 // Supported modes
 // ----------------------------------------------------
