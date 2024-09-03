@@ -18,7 +18,9 @@ class Ample():
         node_slots = 256,
         message_channel_count = 16,
         precision_count = 1,
-        aggregation_buffer_slots = 4
+        aggregation_buffer_slots = 4,
+        plot = False
+        
     ):
         
         
@@ -29,8 +31,7 @@ class Ample():
         self.cpu_sim = cpu_sim
         self.add_to_device_method()
         self.compiler = AmpleCompiler(sim = sim)
-        # self.base_path = os.getenv('WORKAREA')
-
+        self.plot = plot
         # self.device = Ample_Driver(sim = sim)
 
         # if not self.sim:
@@ -47,7 +48,7 @@ class Ample():
         self.model = model
         self.inputs = data
         if device == 'ample':
-            self.compiler.compile(model,data=data,trace_mode='hooks')
+            self.compiler.compile(model,data=data,trace_mode='hooks',plot=self.plot)
             self.overload_forward()
         else:
             print(f'Moving model to {device}')
@@ -85,14 +86,12 @@ class Ample():
             gui = False,
             metrics = False,
         )
-        print('args',args)
         bman = BenchmarkingManager(inputs=self.inputs, model=self.model, args=args)
 
         metrics = bman.benchmark()
 
-        metrics_df = bman.print_metrics(metrics)
+        bman.print_metrics(metrics)
 
-        bman.store_metrics(metrics_df)
 
 
 
