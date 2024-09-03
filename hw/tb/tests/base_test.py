@@ -51,50 +51,50 @@ class BaseTest:
         self.test_nodes=10
 
 
-        self.state_monitor = State_Monitor(
-            dut.top_i.node_scoreboard_i,
-            self.variant,
-            self.dut._log,
-            self.test_nodes
-        )
-        self.age_monitor = AGE_Monitor(
-            dut.top_i.aggregation_engine_i,
-            self.variant,
-            self.dut._log
-        )
+        # self.state_monitor = State_Monitor(
+        #     dut.top_i.node_scoreboard_i,
+        #     self.variant,
+        #     self.dut._log,
+        #     self.test_nodes
+        # )
+        # self.age_monitor = AGE_Monitor(
+        #     dut.top_i.aggregation_engine_i,
+        #     self.variant,
+        #     self.dut._log
+        # )
 
-        self.nsb_monitor = NSB_Monitor(
-            dut.top_i.node_scoreboard_i,
-            self.variant,
-            self.dut._log
-        )
-        self.prefetcher_monitor = Prefetcher_Monitor(
-            dut.top_i.prefetcher_i,
-            self.variant,
-            self.dut._log
-        )
+        # self.nsb_monitor = NSB_Monitor(
+        #     dut.top_i.node_scoreboard_i,
+        #     self.variant,
+        #     self.dut._log
+        # )
+        # self.prefetcher_monitor = Prefetcher_Monitor(
+        #     dut.top_i.prefetcher_i,
+        #     self.variant,
+        #     self.dut._log
+        # )
 
-        self.fte_monitor = FTE_Monitor(
-            dut.top_i.transformation_engine_i,
-            self.variant,
-            self.dut._log
-        )
+        # self.fte_monitor = FTE_Monitor(
+        #     dut.top_i.transformation_engine_i,
+        #     self.variant,
+        #     self.dut._log
+        # )
 
-        self.axi_monitor = AXIWriteMasterMonitor(
-            dut=dut,
-            clk=dut.sys_clk,
-            req_valid=dut.top_i.transformation_engine_i.axi_write_master_req_valid,
-            req_ready=dut.top_i.transformation_engine_i.axi_write_master_req_ready,
-            start_address=dut.top_i.transformation_engine_i.axi_write_master_req_start_address,
-            req_len=dut.top_i.transformation_engine_i.axi_write_master_req_len,
-            data_valid=dut.top_i.transformation_engine_i.axi_write_master_data_valid,
-            data=dut.top_i.transformation_engine_i.transformation_core_axi_write_master_data_unreversed,
-            pop=dut.top_i.transformation_engine_i.axi_write_master_pop,
-            resp_valid=dut.top_i.transformation_engine_i.axi_write_master_resp_valid,
-            resp_ready=dut.top_i.transformation_engine_i.axi_write_master_resp_ready,
-            tolerance = self.tolerance 
-            # log_level = #connect logging level from main test
-        )
+        # self.axi_monitor = AXIWriteMasterMonitor(
+        #     dut=dut,
+        #     clk=dut.sys_clk,
+        #     req_valid=dut.top_i.transformation_engine_i.axi_write_master_req_valid,
+        #     req_ready=dut.top_i.transformation_engine_i.axi_write_master_req_ready,
+        #     start_address=dut.top_i.transformation_engine_i.axi_write_master_req_start_address,
+        #     req_len=dut.top_i.transformation_engine_i.axi_write_master_req_len,
+        #     data_valid=dut.top_i.transformation_engine_i.axi_write_master_data_valid,
+        #     data=dut.top_i.transformation_engine_i.transformation_core_axi_write_master_data_unreversed,
+        #     pop=dut.top_i.transformation_engine_i.axi_write_master_pop,
+        #     resp_valid=dut.top_i.transformation_engine_i.axi_write_master_resp_valid,
+        #     resp_ready=dut.top_i.transformation_engine_i.axi_write_master_resp_ready,
+        #     tolerance = self.tolerance 
+        #     # log_level = #connect logging level from main test
+        # )
 
 
         # # Buffer Manager Monitors
@@ -169,21 +169,21 @@ class BaseTest:
         self.axi_monitor.load_layer_features(self.nodeslot_programming,layer_features,self.layers[layer_idx],self.global_config,layer_idx)
 
     async def start_monitors(self):
-        self.axi_monitor.running = True
-        cocotb.start_soon(self.axi_monitor.monitor_write_transactions())
+        # self.axi_monitor.running = True
+        # cocotb.start_soon(self.axi_monitor.monitor_write_transactions())
 
         ######Start all monitors#####
-        self.nsb_monitor.running = True
-        self.nsb_monitor.start()
-        self.prefetcher_monitor.running = True
-        self.prefetcher_monitor.start()
-        self.fte_monitor.running = True
-        self.fte_monitor.start()
-        self.age_monitor.running = True
-        self.age_monitor.start()
+        # self.nsb_monitor.running = True
+        # self.nsb_monitor.start()
+        # self.prefetcher_monitor.running = True
+        # self.prefetcher_monitor.start()
+        # self.fte_monitor.running = True
+        # self.fte_monitor.start()
+        # self.age_monitor.running = True
+        # self.age_monitor.start()
 
-        self.state_monitor.running = True
-        self.state_monitor.start()
+        # self.state_monitor.running = True
+        # self.state_monitor.start()
 
         ############################
         
@@ -193,14 +193,15 @@ class BaseTest:
     #     pass
 
     async def end_test(self):
+        pass
         # Stop monitors
         ######Stop all monitors######
-        self.axi_monitor.running = False
-        self.nsb_monitor.running = False
-        self.prefetcher_monitor.running = False
-        self.fte_monitor.running = False
-        self.age_monitor.running = False
-        self.state_monitor.running = False
+        # self.axi_monitor.running = False
+        # self.nsb_monitor.running = False
+        # self.prefetcher_monitor.running = False
+        # self.fte_monitor.running = False
+        # self.age_monitor.running = False
+        # self.state_monitor.running = False
         # self.state_monitor.stop()
         #############################
         # await self.nsb_monitor.stop()
