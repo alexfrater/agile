@@ -60,7 +60,7 @@ class FakeDataset(InMemoryDataset):
             task = 'graph' if num_graphs > 1 else 'node'
         assert task in ['node', 'graph']
 
-        self.avg_num_nodes = max(avg_num_nodes, int(avg_degree))
+        self.num_nodes = num_nodes
         self.avg_degree = max(avg_degree, 1)
         self.num_channels = num_channels
         self.edge_dim = edge_dim
