@@ -174,6 +174,8 @@ class Graphcast(torch.nn.Module):
         outputs_model = outputs_sub_model1 + outputs_sub_model2 + outputs_sub_model3 + outputs_sub_model5 + outputs_sub_model7# + outputs_sub_model4  #+ outputs_sub_model6 #+ outputs_sub_model7
         return outputs_model,grid_mesh_emb
 
+
+
 model = Graphcast()
 
 
@@ -203,7 +205,6 @@ m2m_edge_index = dataset.m2m_edge_index
 m2g_edge_index = dataset.m2g_edge_index
 
 # inputs  = [g2m_edge_attr, m2m_edge_attr, m2g_edge_attr, g2m_edge_index, m2m_edge_index, m2g_edge_index, grid_mesh_rep]
-
 inputs = [
           g2m_edge_attr,
           g2m_edge_index,
@@ -214,7 +215,7 @@ inputs = [
 
 dataset = FakeDataset(
                         num_graphs=1, 
-                        avg_num_nodes = 100,
+                        avg_num_nodes = 300,
                         avg_degree=3,
                         num_channels=32,
                         edge_dim=32
@@ -231,8 +232,6 @@ inputs = [dataset.edge_attr,
           (dataset.edge_attr + 0.1),
           dataset.edge_index]
 outputs_model, grid_mesh_emb = model(*inputs)
-
-
 from sdk.ample import Ample
 ample = Ample(sim=True,cpu_sim=True)
 model.to_device('ample',data=inputs)
