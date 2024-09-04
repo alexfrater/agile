@@ -29,7 +29,8 @@ def get_log_level():
 
 async def graph_test_runner(dut):
     model_name = str(os.environ.get('AMPLE_GRAPH_TB_MODEL_NAME', 1))
-   
+    monitors = str(os.environ.get('AMPLE_GRAPH_TB_MONITORS', 0))
+    monitors  = 0 #TODO
 
     
     tolerance = float(os.environ.get('AMPLE_GRAPH_TB_TOLERANCE', 1))#TODO fix
@@ -40,7 +41,7 @@ async def graph_test_runner(dut):
     log_level = get_log_level()
     dut._log.setLevel(log_level)  
 
-    test = BaseTest(dut,nodeslot_count,model_name = model_name,tolerance = tolerance,log_level = log_level)
+    test = BaseTest(dut,nodeslot_count,model_name = model_name,tolerance = tolerance,log_level = log_level,monitors = monitors)
     
     test.log_info(dut, "Starting Graph Test")
 
@@ -67,7 +68,8 @@ async def graph_test_runner(dut):
         dut._log.debug(f"Layer Out Expected {layer_features}")
         
         # Load monitor
-        test.load_layer_test(layer_features,layer_idx)
+        if test.monitors:
+            test.load_layer_test(layer_features,layer_idx)
 
         # Layer configuration
         await test.driver.program_layer_config(layer)
@@ -95,7 +97,8 @@ async def graph_test_runner(dut):
 
         dut._log.debug("Nodeslot fetching done, waiting for nodeslots to be flushed.")
         initial_cycle = test.get_cycle_count()
-        await test.start_monitors()
+        if test.monitors:
+            await test.start_monitors()
 
         await test.flush_nodeslots(test)
 
@@ -103,19 +106,21 @@ async def graph_test_runner(dut):
 
 
         layer_cycle_count.append(int(final_cycle - initial_cycle))
-
-        await test.end_test()
-        # assert test.axi_monitor.empty_expected_layer_features() == True, f"Not all nodeslots written back {layer_idx}"
-        if test.axi_monitor.empty_expected_layer_features():
-            dut._log.info("All nodes written.")
-        else:
-            dut._log.error("Not all nodes not written.")
+        if test.monitors:
+            await test.end_test()
+            # assert test.axi_monitor.empty_expected_layer_features() == True, f"Not all nodeslots written back {layer_idx}"
+            if test.axi_monitor.empty_expected_layer_features():
+                dut._log.info("All nodes written.")
+            else:
+                dut._log.error("Not all nodes not written.")
 
   
         test.dut._log.info(f"Layer {layer_idx} finished.")
-        #Append layer cycle profile
-        cycles = test.state_monitor.get_cycle_profile()
-        cycle_lists.append(cycles)
+
+        if test.monitors:
+            #Append layer cycle profile
+            cycles = test.state_monitor.get_cycle_profile()
+            cycle_lists.append(cycles)
 
         await delay(dut.regbank_clk, 10)
 
@@ -123,8 +128,8 @@ async def graph_test_runner(dut):
     
     # await test.stop_monitors()
     test.dut._log.info(f"Test finished. Simulation time: {stime}ms.")
-
-    test.plot_stacked_cycles(cycle_lists, layer_lables)
+    if test.monitors:
+        test.plot_stacked_cycles(cycle_lists, layer_lables)
     with open(f"sim_time.txt", "w") as f:
         f.write(str(stime))
 

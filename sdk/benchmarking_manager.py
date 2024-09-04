@@ -225,6 +225,7 @@ class BenchmarkingManager:
         os.environ['AMPLE_GRAPH_TB_LOG_LEVEL'] = str(self.args.tb_log_level)
         os.environ['AMPLE_GRAPH_TB_NODESLOT_COUNT'] = '64'
         os.environ['AMPLE_GRAPH_TB_MODEL_NAME'] = str(self.model.__class__.__name__)
+        os.environ['AMPLE_GRAPH_TB_MONITORS'] = str(int(self.args.monitors))
 
 
         # * Run simulation (assume )

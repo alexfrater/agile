@@ -19,7 +19,8 @@ class Ample():
         message_channel_count = 16,
         precision_count = 1,
         aggregation_buffer_slots = 4,
-        plot = False
+        plot = False,
+        monitors = False,
         
     ):
         
@@ -32,6 +33,7 @@ class Ample():
         self.add_to_device_method()
         self.compiler = AmpleCompiler(sim = sim)
         self.plot = plot
+        self.monitors = monitors
         # self.device = Ample_Driver(sim = sim)
 
         # if not self.sim:
@@ -85,6 +87,7 @@ class Ample():
             build = False,
             gui = False,
             metrics = False,
+            monitors = self.monitors
         )
         bman = BenchmarkingManager(inputs=self.inputs, model=self.model, args=args)
 

@@ -44,7 +44,7 @@ class FakeDataset(InMemoryDataset):
         self,
         num_graphs: int = 1,
         num_nodes: int = 1000,
-        avg_degree: float = 10.0,
+        degree: float = 10.0,
         num_channels: int = 64,
         edge_dim: int = 0,
         num_classes: int = 10,
@@ -61,7 +61,7 @@ class FakeDataset(InMemoryDataset):
         assert task in ['node', 'graph']
 
         self.num_nodes = num_nodes
-        self.avg_degree = max(avg_degree, 1)
+        self.degree = max(degree, 1)
         self.num_channels = num_channels
         self.edge_dim = edge_dim
         self._num_classes = num_classes
@@ -81,8 +81,8 @@ class FakeDataset(InMemoryDataset):
             data.y = torch.randint(self._num_classes, (num_nodes, ))
         elif self._num_classes > 0 and self.task == 'graph':
             data.y = torch.tensor([random.randint(0, self._num_classes - 1)])
-
-        data.edge_index = get_edge_index(num_nodes, num_nodes, self.avg_degree,
+        print('Getting Edge index')
+        data.edge_index = get_edge_index(num_nodes, num_nodes, self.degree,
                                          self.is_undirected, remove_loops=True)
 
         if self.num_channels > 0:
@@ -110,7 +110,7 @@ class FakeDataset(InMemoryDataset):
 
 
 
-def get_edge_index(
+def get_edge_index_avg(
     num_src_nodes: int,
     num_dst_nodes: int,
     avg_degree: float,
@@ -133,3 +133,30 @@ def get_edge_index(
         edge_index = coalesce(edge_index, num_nodes=num_nodes)
 
     return edge_index
+
+
+def get_edge_index(
+    num_src_nodes: int,
+    num_dst_nodes: int,
+    degree: int,
+    is_undirected: bool = False,
+    remove_loops: bool = False,
+) -> torch.Tensor:
+    print('Degree:',degree)
+    degree = int(degree)  
+    row = torch.arange(num_src_nodes, dtype=torch.int64).repeat_interleave(degree)
+    col = torch.randint(num_dst_nodes, (num_src_nodes * degree, ), dtype=torch.int64)
+
+    edge_index = torch.stack([row, col], dim=0)
+
+    if remove_loops:
+        edge_index, _ = remove_self_loops(edge_index)
+
+    num_nodes = max(num_src_nodes, num_dst_nodes)
+    if is_undirected:
+        edge_index = to_undirected(edge_index, num_nodes=num_nodes)
+    else:
+        edge_index = coalesce(edge_index, num_nodes=num_nodes)
+
+    return edge_index
+
