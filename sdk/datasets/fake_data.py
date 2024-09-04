@@ -45,6 +45,7 @@ class FakeDataset(InMemoryDataset):
         num_graphs: int = 1,
         num_nodes: int = 1000,
         degree: float = 10.0,
+        degree: float = 10.0,
         num_channels: int = 64,
         edge_dim: int = 0,
         num_classes: int = 10,
@@ -61,6 +62,7 @@ class FakeDataset(InMemoryDataset):
         assert task in ['node', 'graph']
 
         self.num_nodes = num_nodes
+        self.degree = max(degree, 1)
         self.degree = max(degree, 1)
         self.num_channels = num_channels
         self.edge_dim = edge_dim
@@ -110,6 +112,7 @@ class FakeDataset(InMemoryDataset):
 
 
 
+def get_edge_index_avg(
 def get_edge_index_avg(
     num_src_nodes: int,
     num_dst_nodes: int,

@@ -2,6 +2,7 @@ import cocotb
 import sys
 import os
 workarea = os.environ.get('WORKAREA')
+sys.path.insert(0,"/home/aw1223/agile/hw/")
 
 if workarea is None:
     raise EnvironmentError("WORKAREA environment variable is not set")

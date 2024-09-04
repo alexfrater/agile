@@ -1,6 +1,13 @@
 import os
 import pdb
 # from tqdm import tqdm
+import sys 
+
+# workarea = os.environ.get("WORKAREA")
+# sys.path.insert(0,workarea)
+sys.path.insert(0,"/home/aw1223/agile/hw/")
+
+# print(workarea)
 from tqdm.asyncio import tqdm as tqdm_asyncio
 
 from cocotb.utils import get_sim_time
